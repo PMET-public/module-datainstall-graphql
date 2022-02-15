@@ -2,4 +2,7 @@ type StoreConfig {
     root_cateogry_name: String @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Store\\RootCategoryName") @doc(description:"Name of Stores Root Category")
     theme: String @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Store\\Theme") @doc(description:"Path of the Store's Theme")
 }
-
+interface CategoryInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\CategoryInterfaceTypeResolver") {
+    custom_design: String
+    page_layout: String
+}
