@@ -3,6 +3,11 @@ type StoreConfig {
     theme: String @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Store\\Theme") @doc(description:"Path of the Store's Theme")
 }
 interface CategoryInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\CategoryInterfaceTypeResolver") {
-    custom_design: String
+    custom_design_theme: String @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Category\\CustomDesign") @doc(description:"Path of the Theme")
+    landing_page_identifier: String @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Category\\LandingPage") @doc(description:"identifier of landing page")
+    store_view_code: String @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Category\\StoreViewCode") @doc(description:"identifier of landing page")
+    name_path: String @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Category\\NamePath") @doc(description:"path by name excluding root, parent and self")
+    category_name: String @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Category\\CategoryName") @doc(description:"name with path delimiter escaped")
     page_layout: String
+    custom_design: String
 }

@@ -17,7 +17,8 @@ class RootCategoryName implements ResolverInterface
     
     /** @param CategoryRepositoryInterface $categoryRepository */
 
-    public function __construct(CategoryRepositoryInterface $categoryRepository){
+    public function __construct(CategoryRepositoryInterface $categoryRepository)
+    {
         $this->categoryRepository = $categoryRepository;
     }
     
@@ -29,7 +30,7 @@ class RootCategoryName implements ResolverInterface
         $categoryId = $context->getExtensionAttributes()->getStore()->getRootCategoryId();
         $storeId = $context->getExtensionAttributes()->getStore()->getId();
         /** @var CategoryInterface $category */
-        $category = $this->categoryRepository->get($categoryId,$storeId);
+        $category = $this->categoryRepository->get($categoryId, $storeId);
         return $category->getName();
     }
 }

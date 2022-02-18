@@ -1,5 +1,5 @@
 <?php
-namespace MagentoEse\DataInstallGraphQl\Model\Resolver\Store;
+namespace MagentoEse\DataInstallGraphQl\Model\Resolver\Category;
 
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
@@ -11,7 +11,7 @@ use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
 /**
  * @inheritdoc
  */
-class Theme implements ResolverInterface
+class CustomDesign implements ResolverInterface
 {
     /** @var ScopeConfigInterface */
     protected $scopeConfig;
@@ -32,13 +32,15 @@ class Theme implements ResolverInterface
     }
     
     /**
-     * @inheritdoc
+     * Converts the custom_design ID to theme path
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
-        $storeId = $context->getExtensionAttributes()->getStore()->getId();
-        $themeId = $this->scopeConfig->getValue('design/theme/theme_id', 'stores', $storeId);
-        $theme = $this->themeProvider->getThemeById($themeId);
-        return $theme->getThemePath();
+        if (!empty($value['custom_design'])) {
+            $theme = $this->themeProvider->getThemeById($value['custom_design']);
+            return $theme->getThemePath();
+        } else {
+            return null;
+        }
     }
 }
