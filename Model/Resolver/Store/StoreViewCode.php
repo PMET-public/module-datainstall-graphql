@@ -1,5 +1,5 @@
 <?php
-namespace MagentoEse\DataInstallGraphQl\Model\Resolver\Category;
+namespace MagentoEse\DataInstallGraphQl\Model\Resolver\Store;
 
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;

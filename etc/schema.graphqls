@@ -5,9 +5,32 @@ type StoreConfig {
 interface CategoryInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\CategoryInterfaceTypeResolver") {
     custom_design_theme: String @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Category\\CustomDesign") @doc(description:"Path of the Theme")
     landing_page_identifier: String @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Category\\LandingPage") @doc(description:"identifier of landing page")
-    store_view_code: String @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Category\\StoreViewCode") @doc(description:"identifier of landing page")
+    store_view_code: String @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Store\\StoreViewCode")
     name_path: String @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Category\\NamePath") @doc(description:"path by name excluding root, parent and self")
     category_name: String @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Category\\CategoryName") @doc(description:"name with path delimiter escaped")
     page_layout: String
     custom_design: String
+}
+
+type CmsBlock @doc(description: "CMS block defines all CMS block information") {
+    store_view_code: String @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Store\\StoreViewCode")
+    block_content: String @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Cms\\BlockContent") @doc(description:"raw block content")
+}
+
+type Query {
+    dataInstallLog (
+        job_id: [String] @doc(description: "Job Id to Retrieve")
+    ): DataIntstallLog @resolver(class: "Magento\\CmsGraphQl\\Model\\Resolver\\Blocks") @doc(description: "An array containing the log entries from a data install job")
+}
+
+type DataIntstallLog @doc(description: "Retrieves all records from a Data install Job") {
+    job_info: [DataInstallLogRecord] @doc(description: "An array containing the log entries from a data install job")
+}
+
+type DataInstallLogRecord {
+    job_id: String @doc(description: "Id of job if added via scheduled job")
+    datapack: String @doc(description: "Path to data pack")
+    level: String @doc(description: "Type of message: info, warning or error")
+    message: String @doc(description: "Information from installer")
+    add_date: String @doc(description: "Timestamp when record was added")
 }
