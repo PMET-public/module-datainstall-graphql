@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace MagentoEse\DataInstallGraphQl\Model\Resolver\DataProvider;
 
+use Klarna\Core\Api\Data\LogInterface;
 use MagentoEse\DataInstall\Api\LoggerRepositoryInterface;
 use MagentoEse\DataInstall\Api\Data\LoggerInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
@@ -41,66 +42,56 @@ class DataInstallLog
     }
 
     /**
-     * Get block data by identifier
+     * Get log data by job Id
      *
-     * @param string $blockIdentifier
-     * @param int $storeId
+     * @param string $jobId
      * @return array
-     * @throws NoSuchEntityException
      */
-    public function getBlockByIdentifier(string $blockIdentifier, int $storeId): array
+    public function getLogByJobId(string $jobId): array
     {
-        $blockData = $this->fetchBlockData($blockIdentifier, LoggerInterface::JOBID, $storeId);
-
-        return $blockData;
+        $logData = $this->loggerRepository->getByJobId($jobId);
+        return $this->formatLogData($logData, $jobId, LoggerInterface::JOBID);
     }
 
     /**
-     * Get block data by block_id
+     * Get log data by datapack path
      *
-     * @param int $blockId
-     * @param int $storeId
+     * @param int $datapack
      * @return array
-     * @throws NoSuchEntityException
      */
-    public function getBlockById(int $blockId, int $storeId): array
+    public function getLogByDatpack(string $datapack): array
     {
-        $blockData = $this->fetchBlockData($blockId, BlockInterface::BLOCK_ID, $storeId);
-
-        return $blockData;
+        $logData = $this->loggerRepository->getByDatapack($datapack);
+        return $this->formatLogData($logData, $datapack, LoggerInterface::DATAPACK);
     }
 
     /**
-     * Fetch black data by either id or identifier field
+     * Formats log data for return
      *
-     * @param mixed $identifier
-     * @param string $field
-     * @param int $storeId
+     * @param mixed $iden$logResults
+     * @param string $identifier
+     * @param string $type
      * @return array
      * @throws NoSuchEntityException
      */
-    private function fetchBlockData($identifier, string $field, int $storeId): array
+    private function formatLogData($logResults, $identifier, $type): array
     {
-        $searchCriteria = $this->searchCriteriaBuilder
-            ->addFilter($field, $identifier)
-            ->addFilter(Store::STORE_ID, [$storeId, Store::DEFAULT_STORE_ID], 'in')
-            ->addFilter(BlockInterface::IS_ACTIVE, true)->create();
-
-        $blockResults = $this->blockRepository->getList($searchCriteria)->getItems();
-
-        if (empty($blockResults)) {
+        if (empty($logResults)) {
             throw new NoSuchEntityException(
-                __('The CMS block with the "%1" ID doesn\'t exist.', $identifier)
+                __('The log information with %2 "%1" doesn\'t exist.', $identifier, $type)
             );
         }
 
-        $block = current($blockResults);
-        $renderedContent = $this->widgetFilter->filterDirective($block->getContent());
-        return [
-            BlockInterface::BLOCK_ID => $block->getId(),
-            BlockInterface::IDENTIFIER => $block->getIdentifier(),
-            BlockInterface::TITLE => $block->getTitle(),
-            BlockInterface::CONTENT => $renderedContent,
-        ];
+        $results = [];
+        foreach ($logResults as $log) {
+            $results[]=[
+                LoggerInterface::JOBID => $log[LoggerInterface::JOBID],
+                LoggerInterface::DATAPACK => $log[LoggerInterface::DATAPACK],
+                LoggerInterface::MESSAGE => $log[LoggerInterface::MESSAGE],
+                LoggerInterface::LEVEL => $log[LoggerInterface::LEVEL],
+                LoggerInterface::ADDDATE => $log[LoggerInterface::ADDDATE]
+            ];
+        }
+        return $results;
     }
 }
