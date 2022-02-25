@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace MagentoEse\DataInstallGraphQl\Model\Resolver\DataInstallerLog;
+namespace MagentoEse\DataInstallGraphQl\Model\Resolver\DataInstall;
 
 use MagentoEse\DataInstallGraphQl\Model\Resolver\DataProvider\DataInstallLog as LogDataProvider;
 use Magento\Framework\Exception\NoSuchEntityException;
