@@ -10,7 +10,6 @@ namespace MagentoEse\DataInstallGraphQl\Model\Resolver\DataProvider;
 use Klarna\Core\Api\Data\LogInterface;
 use MagentoEse\DataInstall\Api\LoggerRepositoryInterface;
 use MagentoEse\DataInstall\Api\Data\LoggerInterface;
-use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
@@ -24,21 +23,13 @@ class DataInstallLog
     private $loggerRepository;
 
     /**
-     * @var SearchCriteriaBuilder
-     */
-    private $searchCriteriaBuilder;
-
-    /**
      * @param LoggerRepositoryInterface $loggerRepository
      * @param FilterEmulate $widgetFilter
-     * @param SearchCriteriaBuilder $searchCriteriaBuilder
      */
     public function __construct(
-        LoggerRepositoryInterface $loggerRepository,
-        SearchCriteriaBuilder $searchCriteriaBuilder
+        LoggerRepositoryInterface $loggerRepository
     ) {
         $this->loggerRepository = $loggerRepository;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
     }
 
     /**

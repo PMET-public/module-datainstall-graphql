@@ -1,38 +1,94 @@
 <?php
 namespace MagentoEse\DataInstallGraphQl\Model\Resolver\Cms;
 
+use Magento\CmsGraphQl\Model\Resolver\DataProvider\Page as PageDataProvider;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Cms\Api\PageRepositoryInterface;
+use function is_numeric;
 
 /**
- * @inheritdoc
+ * CMS pages field resolver, used for GraphQL request processing
+ * copied from Magento\CmsGraphQl\Model\Resolver\Blocks
  */
 class Pages implements ResolverInterface
 {
-    /** @var PageRepositoryInterface */
-    protected $pageRepository;
-    
-    /** @param PageRepositoryInterface $pageRepository
-     */
-
-    public function __construct(PageRepositoryInterface $pageRepository)
-    {
-        $this->pageRepository = $pageRepository;
-    }
-    
     /**
-     * Converts the landing page page id into page identifier
+     * @var PageDataProvider
      */
-    public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
+    private $pageDataProvider;
+
+    /**
+     * @param PageDataProvider $pageDataProvider
+     */
+    public function __construct(
+        PageDataProvider $pageDataProvider
+    ) {
+        $this->pageDataProvider = $pageDataProvider;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function resolve(
+        Field $field,
+        $context,
+        ResolveInfo $info,
+        array $value = null,
+        array $args = null
+    ) {
+        $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
+        $pageIdentifiers = $this->getPageIdentifiers($args);
+        $pagesData = $this->getPagesData($pageIdentifiers, $storeId);
+
+        return [
+            'items' => $pagesData,
+        ];
+    }
+
+    /**
+     * Get page identifiers
+     *
+     * @param array $args
+     * @return string[]
+     * @throws GraphQlInputException
+     */
+    private function getPageIdentifiers(array $args): array
     {
-        if (!empty($value['identifier'])) {
-            $page = $this->pageRepository->getById($value['page_id']);
-            return $page->getContent();
-        } else {
-            return null;
+        if (!isset($args['identifiers']) || !is_array($args['identifiers']) || count($args['identifiers']) === 0) {
+            throw new GraphQlInputException(__('"identifiers" of CMS pages should be specified'));
         }
+
+        return $args['identifiers'];
+    }
+
+    /**
+     * Get pages data
+     *
+     * @param array $pageIdentifiers
+     * @param int $storeId
+     * @return array
+     * @throws GraphQlNoSuchEntityException
+     */
+    private function getPagesData(array $pageIdentifiers, int $storeId): array
+    {
+        $pagessData = [];
+        foreach ($pageIdentifiers as $pageIdentifier) {
+            try {
+                if (!is_numeric($pageIdentifier)) {
+                    $pagesData[$pageIdentifier] = $this->pageDataProvider
+                        ->getDataByPageIdentifier($pageIdentifier, $storeId);
+                } else {
+                    $pagesData[$pageIdentifier] = $this->pageDataProvider
+                        ->getDataByPageId((int)$pageIdentifier, $storeId);
+                }
+            } catch (NoSuchEntityException $e) {
+                $pagesData[$pageIdentifier] = new GraphQlNoSuchEntityException(__($e->getMessage()), $e);
+            }
+        }
+        return $pagesData;
     }
 }
