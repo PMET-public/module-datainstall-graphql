@@ -120,7 +120,7 @@ Magento GraphQL uses the store scope, so the queries are limited to the store sc
     	}
     }
 
-**cmsBlocks**: Use to create the `blocks.json` file. Include the block identifiers you want to include in the export. `content` will include the raw content, so any Page builder id substitutions will need to be done manually as outlined in the Data Installer documentation https://github.com/PMET-public/module-data-install#content-substitution
+**cmsBlocks**: Use to create the `blocks.json` file. Include the block identifiers or Ids you want to include in the export. `content` will include the raw content, so any Page builder id substitutions will need to be done manually as outlined in the Data Installer documentation https://github.com/PMET-public/module-data-install#content-substitution
 
     query{
     	cmsBlocks(identifiers: ["ac_locations","ac_offers"]) {
@@ -133,7 +133,7 @@ Magento GraphQL uses the store scope, so the queries are limited to the store sc
     	}
     }
 
-**cmsPages**: Use to create the `pages.json` file. Include the page identifiers you want to include in the export. `content` will include the raw content, so any Page builder id substitutions will need to be done manually as outlined in the Data Installer documentation https://github.com/PMET-public/module-data-install#content-substitution
+**cmsPages**: Use to create the `pages.json` file. Include the page identifiers or Ids you want to include in the export. `content` will include the raw content, so any Page builder id substitutions will need to be done manually as outlined in the Data Installer documentation https://github.com/PMET-public/module-data-install#content-substitution
 
 	query{
   		cmsPages(identifiers: ["anais-clement-quiz-p4","anais-clement-quiz-p3"]){
@@ -147,6 +147,21 @@ Magento GraphQL uses the store scope, so the queries are limited to the store sc
       				meta_description
       				meta_keywords
       				meta_title
+    			}
+  		}
+	}
+
+
+**customerSegments**: Use to create the `customer_segments.json` file. Include the segment names or Ids you want to include in the export. `conditions_serialized` will include the raw content, so any id substitutions will need to be done manually as outlined in the Data Installer documentation https://github.com/PMET-public/module-data-install#content-substitution
+
+	query{
+  		customerSegments(identifiers: ["1","2","3","4"]){
+    			items {
+      				name
+      				apply_to
+      				conditions_serialized
+      				description
+      				site_code
     			}
   		}
 	}

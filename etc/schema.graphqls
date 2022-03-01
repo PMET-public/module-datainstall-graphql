@@ -4,11 +4,11 @@ type Query {
         datapack: String @doc(description: "datapack installed, uses instring comparison, so full path of data pack is not needed")
     ): DataIntstallerLog @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\DataInstall\\DataInstallLog") @doc(description:"Get information about a Data Installer Job")
     customerSegments(
-        name: String @doc(description: "name of segment") 
-    ): CustomerSegments @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\DataInstall\\DataInstallLog") @doc(description:"Array of customer segments")
+        identifiers: [String] @doc(description: "Names or IDs of segments") 
+    ): CustomerSegments @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\CustomerSegment\\CustomerSegments") @doc(description:"Array of customer segments")
     cmsPages(
-        identifiers: [String] @doc(description: "Identifiers of the CMS pages")
-    ): CmsPages @resolver(class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Cms\\Pages") @doc(description: "Get all the CMS Pages from store.")
+        identifiers: [String] @doc(description: "Identifiers or IDS of the CMS pages")
+    ): CmsPages @resolver(class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Cms\\Pages") @doc(description: "Get CMS Pages from store.")
 }
 
 type StoreConfig {
@@ -39,7 +39,7 @@ type CmsPage {
     page_content: String @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Cms\\PageContent") @doc(description:"raw page content")
 }
 
-type CustomerSegments @doc(description: "Retrieves all requrested Customer Segments") {
+type CustomerSegments @doc(description: "Retrieves all requested Customer Segments") {
     items: [CustomerSegment] @doc(description: "An array containing the customer segments")
 }
 
@@ -50,9 +50,6 @@ type CustomerSegment {
     conditions_serialized: String
     apply_to: String @doc(description: "2= Apply to Visitors, 1= Apply to Registered Users, 0= Both Visitors and Registered")
 }
-
-
-
 
 type DataIntstallerLog @doc(description: "Retrieves all records from a Data install Job") {
     log_records: [DataInstallerLogRecord] @doc(description: "An array containing the log entries from a data install job")
