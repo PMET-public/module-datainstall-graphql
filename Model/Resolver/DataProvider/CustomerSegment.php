@@ -9,9 +9,7 @@ namespace MagentoEse\DataInstallGraphQl\Model\Resolver\DataProvider;
 
 use Magento\CustomerSegment\Model\Segment;
 use Magento\CustomerSegment\Model\ResourceModel\Segment\CollectionFactory as SegmentCollection;
-use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Store\Api\WebsiteRepositoryInterface;
 
 /**
@@ -25,27 +23,19 @@ class CustomerSegment
     private $segmentCollection;
 
     /**
-     * @var SearchCriteriaBuilder
-     */
-    private $searchCriteriaBuilder;
-
-    /**
      * @var WebsiteRepositoryInterface
      */
     private $websiteRepository;
 
     /**
      * @param SegmentCollection $segmentCollection
-     * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param WebsiteRepositoryInterface $websiteRepository
      */
     public function __construct(
         SegmentCollection $segmentCollection,
-        SearchCriteriaBuilder $searchCriteriaBuilder,
         WebsiteRepositoryInterface $websiteRepository
     ) {
         $this->segmentCollection = $segmentCollection;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->websiteRepository = $websiteRepository;
     }
 
@@ -59,7 +49,7 @@ class CustomerSegment
      */
     public function getSegmentDataByName(string $segmentName): array
     {
-        $segmentData = $this->fetchsegmentData($segmentName, 'name');
+        $segmentData = $this->fetchSegmentData($segmentName, 'name');
 
         return $segmentData;
     }
@@ -74,7 +64,7 @@ class CustomerSegment
      */
     public function getSegmentDataById(int $segmentId): array
     {
-        $segmentData = $this->fetchsegmentData($segmentId, 'segment_id');
+        $segmentData = $this->fetchSegmentData($segmentId, 'segment_id');
 
         return $segmentData;
     }
@@ -84,11 +74,10 @@ class CustomerSegment
      *
      * @param mixed $identifier
      * @param string $field
-     * @param int $storeId
      * @return array
      * @throws NoSuchEntityException
      */
-    private function fetchsegmentData($identifier, string $field): array
+    private function fetchSegmentData($identifier, string $field): array
     {
         $segmentResults = $this->segmentCollection->create()->addFieldToFilter($field, [$identifier])->getItems();
 

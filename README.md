@@ -151,7 +151,6 @@ Magento GraphQL uses the store scope, so the queries are limited to the store sc
   		}
 	}
 
-
 **customerSegments**: Use to create the `customer_segments.json` file. Include the segment names or Ids you want to include in the export. `conditions_serialized` will include the raw content, so any id substitutions will need to be done manually as outlined in the Data Installer documentation https://github.com/PMET-public/module-data-install#content-substitution
 
 	query{
@@ -165,3 +164,35 @@ Magento GraphQL uses the store scope, so the queries are limited to the store sc
     			}
   		}
 	}
+
+**cartRules**: Use to create the `cart_rules.json` file. Include the cart rule names or Ids you want to include in the export. `conditions_serialized` and `actions_serialized` will include the raw content, so any id substitutions will need to be done manually as outlined in the Data Installer documentation https://github.com/PMET-public/module-data-install#content-substitution
+
+	query{
+		cartRules(identifiers: ["1","2","3","4","5"]) {
+			items {
+				actions_serialized
+				apply_to_shipping
+				conditions_serialized
+				coupon_code
+				coupon_type
+				customer_group
+				description
+				discount_amount
+				discount_qty
+				is_advanced
+				is_rss
+				name
+				reward_points_delta
+				simple_action
+				simple_free_shipping
+				site_code
+				sort_order
+				stop_rules_processing
+				times_used
+				use_auto_generation
+				uses_per_coupon
+				uses_per_customer
+			}
+		}
+	}
+	

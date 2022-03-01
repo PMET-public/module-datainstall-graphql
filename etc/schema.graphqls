@@ -6,6 +6,9 @@ type Query {
     customerSegments(
         identifiers: [String] @doc(description: "Names or IDs of segments") 
     ): CustomerSegments @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\CustomerSegment\\CustomerSegments") @doc(description:"Array of customer segments")
+    cartRules(
+        identifiers: [String] @doc(description: "Names or IDs of cart rules") 
+    ): CartRules @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\CartRule\\CartRules") @doc(description:"Array of cart rules")
     cmsPages(
         identifiers: [String] @doc(description: "Identifiers or IDS of the CMS pages")
     ): CmsPages @resolver(class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Cms\\Pages") @doc(description: "Get CMS Pages from store.")
@@ -37,6 +40,36 @@ type CmsPages @doc(description: "CMS pages information") {
 type CmsPage {
     store_view_code: String @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Store\\StoreViewCode")
     page_content: String @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Cms\\PageContent") @doc(description:"raw page content")
+}
+
+type CartRules @doc(description: "Retrieves all requested Cart Rules") {
+    items: [CartRule] @doc(description: "An array containing the cart rules")
+}
+
+type CartRule {
+    site_code: String
+    customer_group: String
+    name: String
+    description: String
+    uses_per_customer: Int
+    stop_rules_processing: Int
+    is_advanced: Int
+    sort_order: Int
+    simple_action: String
+    discount_amount: String
+    discount_qty: String
+    apply_to_shipping: Int
+    times_used: Int
+    is_rss: Int
+    coupon_type: String
+    use_auto_generation: Int
+    uses_per_coupon: Int
+    simple_free_shipping: Int
+    coupon_code: String
+    reward_points_delta: String
+    conditions_serialized: String
+    actions_serialized: String
+
 }
 
 type CustomerSegments @doc(description: "Retrieves all requested Customer Segments") {
