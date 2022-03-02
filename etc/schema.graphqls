@@ -3,9 +3,12 @@ type Query {
         jobId: String @doc(description: "id of job if import was done via admin ui. If used, datapack value is ignored") 
         datapack: String @doc(description: "datapack installed, uses instring comparison, so full path of data pack is not needed")
     ): DataIntstallerLog @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\DataInstall\\DataInstallLog") @doc(description:"Get information about a Data Installer Job")
+    customerGroups(
+        identifiers: [String] @doc(description: "Names or Ids of Groups") 
+    ): CustomerGroups @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Customer\\CustomerGroups") @doc(description:"Array of customer groups")
     customerSegments(
         identifiers: [String] @doc(description: "Names or IDs of segments") 
-    ): CustomerSegments @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\CustomerSegment\\CustomerSegments") @doc(description:"Array of customer segments")
+    ): CustomerSegments @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Customer\\CustomerSegments") @doc(description:"Array of customer segments")
     cartRules(
         identifiers: [String] @doc(description: "Names or IDs of cart rules") 
     ): CartRules @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\CartRule\\CartRules") @doc(description:"Array of cart rules")
@@ -70,6 +73,15 @@ type CartRule {
     conditions_serialized: String
     actions_serialized: String
 
+}
+
+type CustomerGroups @doc(description: "Retrieves all requested Customer Groups") {
+    items: [CustomerGroup] @doc(description: "An array containing the customer group")
+}
+
+type CustomerGroup {
+    name: String
+    tax_class: String
 }
 
 type CustomerSegments @doc(description: "Retrieves all requested Customer Segments") {

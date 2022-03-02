@@ -151,6 +151,17 @@ Magento GraphQL uses the store scope, so the queries are limited to the store sc
   		}
 	}
 
+**customerGroups**: Use to create the `customer_groups.json` file. Include the group names or Ids you want to include in the export. 
+
+	query{
+  		customerGroups(identifiers: ["VIP"]){
+    			items {
+      				name
+      				tax_class
+    			}
+  		}
+	}
+
 **customerSegments**: Use to create the `customer_segments.json` file. Include the segment names or Ids you want to include in the export. `conditions_serialized` will include the raw content, so any id substitutions will need to be done manually as outlined in the Data Installer documentation https://github.com/PMET-public/module-data-install#content-substitution
 
 	query{
@@ -195,4 +206,3 @@ Magento GraphQL uses the store scope, so the queries are limited to the store sc
 			}
 		}
 	}
-	

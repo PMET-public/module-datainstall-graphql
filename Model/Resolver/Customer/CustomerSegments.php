@@ -1,5 +1,5 @@
 <?php
-namespace MagentoEse\DataInstallGraphQl\Model\Resolver\CustomerSegment;
+namespace MagentoEse\DataInstallGraphQl\Model\Resolver\Customer;
 
 use MagentoEse\DataInstallGraphQl\Model\Resolver\DataProvider\CustomerSegment as CustomerSegmentDataProvider;
 use Magento\Framework\Exception\NoSuchEntityException;

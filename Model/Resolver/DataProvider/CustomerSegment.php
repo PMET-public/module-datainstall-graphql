@@ -42,8 +42,7 @@ class CustomerSegment
     /**
      * Get segment data by identifier
      *
-     * @param string $segmentIdentifier
-     * @param int $storeId
+     * @param string $segmentName
      * @return array
      * @throws NoSuchEntityException
      */
@@ -55,10 +54,9 @@ class CustomerSegment
     }
 
     /**
-     * Get block data by block_id
+     * Get segment data by segmentId
      *
-     * @param int $blockId
-     * @param int $storeId
+     * @param int $segmentId
      * @return array
      * @throws NoSuchEntityException
      */
