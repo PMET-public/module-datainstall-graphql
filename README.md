@@ -206,3 +206,43 @@ Magento GraphQL uses the store scope, so the queries are limited to the store sc
 			}
 		}
 	}
+
+**msiSource**: Use to create the `msi_source.json` file. Include the source codes you want to include in the export. 
+
+	query{
+		msiSource(identifiers: ["ac_warehouse"]){
+			items {
+				city
+				contact_name
+				country_id
+				description
+				email
+				enabled
+				fax
+				frontend_description
+				frontend_name
+				is_pickup_location_active
+				latitude
+				longitude
+				name
+				phone
+				postcode
+				region_id
+				source_code
+				street
+				use_default_carrier_config
+			}
+		}
+	}
+
+**msiStock**: Use to create the `msi_stock.json` file. Include the stock names or Ids you want to include in the export. 
+
+	query{
+		msiStock(identifiers: ["2"]){
+			items {
+				site_code
+				source_code
+				stock_name
+			}
+		}
+	}

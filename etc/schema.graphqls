@@ -15,6 +15,14 @@ type Query {
     cmsPages(
         identifiers: [String] @doc(description: "Identifiers or IDS of the CMS pages")
     ): CmsPages @resolver(class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Cms\\Pages") @doc(description: "Get CMS Pages from store.")
+    msiSource(
+        identifiers: [String] @doc(description: "Code of the Msi Source")
+    ): MsiSources @resolver(class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Inventory\\MsiSource") @doc(description: "Get Msi Sources.")
+     msiStock(
+        identifiers: [String] @doc(description: "Names or Ids of the Msi Stock")
+    ): MsiStocks @resolver(class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Inventory\\MsiStock") @doc(description: "Get Msi Stocks.")
+
+
 }
 
 type StoreConfig {
@@ -94,6 +102,47 @@ type CustomerSegment {
     description: String
     conditions_serialized: String
     apply_to: String @doc(description: "2= Apply to Visitors, 1= Apply to Registered Users, 0= Both Visitors and Registered")
+}
+
+type MsiSources @doc(description: "Retrieves all requested Msi Sources") {
+    items: [MsiSource] @doc(description: "An array containing the Msi Sources")
+}
+
+type MsiSource {
+    source_code: String @doc(description: "Unique code of the source")
+    name: String @doc(description: "Name as shown in admin")
+    enabled: Int 
+    description: String
+    latitude: String @doc(description: "Required if used as pickup location")
+    longitude: String @doc(description: "Required if used as pickup location")
+    region_id: Int
+    country_id: String
+    city: String 
+    street: String 
+    postcode: String
+    contact_name: String
+    email: String
+    phone: String
+    fax: String
+    use_default_carrier_config: Int
+    is_pickup_location_active: Int
+    frontend_name: String @doc(description: "Name as shown on storefront")
+    frontend_description: String @doc(description: "Description shown on storefront")
+}
+
+type MsiStocks @doc(description: "Retrieves all requested Msi Stocks") {
+    items: [MsiStock] @doc(description: "An array containing the Msi Stock")
+}
+
+type MsiStock {
+    stock_name: String @doc(description: "Name as shown in admin")
+    site_code: String  @doc(description: "List of site codes")
+    source_code: String  @doc(description: "List of source codes to assign to the stock")
+}
+
+
+type CustomerSegments @doc(description: "Retrieves all requested Customer Segments") {
+    items: [CustomerSegment] @doc(description: "An array containing the customer segments")
 }
 
 type DataIntstallerLog @doc(description: "Retrieves all records from a Data install Job") {
