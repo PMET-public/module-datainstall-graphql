@@ -10,5 +10,8 @@
       "files": [
         "registration.php"
       ]
+    },
+    "require": {
+      "magentoese/module-data-install": "*"
     }
-  }
+}

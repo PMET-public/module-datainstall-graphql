@@ -145,6 +145,10 @@ type CustomerSegments @doc(description: "Retrieves all requested Customer Segmen
     items: [CustomerSegment] @doc(description: "An array containing the customer segments")
 }
 
+type StorefrontProperties{
+    is_pagebuilder_enabled: String
+}
+
 type DataIntstallerLog @doc(description: "Retrieves all records from a Data install Job") {
     log_records: [DataInstallerLogRecord] @doc(description: "An array containing the log entries from a data install job")
 }
@@ -175,4 +179,31 @@ input DataInstallerJobInput @doc(description: "datapack only required value") {
   files: String @doc(description: "Comma delimited list of file so load")
   host: String @doc(description: "Override for host value in stores file")
   reload: Int @doc(description: "1 if reloading an existing Data Pack")
+}
+
+type Attribute {
+     admin_properties: [AdminProperties] @resolver(class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Attribute\\AdminProperties") 
+     @doc(description: "Contains details about the admin settings configured for the attribute")
+}
+
+type AdminProperties {
+    attribute_set: String
+    frontend_label: String
+    is_visible: Int
+    is_searchable: Int
+    is_comparable: Int
+    is_html_allowed_on_front: Int
+    is_used_for_price_rules: Int
+    used_for_sort_by: Int
+    apply_to: String
+    is_visible_in_advanced_search: Int
+    is_wysiwyg_enabled: Int
+    is_used_for_promo_rules: Int
+    is_required_in_admin_store: Int
+    is_used_in_grid: Int
+    is_visible_in_grid: Int
+    is_filterable_in_grid: Int
+    search_weight: Int
+    is_pagebuilder_enabled: Int
+    additional_data: String
 }
