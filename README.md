@@ -246,3 +246,71 @@ Magento GraphQL uses the store scope, so the queries are limited to the store sc
 			}
 		}
 	}
+
+**customAttributeMetadata**: Use to create the `product_attributes.json` file. Include attribute codes you want to include in the export. 
+
+	query{
+		customAttributeMetadata(
+			attributes: [
+				{
+					attribute_code: "testswatch"
+					entity_type: "catalog_product"
+				}
+				{
+					attribute_code: "lipcarepottube"
+					entity_type: "catalog_product"
+				}
+			]
+		) {
+			items {
+				attribute_code
+				store_view_code
+				frontend_input:input_type
+				attribute_options {
+					value
+					label
+				}
+				storefront_properties {
+					is_filterable:use_in_layered_navigation
+					used_in_product_listing:use_in_product_listing
+					is_filterable_in_search:use_in_search_results_layered_navigation
+					is_visible_on_front:visible_on_catalog_pages
+					position
+				}
+				admin_properties {
+					additional_data
+					attribute_set
+					frontend_label
+					is_comparable
+					is_filterable_in_grid
+					is_html_allowed_on_front
+					is_pagebuilder_enabled
+					is_required_in_admin_store
+					is_searchable
+					is_used_for_price_rules
+					is_used_for_promo_rules
+					is_used_in_grid
+					is_visible
+					is_visible_in_advanced_search
+					is_visible_in_grid
+					is_wysiwyg_enabled
+					search_weight
+					used_for_sort_by
+				}
+			}
+		}
+	}
+
+**rewardsPointsExchangeRate**: Use to create the `reward_exchange_rate.json` file. Include the Ids you want to include in the export. 
+
+	query{
+		rewardsPointsExchangeRate(identifiers: ["1"]) {
+			items {
+				currency_amount
+				customer_group
+				direction
+				points
+				site_code
+			}
+		}
+	}

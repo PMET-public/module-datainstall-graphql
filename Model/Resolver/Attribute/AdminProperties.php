@@ -17,30 +17,25 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Eav\Api\Data\AttributeInterface;
+use Magento\Eav\Api\AttributeRepositoryInterface;
 
 /**
  * Resolve data for custom attribute metadata requests
  */
 class AdminProperties implements ResolverInterface
 {
-    /**
-     * @var Type
-     */
-    private $type;
 
     /**
-     * @var Attribute
+     * @var AttributeRepositoryInterface
      */
-    private $attribute;
+    private $attributeRepository;
 
     /**
-     * @param Type $type
-     * @param Attribute $attribute
+     * @param AttributeRepositoryInterface $attributeRepository
      */
-    public function __construct(Type $type, Attribute $attribute)
+    public function __construct(AttributeRepositoryInterface $attributeRepository)
     {
-        $this->type = $type;
-        $this->attribute = $attribute;
+        $this->attributeRepository = $attributeRepository;
     }
 
     /**
@@ -53,9 +48,11 @@ class AdminProperties implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        
-
-        return ['admin_properties' => $this->getStorefrontProperties()];
+        $storeId = $context->getExtensionAttributes()->getStore()->getId();
+        $attributeCode = $value['attribute_code'];
+        $attribute = $this->attributeRepository->get('catalog_product', $attributeCode);
+        $r=$attribute->getApplyTo();
+        return $this->getStorefrontProperties($attribute, $storeId);
     }
 
     /**
@@ -64,26 +61,46 @@ class AdminProperties implements ResolverInterface
      * @param AttributeInterface $attribute
      * @return array
      */
-    private function getStorefrontProperties()
+    private function getStorefrontProperties($attribute, $storeId)
     {
         return [
-            'foo'=> 'foo',
-            'bar'=> 'bar',
-            'shutupmeg'=> 'shutupmeg'
+            'attribute_set'=> 'foo',
+            'frontend_label'=> $this->getFrontEndLabel($attribute, $storeId),
+            'is_visible'=> $attribute->getIsVisible(),
+            'is_searchable'=> $attribute->getIsSearchable(),
+            'is_comparable'=> $attribute->getIsComperable(),
+            'is_html_allowed_on_front'=> $attribute->getIsHtmlAllowedOnFront(),
+            'is_used_for_price_rules'=> $attribute->getIsUsedForPriceRules(),
+            'used_for_sort_by'=> $attribute->getUsedForSortBy(),
+            'is_visible_in_advanced_search'=> $attribute->getIsVisibleInAdvancedSearch(),
+            'is_wysiwyg_enabled'=> $attribute->getIsWysiwygEnabled(),
+            'is_used_for_promo_rules'=> $attribute->getIsUsedForPromoRules(),
+            'is_required_in_admin_store'=> $attribute->getIsRequiredInAdminStore(),
+            'is_used_in_grid'=> $attribute->getIsUsedInGrid(),
+            'is_visible_in_grid'=> $attribute->getIsVisibleInGrid(),
+            'is_filterable_in_grid'=> $attribute->getIsFilterableInGrid(),
+            'search_weight'=> $attribute->getSearchWeight(),
+            'is_pagebuilder_enabled'=> $attribute->getIsPagebuilderEnabled(),
+            'additional_data'=> $attribute->getAdditionalData()
         ];
     }
 
     /**
      * Return enum for resolving use in layered navigation
-     *
-     * @return string[]
+     * @param AttributeInterface $attribute
+     * @param $storeId
+     * @return string
      */
-    private function getLayeredNavigationPropertiesEnum() {
-        return [
-            0 => 'NO',
-            1 => 'FILTERABLE_WITH_RESULTS',
-            2 => 'FILTERABLE_NO_RESULT'
-        ];
+    private function getFrontEndLabel(AttributeInterface $attribute, $storeId)
+    {
+        $labels = $attribute->getFrontendLabels();
+        foreach ($labels as $label) {
+            if ($label->getStoreId()==$storeId) {
+                return $label->getLabel();
+                break;
+            }
+        }
+        return $attribute->getDefaultFrontendLabel();
     }
 
     /**

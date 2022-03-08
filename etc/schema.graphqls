@@ -18,9 +18,12 @@ type Query {
     msiSource(
         identifiers: [String] @doc(description: "Code of the Msi Source")
     ): MsiSources @resolver(class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Inventory\\MsiSource") @doc(description: "Get Msi Sources.")
-     msiStock(
+    msiStock(
         identifiers: [String] @doc(description: "Names or Ids of the Msi Stock")
     ): MsiStocks @resolver(class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Inventory\\MsiStock") @doc(description: "Get Msi Stocks.")
+    rewardsPointsExchangeRate(
+        identifiers: [String] @doc(description: "Ids of Echange Rates")
+    ): RewardPointsRateList @resolver(class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Customer\\RewardExchangeRates") @doc(description: "Get Rewards Exchange Rates")
 
 
 }
@@ -182,8 +185,9 @@ input DataInstallerJobInput @doc(description: "datapack only required value") {
 }
 
 type Attribute {
-     admin_properties: [AdminProperties] @resolver(class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Attribute\\AdminProperties") 
+     admin_properties: AdminProperties @resolver(class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Attribute\\AdminProperties") 
      @doc(description: "Contains details about the admin settings configured for the attribute")
+     store_view_code: String @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Store\\StoreViewCode")
 }
 
 type AdminProperties {
@@ -195,7 +199,6 @@ type AdminProperties {
     is_html_allowed_on_front: Int
     is_used_for_price_rules: Int
     used_for_sort_by: Int
-    apply_to: String
     is_visible_in_advanced_search: Int
     is_wysiwyg_enabled: Int
     is_used_for_promo_rules: Int
@@ -206,4 +209,14 @@ type AdminProperties {
     search_weight: Int
     is_pagebuilder_enabled: Int
     additional_data: String
+}
+
+type RewardPointsRateList @doc(description: "Retrieves all requested Rewards Exchange Rates") {
+    items: [RewardPointsRate]
+}
+
+type RewardPointsRate {
+    site_code: String @doc(description:"Single site code or comma delimited list")
+    customer_group: String @doc(description:"Single group name or comma delimited list")
+    direction: String @doc(description:"points_to_currency or currency_to_points")
 }
