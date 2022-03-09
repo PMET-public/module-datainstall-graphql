@@ -8,10 +8,14 @@ declare(strict_types=1);
 namespace MagentoEse\DataInstallGraphQl\Model\Resolver\DataProvider;
 
 use Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory as RuleCollection;
-use Magento\SalesRule\Model\Data\Rule;
+use Magento\SalesRule\Api\Data\RuleInterface as Rule;
+use Magento\SalesRule\Api\RuleRepositoryInterface as RuleRepository;
+use Magento\SalesRule\Api\Data\CouponInterface;
+use Magento\SalesRule\Api\CouponRepositoryInterface as CouponRepository;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\Customer\Api\GroupRepositoryInterface;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 
 /**
  * Customer Segment data provider
@@ -24,6 +28,16 @@ class CartRule
     private $ruleCollection;
 
     /**
+     * @var RuleRepository
+     */
+    private $ruleRepository;
+
+     /**
+      * @var CouponRepository
+      */
+    private $couponRepository;
+
+    /**
      * @var WebsiteRepositoryInterface
      */
     private $websiteRepository;
@@ -33,19 +47,33 @@ class CartRule
       */
     private $groupRepositoryInterface;
 
+     /**
+      * @var SearchCriteriaBuilder
+      */
+      private $searchCriteria;
+
     /**
      * @param RuleCollection $ruleCollection
+     * @param RuleRepository $ruleRepository
+     * @param CouponRepository $couponRepository
      * @param WebsiteRepositoryInterface $websiteRepository
      * @param GroupRepositoryInterface $groupRepositoryInterface
+     * @param SearchCriteriaBuilder $searchCriteria
      */
     public function __construct(
         RuleCollection $ruleCollection,
+        RuleRepository $ruleRepository,
+        CouponRepository $couponRepository,
         WebsiteRepositoryInterface $websiteRepository,
-        GroupRepositoryInterface $groupRepositoryInterface
+        GroupRepositoryInterface $groupRepositoryInterface,
+        SearchCriteriaBuilder $searchCriteria
     ) {
         $this->ruleCollection = $ruleCollection;
+        $this->ruleRepository = $ruleRepository;
+        $this->couponRepository = $couponRepository;
         $this->websiteRepository = $websiteRepository;
         $this->groupRepositoryInterface = $groupRepositoryInterface;
+        $this->searchCriteria = $searchCriteria;
     }
 
     /**
@@ -97,22 +125,24 @@ class CartRule
         }
         /** @var Rule $rule */
         $rule = current($ruleResults);
-
+        /** @var Rule $newRule */
+        $ruleInterface = $this->ruleRepository->getById($rule->getRuleId());
+        $extAttributes = $ruleInterface->getExtensionAttributes();
         return [
             'name' => $rule->getName(),
             'site_code' => $this->getWebsiteCodes($rule->getWebsiteIds()),
             'description' => $rule->getDescription(),
-            'actions_serialized' => $rule->getActionCondition(),
+            'actions_serialized' => $rule->getActionsSerialized(),
             'apply_to_shipping' => $rule->getApplyToShipping(),
             'conditions_serialized' => $rule->getConditionsSerialized(),
-            'coupon_code' => $rule->getCouponCode(),
+            'coupon_code' =>  $this->getCouponCode($rule->getRuleId()),
             'coupon_type' => $rule->getCouponType(),
             'customer_group' => $this->getCustomerGroupNames($rule->getCustomerGroupIds()),
             'discount_amount' => $rule->getDiscountAmount(),
             'discount_qty' => $rule->getDiscountQty(),
             'is_advanced' => $rule->getIsAdvanced(),
             'is_rss' => $rule->getIsRss(),
-            'reward_points_delta' => $rule->getIsRss(),
+            'reward_points_delta' => $extAttributes->getRewardPointsDelta(),
             'simple_action' => $rule->getSimpleAction(),
             'simple_free_shipping' => $rule->getSimpleFreeShipping(),
             'sort_order' => $rule->getSortOrder(),
@@ -121,10 +151,12 @@ class CartRule
             'use_auto_generation' => $rule->getUseAutoGeneration(),
             'uses_per_coupon' => $rule->getUsesPerCoupon(),
             'uses_per_customer' => $rule->getUsesPerCustomer()
-           
-        ];
+           ];
     }
-
+    /**
+     * @param array $siteIds
+     * @return string
+     */
     private function getWebsiteCodes($siteIds)
     {
         $siteCodes = [];
@@ -135,6 +167,10 @@ class CartRule
         return implode(",", $siteCodes);
     }
 
+    /**
+     * @param array $groupIds
+     * @return string
+     */
     private function getCustomerGroupNames($groupIds)
     {
         $groupNames = [];
@@ -143,5 +179,23 @@ class CartRule
             $groupNames[] = $group->getCode();
         }
         return implode(",", $groupNames);
+    }
+
+    /**
+     * @param array $ruleId
+     * @return string
+     */
+    private function getCouponCode($ruleId)
+    {
+        $search = $this->searchCriteria
+        ->addFilter('rule_id', $ruleId, 'eq')->create()->setPageSize(1)
+        ->setCurrentPage(1);
+        $couponList = $this->couponRepository->getList($search);
+        $coupon = current($couponList->getItems());
+        if ($coupon) {
+            return $coupon->getCode();
+        } else {
+            return null;
+        }
     }
 }

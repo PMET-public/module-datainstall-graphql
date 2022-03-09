@@ -54,7 +54,7 @@ class CustomerGroup
     }
 
     /**
-     * Get block data by block_id
+     * Get group data by id
      *
      * @param int $groupId
      * @return array
@@ -97,15 +97,5 @@ class CustomerGroup
             'name' => $group->getCode(),
             'tax_class' => $group->getTaxClassName()
         ];
-    }
-
-    private function getWebsiteCodes($siteIds)
-    {
-        $siteCodes = [];
-        foreach ($siteIds as $siteId) {
-            $site = $this->websiteRepository->getById($siteId);
-            $siteCodes[] = $site->getCode();
-        }
-        return implode(",", $siteCodes);
     }
 }

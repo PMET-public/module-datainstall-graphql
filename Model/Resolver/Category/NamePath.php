@@ -2,7 +2,6 @@
 namespace MagentoEse\DataInstallGraphQl\Model\Resolver\Category;
 
 use Magento\Framework\GraphQl\Config\Element\Field;
-use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
@@ -32,6 +31,10 @@ class NamePath implements ResolverInterface
         return $namePath;
     }
 
+    /**
+     * @param $path
+     * @return string
+     */
     private function getNamePath($path)
     {
         //remove the first 2 and last elements

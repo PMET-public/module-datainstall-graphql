@@ -11,7 +11,6 @@ use Magento\InventoryApi\Api\Data\StockInterface;
 use Magento\InventoryApi\Api\Data\StockExtension;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
 use Magento\InventoryApi\Api\GetStockSourceLinksInterface;
-use Magento\InventoryApi\Api\Data\StockSourceLinkSearchResultsInterface;
 use Magento\InventoryApi\Api\Data\StockSourceLinkInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -66,7 +65,7 @@ class MsiStock
     }
 
     /**
-     * Get block data by block_id
+     * Get stock data by id
      *
      * @param int $stockId
      * @return array

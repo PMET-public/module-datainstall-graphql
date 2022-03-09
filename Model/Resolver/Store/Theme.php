@@ -2,7 +2,6 @@
 namespace MagentoEse\DataInstallGraphQl\Model\Resolver\Store;
 
 use Magento\Framework\GraphQl\Config\Element\Field;
-use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\App\Config\ScopeConfigInterface;

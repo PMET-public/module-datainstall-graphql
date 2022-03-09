@@ -26,6 +26,7 @@ class LandingPage implements ResolverInterface
     
     /**
      * Converts the landing page block id into block identifier
+     * @inheritdoc
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
