@@ -314,3 +314,18 @@ Magento GraphQL uses the store scope, so the queries are limited to the store sc
 			}
 		}
 	}
+
+**upsells**: Use to create the `upsells.json` file to populate Related Products Cross Sells and Upsells. Include the Ids or names you want to include in the export. 
+
+	query{
+		upsells(identifiers: ["4","3"]) {
+			items {
+				actions_serialized
+				apply_to
+				conditions_serialized
+				customer_segments
+				name
+				sort_order
+			}
+		}
+	}

@@ -13,7 +13,7 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
- * Customer Segment data provider
+ * Customer Group data provider
  */
 class CustomerGroup
 {
@@ -91,7 +91,6 @@ class CustomerGroup
                 __('The group with "%2" "%1" doesn\'t exist.', $identifier, $field)
             );
         }
-        /** @var GroupInterface $group */
 
         return [
             'name' => $group->getCode(),

@@ -1,5 +1,5 @@
 <?php
-namespace MagentoEse\DataInstallGraphQl\Model\Resolver\CartRule;
+namespace MagentoEse\DataInstallGraphQl\Model\Resolver\Marketing;
 
 use MagentoEse\DataInstallGraphQl\Model\Resolver\DataProvider\CartRule as CartRuleDataProvider;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -40,7 +40,6 @@ class CartRules implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
         $cartRuleIdentifiers = $this->getCartRuleIdentifiers($args);
         $cartRuleData = $this->getCartRulesData($cartRuleIdentifiers);
 

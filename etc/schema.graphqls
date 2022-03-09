@@ -11,7 +11,7 @@ type Query {
     ): CustomerSegments @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Customer\\CustomerSegments") @doc(description:"Array of customer segments")
     cartRules(
         identifiers: [String] @doc(description: "Names or IDs of cart rules") 
-    ): CartRules @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\CartRule\\CartRules") @doc(description:"Array of cart rules")
+    ): CartRules @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Marketing\\CartRules") @doc(description:"Array of cart rules")
     cmsPages(
         identifiers: [String] @doc(description: "Identifiers or IDS of the CMS pages")
     ): CmsPages @resolver(class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Cms\\Pages") @doc(description: "Get CMS Pages from store.")
@@ -24,6 +24,10 @@ type Query {
     rewardsPointsExchangeRate(
         identifiers: [String] @doc(description: "Ids of Echange Rates")
     ): RewardPointsRateList @resolver(class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Customer\\RewardExchangeRates") @doc(description: "Get Rewards Exchange Rates")
+    upsells(
+        identifiers: [String] @doc(description: "Names or IDs of related product rules") 
+    ): Upsells @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Marketing\\Upsells") @doc(description:"Array of related product rules")
+  
 
 
 }
@@ -219,4 +223,18 @@ type RewardPointsRate {
     site_code: String @doc(description:"Single site code or comma delimited list")
     customer_group: String @doc(description:"Single group name or comma delimited list")
     direction: String @doc(description:"points_to_currency or currency_to_points")
+}
+
+type Upsells @doc(description: "Retrieves all requested Related Product Rules") {
+    items: [Upsell] @doc(description: "An array containing the Related Product Rules")
+}
+
+type Upsell {
+    name: String
+    conditions_serialized: String
+    actions_serialized: String
+    positions_limit: Int
+    apply_to: String
+    sort_order: Int
+    customer_segments: String
 }
