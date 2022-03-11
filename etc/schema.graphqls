@@ -27,8 +27,9 @@ type Query {
     upsells(
         identifiers: [String] @doc(description: "Names or IDs of related product rules") 
     ): Upsells @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Marketing\\Upsells") @doc(description:"Array of related product rules")
-  
-
+    widgets(
+        identifiers: [String] @doc(description: "Titles or IDs of widgets") 
+    ): Widgets @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Cms\\Widgets") @doc(description:"Array of widgets")
 
 }
 
@@ -237,4 +238,23 @@ type Upsell {
     apply_to: String
     sort_order: Int
     customer_segments: String
+}
+
+type Widgets @doc(description: "Retrieves all requested Widgets") {
+    items: [Widget] @doc(description: "An array containing the Widgets")
+}
+
+type Widget {
+    title: String
+    instance_type: String
+    theme: String  @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Store\\Theme") @doc(description:"Path of the Store's Theme")
+    store_view_code: String
+    widget_parameters: String
+    sort_order: Int
+    page_group: String
+    layout_handle: String
+    block_reference: String
+    page_for: String
+    entities: String
+    page_template: String
 }

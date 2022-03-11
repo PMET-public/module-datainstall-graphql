@@ -329,3 +329,24 @@ Magento GraphQL uses the store scope, so the queries are limited to the store sc
 			}
 		}
 	}
+
+**widgets**: Use to create the `widgets.json` file to populate Widgets. Include the Ids or names you want to include in the export. 
+
+	query{
+		widgets(identifiers: ["1","2","3"]) {
+			items {
+				block_reference
+				entities
+				instance_type
+				layout_handle
+				page_for
+				page_group
+				page_template
+				sort_order
+				store_view_code
+				theme
+				title
+				widget_parameters
+			}
+		}
+	}
