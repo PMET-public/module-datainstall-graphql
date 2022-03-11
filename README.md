@@ -315,7 +315,7 @@ Magento GraphQL uses the store scope, so the queries are limited to the store sc
 		}
 	}
 
-**upsells**: Use to create the `upsells.json` file to populate Related Products Cross Sells and Upsells. Include the Ids or names you want to include in the export. 
+**upsells**: Use to create the `upsells.json` file to populate Related Products Cross Sells and Upsells. Include the Ids or names you want to include in the export. `conditions_serialized` and `actions_serialized` will include the raw content, so any id substitutions will need to be done manually as outlined in the Data Installer documentation https://github.com/PMET-public/module-data-install#content-substitution
 
 	query{
 		upsells(identifiers: ["4","3"]) {
@@ -347,6 +347,27 @@ Magento GraphQL uses the store scope, so the queries are limited to the store sc
 				theme
 				title
 				widget_parameters
+			}
+		}
+	}
+
+
+**catalogRules**: Use to create the `cart_rules.json` file. Include the catalog rule names or Ids you want to include in the export. `conditions_serialized` and `actions_serialized` will include the raw content, so any id substitutions will need to be done manually as outlined in the Data Installer documentation https://github.com/PMET-public/module-data-install#content-substitution
+
+	query{
+		catalogRules(identifiers: ["Test Rule"]) {
+			items {
+				actions_serialized
+				conditions_serialized
+				customer_groups
+				description
+				discount_amount
+				dynamic_blocks
+				name
+				simple_action
+				site_code
+				sort_order
+				stop_rules_processing
 			}
 		}
 	}

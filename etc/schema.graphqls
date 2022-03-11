@@ -12,6 +12,9 @@ type Query {
     cartRules(
         identifiers: [String] @doc(description: "Names or IDs of cart rules") 
     ): CartRules @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Marketing\\CartRules") @doc(description:"Array of cart rules")
+    catalogRules(
+        identifiers: [String] @doc(description: "Names or IDs of catalog rules") 
+    ): CatalogRules @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Marketing\\CatalogRules") @doc(description:"Array of catalog rules")
     cmsPages(
         identifiers: [String] @doc(description: "Identifiers or IDS of the CMS pages")
     ): CmsPages @resolver(class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Cms\\Pages") @doc(description: "Get CMS Pages from store.")
@@ -88,7 +91,24 @@ type CartRule {
     reward_points_delta: String
     conditions_serialized: String
     actions_serialized: String
+}
 
+type CatalogRules @doc(description: "Retrieves all requested Catalog Rules") {
+    items: [CatalogRule] @doc(description: "An array containing the catalog rules")
+}
+
+type CatalogRule {
+    site_code: String
+    customer_groups: String
+    name: String
+    description: String
+    conditions_serialized: String
+    actions_serialized: String
+    stop_rules_processing: Int
+    sort_order: Int
+    simple_action: String
+    discount_amount: Float
+    dynamic_blocks: String
 }
 
 type CustomerGroups @doc(description: "Retrieves all requested Customer Groups") {
