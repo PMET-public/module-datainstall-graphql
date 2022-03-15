@@ -9,8 +9,6 @@ namespace MagentoEse\DataInstallGraphQl\Model\Resolver\DataProvider;
 
 use Magento\Authorization\Model\ResourceModel\Role\CollectionFactory as RoleCollection;
 use Magento\Authorization\Model\ResourceModel\Rules\CollectionFactory as RuleCollection;
-use Magento\Customer\Api\RoleRepositoryInterface;
-use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
@@ -29,23 +27,15 @@ class AdminRole
     private $ruleCollection;
 
     /**
-     * @var SearchCriteriaBuilder
-     */
-    private $searchCriteria;
-
-    /**
      * @param RoleCollection $roleCollection
      * @param RuleCollection $ruleCollection
-     * @param SearchCriteriaBuilder $searchCriteria
      */
     public function __construct(
         RoleCollection $roleCollection,
-        RuleCollection $ruleCollection,
-        SearchCriteriaBuilder $searchCriteria
+        RuleCollection $ruleCollection
     ) {
         $this->roleCollection = $roleCollection;
         $this->ruleCollection = $ruleCollection;
-        $this->searchCriteria = $searchCriteria;
     }
 
     /**
@@ -63,15 +53,15 @@ class AdminRole
     }
 
     /**
-     * Get customer role by name
+     * Get customer role by id
      *
-     * @param string $roleName
+     * @param string $roleId
      * @return array
      * @throws NoSuchEntityException
      */
-    public function getRoleDataById(string $roleName): array
+    public function getRoleDataById(int $roleId): array
     {
-        $roleData = $this->fetchRoleData($roleName, 'role_id');
+        $roleData = $this->fetchRoleData($roleId, 'role_id');
 
         return $roleData;
     }

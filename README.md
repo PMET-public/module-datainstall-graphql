@@ -371,3 +371,29 @@ Magento GraphQL uses the store scope, so the queries are limited to the store sc
 			}
 		}
 	}
+
+**adminRoles**: Use to create the `admin_roles.json` file. Include the role names or Ids you want to include in the export. 
+
+	query{
+		adminRoles(identifiers: ["Sales Admin"]) {
+			items {
+				role
+				resource_id
+			}
+		}
+	}
+
+**adminUsers**: Use to create the `admin_users.json` file. Include the admin user names or Ids you want to include in the export. As passwords cannot be decoded, `password` will return a static value of `Password1`
+
+	query{
+		adminUsers(identifiers: ["2"]) {
+			items {
+				email
+				firstname
+				lastname
+				password
+				role
+				username
+			}
+		}
+	}

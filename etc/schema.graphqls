@@ -36,6 +36,9 @@ type Query {
     adminRoles(
         identifiers: [String] @doc(description: "Role names") 
     ): AdminRoles @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\AdminUsers\\AdminRoles") @doc(description:"Array of Admin Roles and settings")
+    adminUsers(
+        identifiers: [String] @doc(description: "Admin Users") 
+    ): AdminUsers @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\AdminUsers\\AdminUsers") @doc(description:"Array of Admin Users")
 
 }
 
@@ -289,4 +292,17 @@ type AdminRoles @doc(description: "Retrieves all requested Roles and settings") 
 type AdminRole {
     role: String
     resource_id: String
+}
+
+type AdminUsers @doc(description: "Retrieves all requested Admin Users and attributes") {
+    items: [AdminUser] @doc(description: "An array containing individual users data")
+}
+
+type AdminUser {
+    email: String
+    username: String
+    password: String @doc(description:"As passwords cannot be decoded, it will return a static value of 'Password1'")
+    firstname: String
+    lastname: String
+    role: String
 }
