@@ -33,6 +33,9 @@ type Query {
     widgets(
         identifiers: [String] @doc(description: "Titles or IDs of widgets") 
     ): Widgets @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Cms\\Widgets") @doc(description:"Array of widgets")
+    adminRoles(
+        identifiers: [String] @doc(description: "Role names") 
+    ): AdminRoles @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\AdminUsers\\AdminRoles") @doc(description:"Array of Admin Roles and settings")
 
 }
 
@@ -277,4 +280,13 @@ type Widget {
     page_for: String
     entities: String
     page_template: String
+}
+
+type AdminRoles @doc(description: "Retrieves all requested Roles and settings") {
+    items: [AdminRole] @doc(description: "An array containing individual settings")
+}
+
+type AdminRole {
+    role: String
+    resource_id: String
 }

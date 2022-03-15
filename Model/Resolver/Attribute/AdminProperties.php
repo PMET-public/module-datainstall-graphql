@@ -45,7 +45,6 @@ class AdminProperties implements ResolverInterface
         $storeId = $context->getExtensionAttributes()->getStore()->getId();
         $attributeCode = $value['attribute_code'];
         $attribute = $this->attributeRepository->get('catalog_product', $attributeCode);
-        $r=$attribute->getApplyTo();
         return $this->getStorefrontProperties($attribute, $storeId);
     }
 

@@ -125,7 +125,6 @@ class CartRule
         }
         /** @var Rule $rule */
         $rule = current($ruleResults);
-        /** @var Rule $newRule */
         $ruleInterface = $this->ruleRepository->getById($rule->getRuleId());
         $extAttributes = $ruleInterface->getExtensionAttributes();
         return [
