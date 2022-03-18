@@ -39,6 +39,11 @@ type Query {
     adminUsers(
         identifiers: [String] @doc(description: "Admin Users") 
     ): AdminUsers @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\AdminUsers\\AdminUsers") @doc(description:"Array of Admin Users")
+    dataInstallerStoreSettings(
+        restrictProductsFromViews: String @doc(description: "Optional Y or N. Importer will default to Y") 
+        productImageImportDirectory: String @doc(description: "Optional. Do not include if its not used. Path from server root to directory where images should be read during product import. Defaults to data pack directory\\media\\products") 
+        productValidationStrategy: String @doc(description: "Optional. Do not include if its not used. values = validation-stop-on-errors,validation-skip-errors. Importer will default to validation-skip-errors.") 
+    ): DataInstallerStoreSettings @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Store\\Settings") @doc(description:"Default Store Settings")
 
 }
 
@@ -305,4 +310,13 @@ type AdminUser {
     firstname: String
     lastname: String
     role: String
+}
+
+type DataInstallerStoreSettings {
+    site_code: String
+    store_code: String
+    store_view_code: String
+    restrict_products_from_views: String @doc(description:"Optional. Will return Y if not defined")
+    product_image_import_directory: String @doc(description:"Optional. Do not include unless overiding")
+    product_validation_strategy: String @doc(description:"Optional - default validation-skip-errors. Defined values are validation-stop-on-errors,validation-skip-errors")
 }
