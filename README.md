@@ -397,3 +397,44 @@ Magento GraphQL uses the store scope, so the queries are limited to the store sc
 			}
 		}
 	}
+
+**adminUsers**: Use to create the `settings.json` file. *Unless you are overriding the default settings, do not include the arguments. Including them in the query return is also optional unless you are overriding them.*
+
+	query{
+		dataInstallerStoreSettings(
+		restrictProductsFromViews: "N",
+		productImageImportDirectory : "pub/media/import",
+		productValidationStrategy: "validation-stop-on-errors"
+		) {
+			store_code
+			store_view_code
+			site_code
+			product_validation_strategy
+		}
+	}
+
+
+**Gift Cards**: Use to create the `gift_cards.json` file. There is an issue with the giftcard product type where an imported gift card isn't correct until it is saved. This file will load in the product and save it, thus completing the process. It is a simple file with just sku as a value, so it uses the existing products query
+
+	query{
+		products(filter: {sku: { in: ["spagiftcard"] }})
+		{
+			items{
+				sku
+			}
+		}
+	}
+
+**dynamicBlocksExport**: Use to create the `dynamic_blocks.json` file. Include the admin user names or Ids you want to include in the export. This is different than the core *dynamicBlocks* query. It does use the same DynamicBlock Type, but it will not return all the information that the core query returns.
+
+	query{
+		dynamicBlocksExport(identifiers: ["1","2"]) {
+			items {
+				banner_content
+				name
+				segments
+				store_view_code
+				type
+			}
+		}
+	}

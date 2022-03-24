@@ -44,6 +44,9 @@ type Query {
         productImageImportDirectory: String @doc(description: "Optional. Do not include if its not used. Path from server root to directory where images should be read during product import. Defaults to data pack directory\\media\\products") 
         productValidationStrategy: String @doc(description: "Optional. Do not include if its not used. values = validation-stop-on-errors,validation-skip-errors. Importer will default to validation-skip-errors.") 
     ): DataInstallerStoreSettings @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Store\\Settings") @doc(description:"Default Store Settings")
+    dynamicBlocksExport(
+        identifiers: [String] @doc(description: "Dynamic Blocks") 
+    ): DynamicBlocks @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Cms\\DynamicBlocks") @doc(description:"Array of Dynamic Blocks")
 
 }
 
@@ -319,4 +322,12 @@ type DataInstallerStoreSettings {
     restrict_products_from_views: String @doc(description:"Optional. Will return Y if not defined")
     product_image_import_directory: String @doc(description:"Optional. Do not include unless overiding")
     product_validation_strategy: String @doc(description:"Optional - default validation-skip-errors. Defined values are validation-stop-on-errors,validation-skip-errors")
+}
+
+type DynamicBlock {
+    name: String
+    segments: String
+    store_view_code: String @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Store\\StoreViewCode")
+    type: String
+    banner_content: String
 }

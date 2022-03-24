@@ -75,7 +75,7 @@ class Pages implements ResolverInterface
      */
     private function getPagesData(array $pageIdentifiers, int $storeId): array
     {
-        $pagessData = [];
+        $pagesData = [];
         foreach ($pageIdentifiers as $pageIdentifier) {
             try {
                 if (!is_numeric($pageIdentifier)) {
