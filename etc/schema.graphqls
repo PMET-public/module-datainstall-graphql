@@ -250,6 +250,10 @@ type AdminProperties {
     additional_data: String
 }
 
+type AttributeOption {
+    swatch_value: String @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Attribute\\SwatchValue")
+}
+
 type RewardPointsRateList @doc(description: "Retrieves all requested Rewards Exchange Rates") {
     items: [RewardPointsRate]
 }

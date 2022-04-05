@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
+ * Copyright © Adobe, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
@@ -12,6 +12,10 @@ use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Eav\Api\AttributeRepositoryInterface;
+use Magento\Eav\Api\AttributeSetRepositoryInterface;
+use Magento\Eav\Api\AttributeManagementInterface;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Eav\Model\Config as EavConfig;
 
 /**
  * Resolve data for custom attribute metadata requests
@@ -25,11 +29,45 @@ class AdminProperties implements ResolverInterface
     private $attributeRepository;
 
     /**
-     * @param AttributeRepositoryInterface $attributeRepository
+     * @var AttributeSetRepositoryInterface
      */
-    public function __construct(AttributeRepositoryInterface $attributeRepository)
-    {
+    private $attributeSetRepository;
+
+    /**
+     * @var AttributeManagementInterface
+     */
+    private $attributeManagementInterface;
+
+    /**
+     * @var SearchCriteriaBuilder
+     */
+    private $searchCriteria;
+
+    /**
+     * @var EavConfig
+     */
+    private $eavConfig;
+
+     /**
+      * @param AttributeRepositoryInterface $attributeRepository
+      * @param AttributeSetRepositoryInterface $attributeSetRepository
+      * @param AttributeManagementInterface $attributeManagementInterface
+      * @param SearchCriteriaBuilder $searchCriteria
+      * @param EavConfig $eavConfig
+      */
+
+    public function __construct(
+        AttributeRepositoryInterface $attributeRepository,
+        AttributeSetRepositoryInterface $attributeSetRepository,
+        AttributeManagementInterface $attributeManagementInterface,
+        SearchCriteriaBuilder $searchCriteria,
+        EavConfig $eavConfig
+    ) {
         $this->attributeRepository = $attributeRepository;
+        $this->attributeSetRepository = $attributeSetRepository;
+        $this->attributeManagementInterface = $attributeManagementInterface;
+        $this->searchCriteria = $searchCriteria;
+        $this->eavConfig = $eavConfig;
     }
 
     /**
@@ -43,8 +81,7 @@ class AdminProperties implements ResolverInterface
         array $args = null
     ) {
         $storeId = $context->getExtensionAttributes()->getStore()->getId();
-        $attributeCode = $value['attribute_code'];
-        $attribute = $this->attributeRepository->get('catalog_product', $attributeCode);
+        $attribute = $this->attributeRepository->get($value['entity_type'], $value['attribute_code']);
         return $this->getStorefrontProperties($attribute, $storeId);
     }
 
@@ -56,8 +93,9 @@ class AdminProperties implements ResolverInterface
      */
     private function getStorefrontProperties($attribute, $storeId)
     {
+
         return [
-            'attribute_set'=> 'foo',
+            'attribute_set'=> $this->getAttributeSets($attribute),
             'frontend_label'=> $this->getFrontEndLabel($attribute, $storeId),
             'is_visible'=> $attribute->getIsVisible(),
             'is_searchable'=> $attribute->getIsSearchable(),
@@ -96,5 +134,31 @@ class AdminProperties implements ResolverInterface
             }
         }
         return $frontLabel;
+    }
+
+    private function getAttributeSets($attribute)
+    {
+        $attributeSetNames = [];
+        $attributeType = $attribute->getEntityType();
+        $attributeEntityTypeId = $attributeType->getId();
+        $attributeEntityTypeCode = $attributeType->getEntityTypeCode();
+        //get all attribute sets based on the attribute type
+        $search = $this->searchCriteria
+        ->addFilter('entity_type_id', $attributeEntityTypeId, 'eq')->create();
+        $attributeSetList = $this->attributeSetRepository->getList($search)->getItems();
+        foreach ($attributeSetList as $attributeSet) {
+            $assignedAttributes = $this->attributeManagementInterface->
+            getAttributes($attributeEntityTypeCode, $attributeSet->getAttributeSetId());
+            foreach ($assignedAttributes as $assignedAttribute) {
+                if ($assignedAttribute->getAttributeCode() == $attribute->getAttributeCode()) {
+                    $attributeSetNames[] = $attributeSet->getAttributeSetName();
+                }
+            }
+        }
+        if (empty($attributeSetNames)) {
+            return null;
+        } else {
+            return implode("\n", $attributeSetNames);
+        }
     }
 }

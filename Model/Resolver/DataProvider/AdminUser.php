@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
+ * Copyright © Adobe, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
@@ -9,10 +9,7 @@ namespace MagentoEse\DataInstallGraphQl\Model\Resolver\DataProvider;
 
 use Magento\Authorization\Model\ResourceModel\Role\CollectionFactory as RoleCollection;
 use Magento\User\Model\ResourceModel\User\CollectionFactory as UserCollection;
-use Magento\Customer\Api\RoleRepositoryInterface;
-use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\RmaGraphQl\Model\Resolver\CustomerOrder\Returns;
 
 /**
  * Customer Role data provider
@@ -30,23 +27,15 @@ class AdminUser
     private $userCollection;
 
     /**
-     * @var SearchCriteriaBuilder
-     */
-    private $searchCriteria;
-
-    /**
      * @param RoleCollection $roleCollection
      * @param UserCollection $ruleCollection
-     * @param SearchCriteriaBuilder $searchCriteria
      */
     public function __construct(
         RoleCollection $roleCollection,
-        UserCollection $userCollection,
-        SearchCriteriaBuilder $searchCriteria
+        UserCollection $userCollection
     ) {
         $this->roleCollection = $roleCollection;
         $this->userCollection = $userCollection;
-        $this->searchCriteria = $searchCriteria;
     }
 
     /**
