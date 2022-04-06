@@ -94,7 +94,7 @@ class AdminProperties implements ResolverInterface
     private function getStorefrontProperties($attribute, $storeId)
     {
 
-        return [
+        $returnProperties =  [
             'attribute_set'=> $this->getAttributeSets($attribute),
             'frontend_label'=> $this->getFrontEndLabel($attribute, $storeId),
             'is_visible'=> $attribute->getIsVisible(),
@@ -112,8 +112,17 @@ class AdminProperties implements ResolverInterface
             'is_filterable_in_grid'=> $attribute->getIsFilterableInGrid(),
             'search_weight'=> $attribute->getSearchWeight(),
             'is_pagebuilder_enabled'=> $attribute->getIsPagebuilderEnabled(),
-            'additional_data'=> $attribute->getAdditionalData()
+            'additional_data'=> $attribute->getAdditionalData(),
+            'is_required'=>$attribute->getIsRequired()
         ];
+        //add values specific to customer attributes
+        if ($attribute->getEntityType()->getEntityTypeCode()=='customer') {
+            $returnProperties['is_used_for_customer_segment'] =  $attribute->getIsUsedForCustomerSegment();
+            $returnProperties['sort_order'] =  $attribute->getSortOrder();
+            $returnProperties['used_in_forms'] =  implode(",", $attribute->getUsedInForms());
+        }
+
+        return $returnProperties;
     }
 
     /**

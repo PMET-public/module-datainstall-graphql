@@ -247,7 +247,9 @@ Magento GraphQL uses the store scope, so the queries are limited to the store sc
 		}
 	}
 
-**customAttributeMetadata**: Use to create the `product_attributes.json` file. Include attribute codes you want to include in the export. 
+**customAttributeMetadata**: Use to create the `product_attributes.json` and `customer_attributes.json` files. Include attribute codes you want to include in the export along with the `entity_type` value of either `catalog_product` or `customer`. Note that the queries have some differences based on the information supported by each attribute type
+
+***Product Attributes***
 
 	query{
 		customAttributeMetadata(
@@ -296,6 +298,43 @@ Magento GraphQL uses the store scope, so the queries are limited to the store sc
 					is_wysiwyg_enabled
 					search_weight
 					used_for_sort_by
+				}
+			}
+		}
+	}
+
+***Customer Attributes***
+
+	query{
+		customAttributeMetadata(
+			attributes: [
+				{
+					attribute_code: "vehicle_1"
+					entity_type: "customer"
+				}
+				{
+					attribute_code: "vehicle_1_mileage_range"
+					entity_type: "customer"
+				}
+			]
+		) {
+			items {
+				attribute_code
+				store_view_code
+				frontend_input:input_type
+				attribute_options {
+					label
+				}
+				admin_properties {
+					is_visible
+					frontend_label
+					is_filterable_in_grid
+					is_used_in_grid
+					is_visible_in_grid
+					is_required
+					is_used_for_customer_segment
+					sort_order
+					used_in_forms
 				}
 			}
 		}

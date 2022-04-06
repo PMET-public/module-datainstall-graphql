@@ -248,6 +248,10 @@ type AdminProperties {
     search_weight: Int
     is_pagebuilder_enabled: Int
     additional_data: String
+    is_required: Int
+    is_used_for_customer_segment: Int  @doc(description: "Used in Customer Attributes") 
+    sort_order: Int  @doc(description: "Used in Customer Attributes") 
+    used_in_forms: String  @doc(description: "Used in Customer Attributes") 
 }
 
 type AttributeOption {
