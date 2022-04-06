@@ -339,3 +339,7 @@ type DynamicBlock {
     type: String
     banner_content: String
 }
+
+interface ProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\ProductInterfaceTypeResolverComposite"){
+    store_view_code: String @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Store\\StoreViewCode")
+}

@@ -477,3 +477,33 @@ Magento GraphQL uses the store scope, so the queries are limited to the store sc
 			}
 		}
 	}
+
+**products**: Use to create the `reviews.json` file. This product query will retrieve the information necessary to populate product reviews. Search and filter functionality follows the documented features of the products query
+
+	query{
+		products(
+		filter: {
+			sku:{
+				in:["nailpolishcollection","mensgroomingkit"]
+			}
+		}
+		pageSize: 200
+		currentPage: 1
+		) {
+			items{
+			sku
+			store_view_code
+			reviews{
+				items{
+					summary
+					text
+					nickname
+					ratings_breakdown{
+						name
+						value
+					}
+				}
+			}
+			}
+ 		}
+	}
