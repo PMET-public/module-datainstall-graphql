@@ -45,8 +45,11 @@ type Query {
         productValidationStrategy: String @doc(description: "Optional. Do not include if its not used. values = validation-stop-on-errors,validation-skip-errors. Importer will default to validation-skip-errors.") 
     ): DataInstallerStoreSettings @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Store\\Settings") @doc(description:"Default Store Settings")
     dynamicBlocksExport(
-        identifiers: [String] @doc(description: "Dynamic Blocks") 
+        identifiers: [String] @doc(description: "Names or Ids of dynamic blocks") 
     ): DynamicBlocks @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Cms\\DynamicBlocks") @doc(description:"Array of Dynamic Blocks")
+    pageBuilderTemplates(
+        identifiers: [String] @doc(description: "Names or Ids of templates") 
+    ): PageBuilderTemplates @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Cms\\Templates") @doc(description:"Array of Page Builder templates")
 
 }
 
@@ -145,6 +148,19 @@ type CustomerSegment {
     conditions_serialized: String
     apply_to: String @doc(description: "2= Apply to Visitors, 1= Apply to Registered Users, 0= Both Visitors and Registered")
 }
+
+
+type PageBuilderTemplate {
+    name: String
+    created_for: String
+    preview_image: String
+    content: String
+}
+
+type PageBuilderTemplates @doc(description: "Retrieves all requested Page Builder templates") {
+    items: [PageBuilderTemplate] @doc(description: "An array containing the page builder templates")
+}
+
 
 type MsiSources @doc(description: "Retrieves all requested Msi Sources") {
     items: [MsiSource] @doc(description: "An array containing the Msi Sources")

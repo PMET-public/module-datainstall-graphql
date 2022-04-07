@@ -507,3 +507,16 @@ Magento GraphQL uses the store scope, so the queries are limited to the store sc
 			}
  		}
 	}
+
+**pageBuilderTemplates**: Use to create the `templates.json` file, to import Page Builder Templates.
+
+	query{
+		pageBuilderTemplates(identifiers: ["1","Heading / Video"]) {
+			items {
+				content
+				created_for
+				name
+				preview_image
+			}
+		}
+	}
