@@ -12,6 +12,7 @@ use Magento\Banner\Model\ResourceModel\Banner as BannerResource;
 use Magento\BannerCustomerSegment\Model\ResourceModel\BannerSegmentLink;
 use Magento\CustomerSegment\Model\ResourceModel\Segment\CollectionFactory as SegmentCollection;
 use Magento\Framework\Exception\NoSuchEntityException;
+use MagentoEse\DataInstallGraphQl\Model\Converter\Converter;
 
 /**
  * Customer Banner data provider
@@ -39,21 +40,29 @@ class DynamicBlock
     private $segmentCollection;
 
     /**
+     * @var Converter
+     */
+    private $converter;
+
+    /**
      * @param BannerCollection $bannerCollection
      * @param BannerResource $bannerResource
      * @param BannerSegmentLink $bannerSegmentLink
      * @param SegmentCollection $segmentCollection
+     * @param Converter $converter
      */
     public function __construct(
         BannerCollection $bannerCollection,
         BannerResource $bannerResource,
         BannerSegmentLink $bannerSegmentLink,
-        SegmentCollection $segmentCollection
+        SegmentCollection $segmentCollection,
+        Converter $converter
     ) {
         $this->bannerCollection = $bannerCollection;
         $this->bannerResource = $bannerResource;
         $this->bannerSegmentLink = $bannerSegmentLink;
         $this->segmentCollection = $segmentCollection;
+        $this->converter = $converter;
     }
 
     /**
@@ -120,7 +129,7 @@ class DynamicBlock
                 'name' => $banner->getName(),
                 'segments' => $segmentNames,
                 'type' => implode(",", $banner->getTypes()),
-                'banner_content' => $bannerContent
+                'banner_content' => $this->converter->convertContent($bannerContent)
                 ];
 
         return $banners;

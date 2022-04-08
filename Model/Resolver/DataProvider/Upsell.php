@@ -10,6 +10,7 @@ namespace MagentoEse\DataInstallGraphQl\Model\Resolver\DataProvider;
 use Magento\TargetRule\Model\Rule;
 use Magento\TargetRule\Model\ResourceModel\Rule\CollectionFactory as RuleCollection;
 use Magento\Framework\Exception\NoSuchEntityException;
+use MagentoEse\DataInstallGraphQl\Model\Converter\Converter;
 
 /**
  * Upsell data provider
@@ -32,18 +33,26 @@ class Upsell
     private $customerSegment;
 
     /**
+     * @var Converter
+     */
+    private $converter;
+
+    /**
      * @param RuleCollection $ruleCollection
      * @param Rule $rule
      * @param CustomerSegment $customerSegment
+     * @param Converter $converter
      */
     public function __construct(
         RuleCollection $ruleCollection,
         Rule $rule,
-        CustomerSegment $customerSegment
+        CustomerSegment $customerSegment,
+        Converter $converter
     ) {
         $this->ruleCollection = $ruleCollection;
         $this->rule = $rule;
         $this->customerSegment = $customerSegment;
+        $this->converter = $converter;
     }
 
     /**
@@ -101,8 +110,8 @@ class Upsell
 
         return [
             'name' => $rule->getName(),
-            'conditions_serialized' => $rule->getConditionsSerialized(),
-            'actions_serialized' => $rule->getActionsSerialized(),
+            'conditions_serialized' => $this->converter->convertContent($rule->getConditionsSerialized()),
+            'actions_serialized' => $this->converter->convertContent($rule->getActionsSerialized()),
             'positions_limit' => $rule->getPositionsLimit(),
             'apply_to' => $this->getApplyToText((int)$rule->getApplyTo()),
             'sort_order' => $rule->getSortOrder(),

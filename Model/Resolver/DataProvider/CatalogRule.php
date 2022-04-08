@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace MagentoEse\DataInstallGraphQl\Model\Resolver\DataProvider;
 
-use Magento\CatalogRule\Api\CatalogRuleRepositoryInterface;
 use Magento\CatalogRule\Model\ResourceModel\Rule\CollectionFactory as RuleCollection;
 use Magento\CatalogRule\Api\Data\RuleInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -15,20 +14,16 @@ use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Banner\Model\ResourceModel\Banner as BannerResource;
 use Magento\Banner\Model\ResourceModel\Banner\CollectionFactory as BannerCollection;
+use MagentoEse\DataInstallGraphQl\Model\Converter\Converter;
 
 /**
  * Customer Segment data provider
  */
 class CatalogRule
 {
-    /**
-     * @var CatalogRuleRepositoryInterface
-     */
-    private $ruleRepository;
-
-    /**
-     * @var RuleCollection
-     */
+     /**
+      * @var RuleCollection
+      */
     private $ruleCollection;
 
      /**
@@ -57,28 +52,33 @@ class CatalogRule
     private $bannerCollection;
 
     /**
-     * @param CatalogRuleRepositoryInterface $ruleRepository
+     * @var Converter
+     */
+    private $converter;
+
+    /**
      * @param RuleCollection $ruleCollection
      * @param CouponRepository $couponRepository
      * @param WebsiteRepositoryInterface $websiteRepository
      * @param GroupRepositoryInterface $groupRepositoryInterface
      * @param BannerResource $bannerResource
      * @param BannerCollection $bannerCollection
+     * @param Converter $converter
      */
     public function __construct(
-        CatalogRuleRepositoryInterface $ruleRepository,
         RuleCollection $ruleCollection,
         WebsiteRepositoryInterface $websiteRepository,
         GroupRepositoryInterface $groupRepositoryInterface,
         BannerResource $bannerResource,
-        BannerCollection $bannerCollection
+        BannerCollection $bannerCollection,
+        Converter $converter
     ) {
-        $this->ruleRepository = $ruleRepository;
         $this->ruleCollection = $ruleCollection;
         $this->websiteRepository = $websiteRepository;
         $this->groupRepositoryInterface = $groupRepositoryInterface;
         $this->bannerResource = $bannerResource;
         $this->bannerCollection = $bannerCollection;
+        $this->converter = $converter;
     }
 
     /**
@@ -130,16 +130,13 @@ class CatalogRule
         }
         /** @var RuleInterface $rule */
         $rule = current($ruleResults);
-        /** @var Rule $newRule */
-        //$ruleInterface = $this->ruleRepository->getById($rule->getRuleId());
-        //$extAttributes = $ruleInterface->getExtensionAttributes();
-        $t = $this->getCatalogRuleRelatedBannerIds([$rule->getRuleId()]);
+
         return [
             'name' => $rule->getName(),
             'site_code' => $this->getWebsiteCodes($rule->getWebsiteIds()),
             'description' => $rule->getDescription(),
-            'actions_serialized' => $rule->getActionsSerialized(),
-            'conditions_serialized' => $rule->getConditionsSerialized(),
+            'actions_serialized' => $this->converter->convertContent($rule->getActionsSerialized()),
+            'conditions_serialized' => $this->converter->convertContent($rule->getConditionsSerialized()),
             'customer_groups' => $this->getCustomerGroupNames($rule->getCustomerGroupIds()),
             'stop_rules_processing' => $rule->getStopRulesProcessing(),
             'sort_order' => $rule->getSortOrder(),

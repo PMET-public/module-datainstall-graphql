@@ -11,6 +11,7 @@ use Magento\Widget\Model\ResourceModel\Widget\Instance\CollectionFactory as Widg
 use Magento\Widget\Model\Widget\Instance as WidgetInstance;
 use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
+use MagentoEse\DataInstallGraphQl\Model\Converter\Converter;
 
 /**
  * Upsell data provider
@@ -33,18 +34,26 @@ class Widget
     private $storeRepository;
 
     /**
+     * @var Converter
+     */
+    private $converter;
+
+    /**
      * @param WidgetCollection $widgetCollection
      * @param WidgetInstance $widgetInstance
      * @param StoreRepositoryInterface $storeRepository
+     * @param Converter $converter
      */
     public function __construct(
         WidgetCollection $widgetCollection,
         WidgetInstance $widgetInstance,
-        StoreRepositoryInterface $storeRepository
+        StoreRepositoryInterface $storeRepository,
+        Converter $converter
     ) {
         $this->widgetCollection = $widgetCollection;
         $this->widgetInstance = $widgetInstance;
         $this->storeRepository = $storeRepository;
+        $this->converter = $converter;
     }
 
     /**
@@ -111,7 +120,7 @@ class Widget
             'theme' => $widget->getThemeId(),
             'instance_type' => $widget->getType(),
             'store_view_code' => $this->getStoreViewCodes($widget->getStoreIds()),
-            'widget_parameters' => json_encode($widget->getWidgetParameters()),
+            'widget_parameters' => json_encode($this->converter->convertContent($widget->getWidgetParameters())),
             'sort_order' =>  $widget->getSortOrder(),
             'page_group' =>  $pageGroups['page_group'],
             'layout_handle' =>  $pageGroups['layout_handle'],

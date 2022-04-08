@@ -5,6 +5,7 @@ use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Cms\Api\PageRepositoryInterface;
+use MagentoEse\DataInstallGraphQl\Model\Converter\Converter;
 
 /**
  * @inheritdoc
@@ -13,13 +14,20 @@ class PageContent implements ResolverInterface
 {
     /** @var PageRepositoryInterface */
     protected $pageRepository;
+
+    /** @var Converter */
+    protected $converter;
     
     /** @param PageRepositoryInterface $pageRepository
+     * @param Converter $converter
      */
 
-    public function __construct(PageRepositoryInterface $pageRepository)
-    {
+    public function __construct(
+        PageRepositoryInterface $pageRepository,
+        Converter $converter
+    ) {
         $this->pageRepository = $pageRepository;
+        $this->converter = $converter;
     }
     
     /**
@@ -30,7 +38,7 @@ class PageContent implements ResolverInterface
     {
         if (!empty($value['identifier'])) {
             $page = $this->pageRepository->getById($value['page_id']);
-            return $page->getContent();
+            return $this->converter->convertContent($page->getContent());
         } else {
             return null;
         }

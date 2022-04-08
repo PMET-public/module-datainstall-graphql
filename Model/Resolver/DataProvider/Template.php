@@ -10,6 +10,7 @@ namespace MagentoEse\DataInstallGraphQl\Model\Resolver\DataProvider;
 use Magento\PageBuilder\Api\Data\TemplateInterface;
 use Magento\PageBuilder\Model\ResourceModel\Template\CollectionFactory as TemplateCollection;
 use Magento\Framework\Exception\NoSuchEntityException;
+use MagentoEse\DataInstallGraphQl\Model\Converter\Converter;
 
 /**
  * Page Builder Template data provider
@@ -21,14 +22,21 @@ class Template
      */
     private $templateCollection;
 
+     /**
+      * @var Converter
+      */
+    private $converter;
+
     /**
      * @param TemplateCollection $templateCollection
-     * @param SearchCriteriaBuilder $searchCriteria
+     * @param Converter $converter
      */
     public function __construct(
-        TemplateCollection $templateCollection
+        TemplateCollection $templateCollection,
+        Converter $converter
     ) {
         $this->templateCollection = $templateCollection;
+        $this->converter = $converter;
     }
 
     /**
@@ -82,7 +90,7 @@ class Template
             'name' => $template->getName(),
             'created_for' => $template->getCreatedFor(),
             'preview_image' => str_replace('.template-manager/', '', $template->getPreviewImage()),
-            'content' => $template->getTemplate()
+            'content' => $this->converter->convertContent($template->getTemplate())
         ];
     }
 }

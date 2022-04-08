@@ -11,6 +11,7 @@ use Magento\CustomerSegment\Model\Segment;
 use Magento\CustomerSegment\Model\ResourceModel\Segment\CollectionFactory as SegmentCollection;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Api\WebsiteRepositoryInterface;
+use MagentoEse\DataInstallGraphQl\Model\Converter\Converter;
 
 /**
  * Customer Segment data provider
@@ -28,15 +29,23 @@ class CustomerSegment
     private $websiteRepository;
 
     /**
+     * @var Converter
+     */
+    private $converter;
+
+    /**
      * @param SegmentCollection $segmentCollection
      * @param WebsiteRepositoryInterface $websiteRepository
+     * @param Converter $converter
      */
     public function __construct(
         SegmentCollection $segmentCollection,
-        WebsiteRepositoryInterface $websiteRepository
+        WebsiteRepositoryInterface $websiteRepository,
+        Converter $converter
     ) {
         $this->segmentCollection = $segmentCollection;
         $this->websiteRepository = $websiteRepository;
+        $this->converter = $converter;
     }
 
     /**
@@ -92,7 +101,7 @@ class CustomerSegment
             'site_code' => $this->getWebsiteCodes($segment->getWebsiteIds()),
             'description' => $segment->getDescription(),
             'apply_to' => $segment->getApplyTo(),
-            'conditions_serialized' => $segment->getConditionsSerialized()
+            'conditions_serialized' => $this->converter->convertContent($segment->getConditionsSerialized())
         ];
     }
 

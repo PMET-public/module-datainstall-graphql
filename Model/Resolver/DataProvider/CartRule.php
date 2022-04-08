@@ -10,12 +10,12 @@ namespace MagentoEse\DataInstallGraphQl\Model\Resolver\DataProvider;
 use Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory as RuleCollection;
 use Magento\SalesRule\Api\Data\RuleInterface as Rule;
 use Magento\SalesRule\Api\RuleRepositoryInterface as RuleRepository;
-use Magento\SalesRule\Api\Data\CouponInterface;
 use Magento\SalesRule\Api\CouponRepositoryInterface as CouponRepository;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use MagentoEse\DataInstallGraphQl\Model\Converter\Converter;
 
 /**
  * Customer Segment data provider
@@ -25,32 +25,37 @@ class CartRule
     /**
      * @var RuleCollection
      */
-    private $ruleCollection;
+    protected $ruleCollection;
 
     /**
      * @var RuleRepository
      */
-    private $ruleRepository;
+    protected $ruleRepository;
 
      /**
       * @var CouponRepository
       */
-    private $couponRepository;
+      protected $couponRepository;
 
     /**
      * @var WebsiteRepositoryInterface
      */
-    private $websiteRepository;
+    protected $websiteRepository;
 
-     /**
-      * @var GroupRepositoryInterface
-      */
-    private $groupRepositoryInterface;
+    /**
+     * @var GroupRepositoryInterface
+     */
+    protected $groupRepositoryInterface;
 
-     /**
-      * @var SearchCriteriaBuilder
-      */
-      private $searchCriteria;
+    /**
+     * @var SearchCriteriaBuilder
+     */
+    protected $searchCriteria;
+
+    /**
+     * @var Converter
+     */
+    protected $converter;
 
     /**
      * @param RuleCollection $ruleCollection
@@ -59,6 +64,7 @@ class CartRule
      * @param WebsiteRepositoryInterface $websiteRepository
      * @param GroupRepositoryInterface $groupRepositoryInterface
      * @param SearchCriteriaBuilder $searchCriteria
+     * @param Converter $converter
      */
     public function __construct(
         RuleCollection $ruleCollection,
@@ -66,7 +72,8 @@ class CartRule
         CouponRepository $couponRepository,
         WebsiteRepositoryInterface $websiteRepository,
         GroupRepositoryInterface $groupRepositoryInterface,
-        SearchCriteriaBuilder $searchCriteria
+        SearchCriteriaBuilder $searchCriteria,
+        Converter $converter
     ) {
         $this->ruleCollection = $ruleCollection;
         $this->ruleRepository = $ruleRepository;
@@ -74,6 +81,7 @@ class CartRule
         $this->websiteRepository = $websiteRepository;
         $this->groupRepositoryInterface = $groupRepositoryInterface;
         $this->searchCriteria = $searchCriteria;
+        $this->converter = $converter;
     }
 
     /**
@@ -131,9 +139,9 @@ class CartRule
             'name' => $rule->getName(),
             'site_code' => $this->getWebsiteCodes($rule->getWebsiteIds()),
             'description' => $rule->getDescription(),
-            'actions_serialized' => $rule->getActionsSerialized(),
+            'actions_serialized' => $this->converter->convertContent($rule->getActionsSerialized()),
             'apply_to_shipping' => $rule->getApplyToShipping(),
-            'conditions_serialized' => $rule->getConditionsSerialized(),
+            'conditions_serialized' => $this->converter->convertContent($rule->getConditionsSerialized()),
             'coupon_code' =>  $this->getCouponCode($rule->getRuleId()),
             'coupon_type' => $rule->getCouponType(),
             'customer_group' => $this->getCustomerGroupNames($rule->getCustomerGroupIds()),
