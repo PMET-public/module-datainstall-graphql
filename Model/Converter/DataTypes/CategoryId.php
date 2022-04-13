@@ -16,10 +16,20 @@ class CategoryId
         'substring'=>'"attribute":"category_ids","operator":"!=","value":"'],
         ['regex'=>'/"attribute":"category_ids","operator":"","value":"([0-9,]+)",/',
         'substring'=>'"attribute":"category_ids","operator":"","value":"'],
+        ['regex'=>'/"attribute":"category_ids","operator":"\(\)","value":"([0-9,]+)",/',
+        'substring'=>'"attribute":"category_ids","operator":"()","value":"'],
+        ['regex'=>'/"attribute":"category_ids","operator":"!\(\)","value":"([0-9,]+)",/',
+        'substring'=>'"attribute":"category_ids","operator":"!()","value":"'],
+        ['regex'=>'/"attribute":"category_ids","operator":"{}}","value":"([0-9,]+)",/',
+        'substring'=>'"attribute":"category_ids","operator":"{}","value":"'],
+        ['regex'=>'/"attribute":"category_ids","operator":"!{}","value":"([0-9,]+)",/',
+        'substring'=>'"attribute":"category_ids","operator":"!{}","value":"'],
         ['regex'=>'/condition_option="category_ids" condition_option_value="([0-9,]+)"/',
         'substring'=>'condition_option="category_ids" condition_option_value="'],
         ['regex'=>'/\?cat=([0-9,]+)"/',
-        'substring'=>'?cat=']
+        'substring'=>'?cat='],
+        ['regex'=>'/Condition\|\|Product`,`attribute`:`category_ids`,`value`:`([0-9,`]+)`/',
+        'substring'=>'`category_ids`,`value`:`']
     ];
     /** @var CategoryRepositoryInterface */
     protected $categoryRepository;
@@ -52,7 +62,7 @@ class CategoryId
                         $urlKey = $category->getUrlKey();
                         $replacementString.= $this->tokenStart.$urlKey.$this->tokenEnd;
                     }
-                    $content = str_replace($search['substring'].$idToReplace, $replacementString, $content);
+                    $content = str_replace($search['substring'].$idToReplace, $search['substring'].$replacementString, $content);
                 }
             }
         }

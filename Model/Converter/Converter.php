@@ -3,26 +3,35 @@ namespace MagentoEse\DataInstallGraphQl\Model\Converter;
 
 class Converter
 {
-     /** @var Datatypes\CategoryId */
-     protected $categoryId;
+    /** @var Datatypes\CategoryId */
+    protected $categoryId;
 
-     /** @var Datatypes\ProductId */
-     protected $productId;
+    /** @var Datatypes\ProductId */
+    protected $productId;
 
-     /** @var Datatypes\CustomerSegment */
-     protected $customerSegment;
+    /** @var Datatypes\CustomerSegment */
+    protected $customerSegment;
 
-     /** @var Datatypes\PageId */
-     protected $pageId;
+    /** @var Datatypes\PageId */
+    protected $pageId;
 
-     /** @var Datatypes\Block */
-     protected $block;
+    /** @var Datatypes\Block */
+    protected $block;
 
-     /** @var Datatypes\DynamicBlock */
-     protected $dynamicBlock;
+    /** @var Datatypes\DynamicBlock */
+    protected $dynamicBlock;
 
-     /** @var Datatypes\CustomerGroup */
-     protected $customerGroup;
+    /** @var Datatypes\CustomerGroup */
+    protected $customerGroup;
+
+    /** @var Datatypes\ProductAttributeSet */
+    protected $productAttributeSet;
+
+    /** @var Datatypes\ProductAttribute */
+    protected $productAttribute;
+
+    /** @var Datatypes\CustomerAttribute */
+    protected $customerAttribute;
 
     /**
      * @param Datatypes\CategoryId $categoryId
@@ -32,6 +41,9 @@ class Converter
      * @param Datatypes\Block $block
      * @param Datatypes\DynamicBlock $dynamicBlock
      * @param Datatypes\CustomerGroup $customerGroup
+     * @param Datatypes\ProductAttributeSet $productAttributeSet
+     * @param Datatypes\ProductAttribute $productAttribute
+     * @param Datatypes\CustomerAttribute $customerAttribute
      */
     public function __construct(
         Datatypes\CategoryId $categoryId,
@@ -40,7 +52,10 @@ class Converter
         Datatypes\PageId $pageId,
         Datatypes\Block $block,
         Datatypes\DynamicBlock $dynamicBlock,
-        Datatypes\CustomerGroup $customerGroup
+        Datatypes\CustomerGroup $customerGroup,
+        Datatypes\ProductAttributeSet $productAttributeSet,
+        Datatypes\ProductAttribute $productAttribute,
+        Datatypes\CustomerAttribute $customerAttribute
     ) {
         $this->categoryId = $categoryId;
         $this->productId = $productId;
@@ -49,6 +64,9 @@ class Converter
         $this->block = $block;
         $this->dynamicBlock = $dynamicBlock;
         $this->customerGroup = $customerGroup;
+        $this->productAttributeSet = $productAttributeSet;
+        $this->productAttribute = $productAttribute;
+        $this->customerAttribute = $customerAttribute;
     }
 
     /**
@@ -57,7 +75,7 @@ class Converter
      */
     public function convertContent($content)
     {
-        $content = '[{"type":"Magento\\CustomerSegment\\Model\\Segment\\Condition\\Customer\\Attributes","attribute":"group_id","operator":"!=","value":"4","is_value_process';
+        $content = '{"type":"Magento\\SalesRule\\Model\\Rule\\Condition\\Product\\Combine","attribute":null,"operator":null,"value":"1","is_value_processed":null,"aggregator":"all","conditions":[{"type":"Magento\\SalesRule\\Model\\Rule\\Condition\\Product","attribute":"skin","operator":"()","value":["41","42"],"is_value_processed":false,"attribute_scope":""}]}';
         $content = $this->categoryId->replaceCategoryIds($content);
         $content = $this->productId->replaceProductIds($content);
         $content = $this->customerSegment->replaceSegmentIds($content);
@@ -65,6 +83,9 @@ class Converter
         $content = $this->block->replaceBlockIds($content);
         $content = $this->dynamicBlock->replaceDynamicBlockIds($content);
         $content = $this->customerGroup->replaceCustomerGroupIds($content);
+        $content = $this->productAttributeSet->replaceAttributeSetIds($content);
+        $content = $this->productAttribute->replaceAttributeOptionIds($content);
+        $content = $this->customerAttribute->replaceAttributeOptionIds($content);
         return $content;
     }
 }

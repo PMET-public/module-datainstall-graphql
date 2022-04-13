@@ -8,8 +8,10 @@ class DynamicBlock
     protected $tokenStart = '{{dynamicblock name="';
     protected $tokenEnd = '"}}';
     protected $regexToSearch = [
-        ['regex'=> '/"banner_ids":"([0-9]+)"/',
-        'substring'=> '"banner_ids":"']
+        ['regex'=> '/"banner_ids":"([0-9,]+)"/',
+        'substring'=> '"banner_ids":"'],
+        ['regex'=> '/banner_ids="([0-9,]+)"/',
+        'substring'=> 'banner_ids="']
     ];
     /** @var BannerCollection */
     protected $bannerCollection;
@@ -42,12 +44,30 @@ class DynamicBlock
                         ->addFieldToFilter('banner_id', [$bannerId])->getItems();
                         $banner = current($bannerResults);
                         $name = $banner->getName();
-                        $replacementString.= $this->tokenStart.$name.$this->tokenEnd;
+                        $replacementString.= $this->tokenStart.$name.$this->tokenEnd.",";
                     }
-                    $content = str_replace($search['substring'].$idToReplace, $replacementString, $content);
+                    $replacementString = $this->strLreplace(',', "", $replacementString);
+                    $content = str_replace($search['substring'].$idToReplace, $search['substring'].$replacementString, $content);
                 }
             }
         }
         return $content;
+    }
+    /**
+     * @param string $search
+     * @param string $replace
+     * @param string $subject
+     * @return string
+     */
+
+    private function strLreplace($search, $replace, $subject)
+    {
+        $pos = strrpos($subject, $search);
+    
+        if ($pos !== false) {
+            $subject = substr_replace($subject, $replace, $pos, strlen($search));
+        }
+    
+        return $subject;
     }
 }

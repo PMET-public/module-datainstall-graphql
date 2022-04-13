@@ -13,6 +13,10 @@ class CustomerSegment
         ['regex'=>'/{"type":"Magento\\\\CustomerSegment\\\\Model\\\\Segment\\\\Condition\\\\Segment","attribute":false,"operator":"!=","value":"([0-9,]+)"/',
         'substring'=> 'Segment","attribute":false,"operator":"!=","value":"'],
         ['regex'=>'/{"type":"Magento\\\\CustomerSegment\\\\Model\\\\Segment\\\\Condition\\\\Segment","attribute":false,"operator":"","value":"([0-9,]+)"/',
+        'substring'=> 'Segment","attribute":false,"operator":"","value":"'],
+        ['regex'=>'/{"type":"Magento\\\\CustomerSegment\\\\Model\\\\Segment\\\\Condition\\\\Segment","attribute":false,"operator":"\(\)","value":"([0-9,]+)"/',
+        'substring'=> 'Segment","attribute":false,"operator":"","value":"'],
+        ['regex'=>'/{"type":"Magento\\\\CustomerSegment\\\\Model\\\\Segment\\\\Condition\\\\Segment","attribute":false,"operator":"!\(\)","value":"([0-9,]+)"/',
         'substring'=> 'Segment","attribute":false,"operator":"","value":"']
     ];
     /** @var SegmentCollection */

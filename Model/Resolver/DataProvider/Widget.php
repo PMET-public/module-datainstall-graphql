@@ -120,7 +120,7 @@ class Widget
             'theme' => $widget->getThemeId(),
             'instance_type' => $widget->getType(),
             'store_view_code' => $this->getStoreViewCodes($widget->getStoreIds()),
-            'widget_parameters' => json_encode($this->converter->convertContent($widget->getWidgetParameters())),
+            'widget_parameters' => $this->converter->convertContent(json_encode($widget->getWidgetParameters())),
             'sort_order' =>  $widget->getSortOrder(),
             'page_group' =>  $pageGroups['page_group'],
             'layout_handle' =>  $pageGroups['layout_handle'],
