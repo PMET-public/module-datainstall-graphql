@@ -81,7 +81,7 @@ Magento GraphQL uses the store scope, so the queries are limited to the store sc
     		store_view_code:store_code
     		store_code:store_group_code
     		store_name:store_group_name
-    		store_view_name:store_name
+    		view_name:store_name
     		view_order:store_sort_order
     		site_code:website_code
     		site_name:website_name
