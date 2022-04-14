@@ -56,13 +56,13 @@ class CategoryId
                 if ($idToReplace) {
                     //categoryids may be a list
                     $categoryIds = explode(",", $idToReplace);
-                    $replacementString = '';
+                    $replacementArr = [];
                     foreach ($categoryIds as $categoryId) {
                         $category = $this->categoryRepository->get($categoryId);
                         $urlKey = $category->getUrlKey();
-                        $replacementString.= $this->tokenStart.$urlKey.$this->tokenEnd;
+                        $replacementArr[]= $this->tokenStart.$urlKey.$this->tokenEnd;
                     }
-                    $content = str_replace($search['substring'].$idToReplace, $search['substring'].$replacementString, $content);
+                    $content = str_replace($search['substring'].$idToReplace, $search['substring'].implode(",", $replacementArr), $content);
                 }
             }
         }

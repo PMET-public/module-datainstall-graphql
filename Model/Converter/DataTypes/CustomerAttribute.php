@@ -61,7 +61,7 @@ class CustomerAttribute
                     foreach ($optionIds as $optionId) {
                         foreach ($attributeOptions as $attributeOption) {
                             if ($attributeOption->getvalue()==$optionId) {
-                                $replacementString.= $this->tokenStart.$attributeOption->getLabel().$this->tokenEnd.'","';
+                                $replacementString.= $this->tokenStart.$attributeCode.":".$attributeOption->getLabel().$this->tokenEnd.'","';
                                 break;
                             }
                         }

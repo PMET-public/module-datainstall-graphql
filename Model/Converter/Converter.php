@@ -75,7 +75,6 @@ class Converter
      */
     public function convertContent($content)
     {
-        $content = '{"type":"Magento\\SalesRule\\Model\\Rule\\Condition\\Product\\Combine","attribute":null,"operator":null,"value":"1","is_value_processed":null,"aggregator":"all","conditions":[{"type":"Magento\\SalesRule\\Model\\Rule\\Condition\\Product","attribute":"skin","operator":"()","value":["41","42"],"is_value_processed":false,"attribute_scope":""}]}';
         $content = $this->categoryId->replaceCategoryIds($content);
         $content = $this->productId->replaceProductIds($content);
         $content = $this->customerSegment->replaceSegmentIds($content);

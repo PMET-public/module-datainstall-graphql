@@ -37,6 +37,36 @@ class ProductAttribute
         'substringend'=>'","operator":"!{}","value":["',
         'delimiter'=>'","'],
 
+        // //this may be redundant
+        ['regex'=> '/Product\\\\\\\\Attributes","attribute":"([a-zA-Z0-9_]+)","operator":"==","value":\["([0-9,"]+)"\]/',
+        'substringstart'=> 'Product\\\\Attributes","attribute":"',
+        'substringend'=>'","operator":"==","value":["',
+        'delimiter'=>'","'],
+        ['regex'=> '/Product\\\\\\\\Attributes","attribute":"([a-zA-Z0-9_]+)","operator":"!=","value":\["([0-9,"]+)"\]/',
+        'substringstart'=> 'Product\\\\Attributes","attribute":"',
+        'substringend'=>'","operator":"!=","value":["',
+        'delimiter'=>'","'],
+        ['regex'=> '/Product\\\\\\\\Attributes","attribute":"([a-zA-Z0-9_]+)","operator":"","value":\["([0-9,"]+)"\]/',
+        'substringstart'=> 'Product\\\\Attributes","attribute":"',
+        'substringend'=>'","operator":"","value":["',
+        'delimiter'=>'","'],
+        ['regex'=> '/Product\\\\\\\\Attributes","attribute":"([a-zA-Z0-9_]+)","operator":"\!\(\)","value":\["([0-9,"]+)"\]/',
+        'substringstart'=> 'Product\\\\Attributes","attribute":"',
+        'substringend'=>'","operator":"!()","value":["',
+        'delimiter'=>'","'],
+        ['regex'=> '/Product\\\\\\\\Attributes","attribute":"([a-zA-Z0-9_]+)","operator":"\(\)","value":\["([0-9,"]+)"\]/',
+        'substringstart'=> 'Product\\\\Attributes","attribute":"',
+        'substringend'=>'","operator":"()","value":["',
+        'delimiter'=>'","'],
+        ['regex'=> '/Product\\\\\\\\Attributes","attribute":"([a-zA-Z0-9_]+)","operator":"{}","value":\["([0-9,"]+)"\]/',
+        'substringstart'=> 'Product\\\\Attributes","attribute":"',
+        'substringend'=>'","operator":"{}","value":["',
+        'delimiter'=>'","'],
+        ['regex'=> '/Product\\\\\\\\Attributes","attribute":"([a-zA-Z0-9_]+)","operator":"!{}","value":\["([0-9,"]+)"\]/',
+        'substringstart'=> 'Product\\\\Attributes","attribute":"',
+        'substringend'=>'","operator":"!{}","value":["',
+        'delimiter'=>'","'],
+
         ['regex'=> '/Condition\\\\Product","attribute":"([a-zA-Z0-9_]+)","operator":"==","value":\["([0-9,"]+)"\]/',
         'substringstart'=> 'Condition\\Product","attribute":"',
         'substringend'=>'","operator":"==","value":["',
@@ -130,13 +160,12 @@ class ProductAttribute
                     foreach ($optionIds as $optionId) {
                         foreach ($attributeOptions as $attributeOption) {
                             if ($attributeOption->getvalue()==$optionId) {
-                                $replacementArr[]= $this->tokenStart.$attributeOption->getLabel().$this->tokenEnd;
+                                $replacementArr[]= $this->tokenStart.$attributeCode.":".$attributeOption->getLabel().$this->tokenEnd;
                                 break;
                             }
                         }
                     }
                     $replacementString = implode($search['delimiter'], $replacementArr);
-                    $toFind = $search['substringstart'].$attributeCode.$search['substringend'].$idToReplace;
                     $content = $this->strLreplace($search['substringstart'].$attributeCode.$search['substringend'].
                         $idToReplace, $search['substringstart'].$attributeCode.$search['substringend'].
                         $replacementString, $content);
