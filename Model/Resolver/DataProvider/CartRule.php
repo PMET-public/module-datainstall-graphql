@@ -147,6 +147,7 @@ class CartRule
             'customer_group' => $this->getCustomerGroupNames($rule->getCustomerGroupIds()),
             'discount_amount' => $rule->getDiscountAmount(),
             'discount_qty' => $rule->getDiscountQty(),
+            'discount_step' => $rule->getDiscountStep(),
             'is_advanced' => $rule->getIsAdvanced(),
             'is_rss' => $rule->getIsRss(),
             'reward_points_delta' => $extAttributes->getRewardPointsDelta(),

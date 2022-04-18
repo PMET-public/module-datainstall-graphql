@@ -99,7 +99,7 @@ class AdminProperties implements ResolverInterface
             'frontend_label'=> $this->getFrontEndLabel($attribute, $storeId),
             'is_visible'=> $attribute->getIsVisible(),
             'is_searchable'=> $attribute->getIsSearchable(),
-            'is_comparable'=> $attribute->getIsComperable(),
+            'is_comparable'=> $attribute->getIsComparable(),
             'is_html_allowed_on_front'=> $attribute->getIsHtmlAllowedOnFront(),
             'is_used_for_price_rules'=> $attribute->getIsUsedForPriceRules(),
             'used_for_sort_by'=> $attribute->getUsedForSortBy(),

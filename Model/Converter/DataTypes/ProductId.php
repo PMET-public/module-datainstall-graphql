@@ -42,7 +42,7 @@ class ProductId
                         $sku = $product->getSku();
                         $replacementString.= $this->tokenStart.$sku.$this->tokenEnd;
                     }
-                    $content = str_replace($search['substring'].$idToReplace, $replacementString, $content);
+                    $content = str_replace($search['substring'].$idToReplace, $search['substring'].$replacementString, $content);
                 }
             }
         }

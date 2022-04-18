@@ -97,6 +97,7 @@ type CartRule {
     simple_action: String
     discount_amount: String
     discount_qty: String
+    discount_step: String
     apply_to_shipping: Int
     times_used: Int
     is_rss: Int

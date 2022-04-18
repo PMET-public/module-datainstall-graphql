@@ -190,6 +190,7 @@ Magento GraphQL uses the store scope, so the queries are limited to the store sc
 				description
 				discount_amount
 				discount_qty
+				discount_step
 				is_advanced
 				is_rss
 				name
@@ -365,6 +366,7 @@ Magento GraphQL uses the store scope, so the queries are limited to the store sc
 				customer_segments
 				name
 				sort_order
+				positions_limit
 			}
 		}
 	}
