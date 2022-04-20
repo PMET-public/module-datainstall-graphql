@@ -90,10 +90,10 @@ Magento GraphQL uses the store scope, so the queries are limited to the store sc
     	}
     }
 
-**categories**: Use to create the `categories.json` file. Include the ids of the categories you want to include in the export
+**categories**: Use to create the `categories.json` file. For the complete list of filtering options, see the GraphQL DevDocs.
 
     query{
-    	categories(filters: { ids: {in: ["4","5","6","7","8"]}} pageSize:50) {
+    	categories(filters: {  parent_id: {in: ["3","4","8"]}}} pageSize:50) {
     	items {
     		id
     		store_view_code
@@ -439,7 +439,19 @@ Magento GraphQL uses the store scope, so the queries are limited to the store sc
 		}
 	}
 
-**adminUsers**: Use to create the `settings.json` file. *Unless you are overriding the default settings, do not include the arguments. Including them in the query return is also optional unless you are overriding them.*
+**dataInstallerStoreSettings**: Use to create the `settings.json` file.
+
+***Basic Query***
+
+	query{
+		dataInstallerStoreSettings {
+			store_code
+			store_view_code
+			site_code
+		}
+	}
+***Advanced Query***
+*Unless you are overriding the default settings, do not include the arguments. Including them in the query return is also optional unless you are overriding them.*
 
 	query{
 		dataInstallerStoreSettings(
