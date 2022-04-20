@@ -160,7 +160,8 @@ class ProductAttribute
                     foreach ($optionIds as $optionId) {
                         foreach ($attributeOptions as $attributeOption) {
                             if ($attributeOption->getvalue()==$optionId) {
-                                $replacementArr[]= $this->tokenStart.$attributeCode.":".$attributeOption->getLabel().$this->tokenEnd;
+                                $replacementArr[]= $this->tokenStart.$attributeCode.":".$attributeOption->getLabel().
+                                $this->tokenEnd;
                                 break;
                             }
                         }

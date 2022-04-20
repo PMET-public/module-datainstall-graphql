@@ -50,7 +50,7 @@ class ProductAttributeSet
                         $setName = $set->getAttributeSetName();
                         $replacementString.= $this->tokenStart.$setName.$this->tokenEnd;
                     }
-                    $content = str_replace($search['substring'].$idToReplace, $replacementString, $content);
+                    $content = str_replace($search['substring'].$idToReplace, $search['substring'].$replacementString, $content);
                 }
             }
         }

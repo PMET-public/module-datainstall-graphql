@@ -29,6 +29,10 @@ class CustomerAttribute
         ['regex'=> '/Customer\\\\Attributes","attribute":"([a-zA-Z0-9_]+)","operator":"!{}","value":\["([0-9,"]+)"\]/',
         'substringstart'=> 'Customer\\Attributes","attribute":"',
         'substringend'=>'","operator":"!{}","value":["'],
+
+        ['regex'=> '/Customer\\\\\\\\Attributes","attribute":"([a-zA-Z0-9_]+)","operator":"==","value":"([0-9]+)"/',
+        'substringstart'=> 'Customer\\\\Attributes","attribute":"',
+        'substringend'=>'","operator":"==","value":"']
     ];
     /** @var AttributeOptionManagementInterface */
     protected $attributeOptionManagement;
@@ -61,14 +65,17 @@ class CustomerAttribute
                     foreach ($optionIds as $optionId) {
                         foreach ($attributeOptions as $attributeOption) {
                             if ($attributeOption->getvalue()==$optionId) {
-                                $replacementString.= $this->tokenStart.$attributeCode.":".$attributeOption->getLabel().$this->tokenEnd.'","';
+                                $replacementString.= $this->tokenStart.$attributeCode.":".
+                                $attributeOption->getLabel().$this->tokenEnd.'","';
                                 break;
                             }
                         }
                     }
                     $replacementString = $this->strLreplace('","', "", $replacementString);
                     $toFind = $search['substringstart'].$attributeCode.$search['substringend'].$idToReplace;
-                    $content = str_replace($search['substringstart'].$attributeCode.$search['substringend'].$idToReplace, $search['substringstart'].$attributeCode.$search['substringend'].$replacementString, $content);
+                    $content = str_replace($search['substringstart'].$attributeCode.$search['substringend'].
+                    $idToReplace, $search['substringstart'].$attributeCode.$search['substringend'].
+                    $replacementString, $content);
                 }
             }
         }

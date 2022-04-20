@@ -119,6 +119,7 @@ class AdminProperties implements ResolverInterface
         if ($attribute->getEntityType()->getEntityTypeCode()=='customer') {
             $returnProperties['is_used_for_customer_segment'] =  $attribute->getIsUsedForCustomerSegment();
             $returnProperties['sort_order'] =  $attribute->getSortOrder();
+            $returnProperties['is_required'] =  $attribute->getIsRequired();
             $returnProperties['used_in_forms'] =  implode(",", $attribute->getUsedInForms());
         }
 
