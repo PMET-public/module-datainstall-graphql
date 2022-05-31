@@ -28,6 +28,25 @@ Details on query arguments and types are available in the online GraphQL docs.
   	}
 	}
 
+**dataInstallerJobStatus**: Retrieves the current status of the provided `job_id` . Status includes `NOT_STARTED`,`IN_PROGRESS`, `FINISHED_SUCCESSFULLY`,`FINISHED_WITH_FAILURE` and `UNKNOWN` 
+
+*example:*
+
+	query{
+		dataInstallerJobStatus(jobId: "c3f070cd-047e-40d6-b1b4-e6f726162f67") {
+			job_status
+			job_status_text
+		}
+	}
+*returns:*
+
+	"data": {
+		"dataInstallerJobStatus": {
+			"job_status": "3",
+			"job_status_text": "FINISHED_WITH_FAILURE"
+		}
+	}
+
 **dataInstallerLogs**: Retrives information about a data pack install which is displayed in the terminal with a CLI install. Can be selected by `job_id` in the case of a scheduled install, or by the name of a data pack.  Name can be partial string.
 
 *example:*
