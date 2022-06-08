@@ -7,9 +7,8 @@ declare(strict_types=1);
 
 namespace MagentoEse\DataInstallGraphQl\Model\Resolver\DataInstall;
 
-use Magento\AsynchronousOperations\Model\BulkSummary;
 use Magento\Framework\Bulk\BulkStatusInterface;
-use Magento\Framework\Bulk\BulkSummaryInterface;
+use Magento\Framework\Bulk\BulkSummaryInterface as BulkSummary;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;

@@ -12,7 +12,6 @@
       ]
     },
     "require": {
-      "magentoese/module-data-install": "*",
-      "mageplaza/module-webhook":"^4.1.2"
+      "magentoese/module-data-install": "*"
     }
 }
