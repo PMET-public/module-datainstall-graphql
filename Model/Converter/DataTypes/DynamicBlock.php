@@ -47,7 +47,11 @@ class DynamicBlock
                         $replacementString.= $this->tokenStart.$name.$this->tokenEnd.",";
                     }
                     $replacementString = $this->strLreplace(',', "", $replacementString);
-                    $content = str_replace($search['substring'].$idToReplace, $search['substring'].$replacementString, $content);
+                    $content = str_replace(
+                        $search['substring'].$idToReplace,
+                        $search['substring'].$replacementString,
+                        $content
+                    );
                 }
             }
         }

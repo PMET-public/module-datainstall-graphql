@@ -62,7 +62,11 @@ class CategoryId
                         $urlKey = $category->getUrlKey();
                         $replacementArr[]= $this->tokenStart.$urlKey.$this->tokenEnd;
                     }
-                    $content = str_replace($search['substring'].$idToReplace, $search['substring'].implode(",", $replacementArr), $content);
+                    $content = str_replace(
+                        $search['substring'].$idToReplace,
+                        $search['substring'].implode(",", $replacementArr),
+                        $content
+                    );
                 }
             }
         }

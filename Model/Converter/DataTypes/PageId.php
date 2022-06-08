@@ -42,7 +42,11 @@ class PageId
                         $identifier = $page->getIdentifier();
                         $replacementString.= $this->tokenStart.$identifier.$this->tokenEnd;
                     }
-                    $content = str_replace($search['substring'].$idToReplace, $search['substring'].$replacementString, $content);
+                    $content = str_replace(
+                        $search['substring'].$idToReplace,
+                        $search['substring'].$replacementString,
+                        $content
+                    );
                 }
             }
         }

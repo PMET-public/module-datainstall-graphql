@@ -42,7 +42,7 @@ class DataInstallJobStatus implements ResolverInterface
         if (!empty($args['jobId'])) {
             $jobStatusText="UNKNOWN";
             $jobStatus = $this->bulkStatus->getBulkStatus($args['jobId']);
-            switch($jobStatus){
+            switch ($jobStatus) {
                 case BulkSummary::NOT_STARTED:
                     $jobStatusText = "NOT_STARTED";
                     break;
