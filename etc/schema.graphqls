@@ -383,6 +383,7 @@ type Company {
         currentPage: Int = 1 @doc(description: "Specifies which page of results to return. The default value is 1"),
     ): CompanyUsers @resolver(class: "MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Company\\Users") @doc(description: "Returns a list of company users based on activity status")
     user_export(id: ID!): Customer @resolver(class: "MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Company\\User") @doc(description: "Returns a company user filtered by the unique ID for a `Customer` object")
+    site_code: String @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Store\\SiteCode")
 }
 
 type CompanyCreditExport {
