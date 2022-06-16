@@ -497,7 +497,7 @@ Magento GraphQL uses the store scope, so the queries are limited to the store sc
 		}
 	}
 
-**dynamicBlocksExport**: Use to create the `dynamic_blocks.json` file. Include the admin user names or Ids you want to include in the export. This is different than the core *dynamicBlocks* query. It does use the same DynamicBlock Type, but it will not return all the information that the core query returns.
+**dynamicBlocksExport**: Use to create the `dynamic_blocks.json` file. Include the Dynamic Block names or Ids you want to include in the export. This is different than the core *dynamicBlocks* query. It does use the same DynamicBlock Type, but it will not return all the information that the core query returns.
 
 	query{
 		dynamicBlocksExport(identifiers: ["1","2"]) {
@@ -541,7 +541,7 @@ Magento GraphQL uses the store scope, so the queries are limited to the store sc
  		}
 	}
 
-**pageBuilderTemplates**: Use to create the `templates.json` file, to import Page Builder Templates.
+**pageBuilderTemplates**: Use to create the `templates.json` file, to import Page Builder Templates. Include the template names or Ids you want to include in the export.
 
 	query{
 		pageBuilderTemplates(identifiers: ["1","Heading / Video"]) {
@@ -550,6 +550,39 @@ Magento GraphQL uses the store scope, so the queries are limited to the store sc
 				created_for
 				name
 				preview_image
+			}
+		}
+	}
+
+**companies**: Use to create the `b2b_companies.json` file.
+Include the company names or Ids you want to include in the export.
+
+	query{
+		companies(identifiers: ["1"]) {
+			items {
+				legal_name
+				company_name:name
+				company_email:email
+				address:legal_address {
+					city
+					country_id:country_code
+					postcode
+					region{
+						region_code
+					}
+					street
+					telephone
+				}
+				reseller_id
+				vat_tax_id
+				credit {
+					credit_limit{
+						value
+					}
+					}
+				company_admin{
+					email
+				}
 			}
 		}
 	}

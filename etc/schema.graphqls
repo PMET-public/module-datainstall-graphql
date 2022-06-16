@@ -53,7 +53,9 @@ type Query {
     pageBuilderTemplates(
         identifiers: [String] @doc(description: "Names or Ids of templates") 
     ): PageBuilderTemplates @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Cms\\Templates") @doc(description:"Array of Page Builder templates")
-
+    companies(
+        identifiers: [String] @doc(description: "Names or IDS of the Companies")
+    ): Companies @resolver(class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Company\\Company") @doc(description: "Get List of Companies.")
 }
 
 type StoreConfig {
@@ -152,7 +154,6 @@ type CustomerSegment {
     conditions_serialized: String
     apply_to: String @doc(description: "2= Apply to Visitors, 1= Apply to Registered Users, 0= Both Visitors and Registered")
 }
-
 
 type PageBuilderTemplate {
     name: String
@@ -363,6 +364,31 @@ type DynamicBlock {
     store_view_code: String @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Store\\StoreViewCode")
     type: String
     banner_content: String
+}
+
+type Companies @doc(description: "List of Companies") {
+    items: [Company] @doc(description: "Array of information about the requested companies")
+}
+
+type Company {
+    credit_export: CompanyCreditExport! @resolver(class: "MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Company\\Credit") @doc(description: "Company credit balance")
+    credit_history(filter: CompanyCreditHistoryFilterInput, pageSize: Int = 20, currentPage: Int = 1): CompanyCreditHistory! @resolver(class: "Magento\\CompanyCreditGraphQl\\Model\\Resolver\\CreditHistory") @doc(description: "Company credit operations history")
+    roles_export(
+        pageSize: Int = 20 @doc(description: "Specifies the maximum number of results to return at once. Defaults to 20"),
+        currentPage: Int = 1 @doc(description: "Specifies which page of results to return. The default value is 1"),
+    ): CompanyRoles! @resolver(class: "MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Company\\Roles") @doc(description: "Returns the list of company roles")
+    users_export(
+        filter: CompanyUsersFilterInput @doc(description: "Defines the type of company users to return"),
+        pageSize: Int = 20 @doc(description: "Specifies the maximum number of results to return at once. Defaults to 20"),
+        currentPage: Int = 1 @doc(description: "Specifies which page of results to return. The default value is 1"),
+    ): CompanyUsers @resolver(class: "MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Company\\Users") @doc(description: "Returns a list of company users based on activity status")
+    user_export(id: ID!): Customer @resolver(class: "MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Company\\User") @doc(description: "Returns a company user filtered by the unique ID for a `Customer` object")
+}
+
+type CompanyCreditExport {
+    outstanding_balance: Money! @doc(description: "Outstanding company credit")
+    available_credit: Money! @doc(description: "Available company credit")
+    credit_limit: Money! @doc(description: "Company credit limit")
 }
 
 interface ProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\ProductInterfaceTypeResolverComposite"){
