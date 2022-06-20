@@ -12,7 +12,6 @@ use Magento\Company\Model\ResourceModel\Role\CollectionFactory as RoleCollection
 use Magento\Company\Model\ResourceModel\UserRole\CollectionFactory;
 use Magento\Company\Model\Role\Permission;
 use Magento\CompanyGraphQl\Model\Company\IdEncoder;
-use Magento\CompanyGraphQl\Model\Company\ResolverAccess;
 use Magento\CompanyGraphQl\Model\Company\Role\PermissionsFormatter;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
@@ -36,16 +35,6 @@ class Roles implements ResolverInterface
     private $roleCollectionFactory;
 
     /**
-     * @var ResolverAccess
-     */
-    private $resolverAccess;
-
-    /**
-     * @var array
-     */
-    private $allowedResources;
-
-    /**
      * @var IdEncoder
      */
     private $idEncoder;
@@ -63,25 +52,19 @@ class Roles implements ResolverInterface
     /**
      * @param CollectionFactory $userRoleCollectionFactory
      * @param RoleCollectionFactory $roleCollectionFactory
-     * @param ResolverAccess $resolverAccess
      * @param IdEncoder $idEncoder
      * @param PermissionsFormatter $permissionsFormatter
      * @param Permission $permission
-     * @param array $allowedResources
      */
     public function __construct(
         CollectionFactory $userRoleCollectionFactory,
         RoleCollectionFactory $roleCollectionFactory,
-        ResolverAccess $resolverAccess,
         IdEncoder $idEncoder,
         PermissionsFormatter $permissionsFormatter,
-        Permission $permission,
-        array $allowedResources = []
+        Permission $permission
     ) {
         $this->userRoleCollectionFactory = $userRoleCollectionFactory;
         $this->roleCollectionFactory = $roleCollectionFactory;
-        $this->resolverAccess = $resolverAccess;
-        $this->allowedResources = $allowedResources;
         $this->idEncoder = $idEncoder;
         $this->permissionsFormatter = $permissionsFormatter;
         $this->rolePermission = $permission;
@@ -109,11 +92,6 @@ class Roles implements ResolverInterface
             throw new LocalizedException(__('"model" value should be specified'));
         }
 
-        // if (isset($value['isNewCompany']) && $value['isNewCompany'] === true) {
-        //     return null;
-        // }
-
-        //$this->resolverAccess->isAllowed($this->allowedResources);
         $company = $value['model'];
         $companyRoles = $this->roleCollectionFactory->create()
             ->addFieldToFilter('company_id', $company->getId())

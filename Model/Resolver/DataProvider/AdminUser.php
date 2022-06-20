@@ -53,6 +53,20 @@ class AdminUser
     }
 
     /**
+     * Get admin user by username
+     *
+     * @param string $roleName
+     * @return array
+     * @throws NoSuchEntityException
+     */
+    public function getAdminUserDataByEmail(string $email): array
+    {
+        $roleData = $this->fetchRoleData($email, 'email');
+
+        return $roleData;
+    }
+
+    /**
      * Get admin user by id
      *
      * @param string $userId

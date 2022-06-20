@@ -392,6 +392,11 @@ type CompanyCreditExport {
     credit_limit: Money! @doc(description: "Company credit limit")
 }
 
+type CompanySalesRepresentative {
+    username: String @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Company\\SalesRep") @doc(description: "Company Sales Rep's Username")
+    role: String @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Company\\SalesRep") @doc(description: "Company Sales Rep's User Role")
+}
+
 interface ProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\ProductInterfaceTypeResolverComposite"){
     store_view_code: String @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Store\\StoreViewCode")
 }

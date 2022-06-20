@@ -8,9 +8,7 @@ declare(strict_types=1);
 namespace MagentoEse\DataInstallGraphQl\Model\Resolver\Company;
 
 use Magento\CompanyCredit\Api\CreditDataProviderInterface;
-use Magento\CompanyCredit\Model\PaymentMethodStatus;
 use Magento\CompanyCreditGraphQl\Model\Credit\Balance;
-use Magento\CompanyGraphQl\Model\Company\ResolverAccess;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
@@ -23,24 +21,9 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 class Credit implements ResolverInterface
 {
     /**
-     * @var ResolverAccess
-     */
-    private $resolverAccess;
-
-    /**
-     * @var array
-     */
-    private $allowedResources;
-
-    /**
      * @var CreditDataProviderInterface
      */
     private $creditDataProvider;
-
-    /**
-     * @var PaymentMethodStatus
-     */
-    private $paymentMethodStatus;
 
     /**
      * @var Balance
@@ -48,23 +31,17 @@ class Credit implements ResolverInterface
     private $balance;
 
     /**
-     * @param ResolverAccess $resolverAccess
      * @param CreditDataProviderInterface $creditDataProvider
-     * @param PaymentMethodStatus $paymentMethodStatus
      * @param Balance $balance
      * @param array $allowedResources
      */
     public function __construct(
-        ResolverAccess $resolverAccess,
         CreditDataProviderInterface $creditDataProvider,
-        PaymentMethodStatus $paymentMethodStatus,
         Balance $balance,
         array $allowedResources = []
     ) {
-        $this->resolverAccess = $resolverAccess;
         $this->allowedResources = $allowedResources;
         $this->creditDataProvider = $creditDataProvider;
-        $this->paymentMethodStatus = $paymentMethodStatus;
         $this->balance = $balance;
     }
 
@@ -76,12 +53,6 @@ class Credit implements ResolverInterface
         if (!isset($value['model'])) {
             throw new LocalizedException(__('"model" value should be specified'));
         }
-
-        //$this->resolverAccess->isAllowed($this->allowedResources);
-
-        // if (!$this->paymentMethodStatus->isEnabled()) {
-        //     throw new GraphQlInputException(__('"Payment on Account" is disabled.'));
-        // }
 
         $company = $value['model'];
         $credit = $this->creditDataProvider->get($company->getId());

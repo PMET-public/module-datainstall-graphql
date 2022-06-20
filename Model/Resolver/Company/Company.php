@@ -12,9 +12,9 @@ use function is_numeric;
 
 class Company implements ResolverInterface
 {
-    /**
-     * @var CompanyDataProvider
-     */
+     /**
+      * @var CompanyDataProvider
+      */
     private $companyDataProvider;
 
     /**

@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace MagentoEse\DataInstallGraphQl\Model\Resolver\Company;
 
 use Magento\CompanyGraphQl\Model\Company\IdEncoder;
-use Magento\CompanyGraphQl\Model\Company\ResolverAccess;
 use Magento\CompanyGraphQl\Model\Company\Users\Customer;
 use Magento\CustomerGraphQl\Model\Customer\ExtractCustomerData;
 use Magento\Framework\Exception\LocalizedException;
@@ -28,16 +27,6 @@ class User implements ResolverInterface
     private $customerData;
 
     /**
-     * @var ResolverAccess
-     */
-    private $resolverAccess;
-
-    /**
-     * @var array
-     */
-    private $allowedResources;
-
-    /**
      * @var IdEncoder
      */
     private $idEncoder;
@@ -49,21 +38,15 @@ class User implements ResolverInterface
 
     /**
      * @param ExtractCustomerData $customerData
-     * @param ResolverAccess $resolverAccess
      * @param IdEncoder $idEncoder
      * @param Customer $customerUser
-     * @param array $allowedResources
      */
     public function __construct(
         ExtractCustomerData $customerData,
-        ResolverAccess $resolverAccess,
         IdEncoder $idEncoder,
-        Customer $customerUser,
-        array $allowedResources = []
+        Customer $customerUser
     ) {
         $this->customerData = $customerData;
-        $this->resolverAccess = $resolverAccess;
-        $this->allowedResources = $allowedResources;
         $this->idEncoder = $idEncoder;
         $this->customerUser = $customerUser;
     }
@@ -86,7 +69,6 @@ class User implements ResolverInterface
             throw new LocalizedException(__('"model" value should be specified'));
         }
 
-        //$this->resolverAccess->isAllowed($this->allowedResources);
         $company = $value['model'];
         $customer = $this->customerUser->getCustomerById((int)$this->idEncoder->decode($args['id']));
         $customerCompanyAttributes = $this->customerUser->getCustomerCompanyAttributes($customer);

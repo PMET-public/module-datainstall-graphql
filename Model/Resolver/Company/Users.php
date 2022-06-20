@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace MagentoEse\DataInstallGraphQl\Model\Resolver\Company;
 
-use Magento\CompanyGraphQl\Model\Company\ResolverAccess;
 use Magento\CompanyGraphQl\Model\Company\Users as CompanyUsers;
 use Magento\CustomerGraphQl\Model\Customer\ExtractCustomerData;
 use Magento\Framework\GraphQl\Config\Element\Field;
@@ -31,31 +30,15 @@ class Users implements ResolverInterface
     private $customerData;
 
     /**
-     * @var ResolverAccess
-     */
-    private $resolverAccess;
-
-    /**
-     * @var array
-     */
-    private $allowedResources;
-
-    /**
      * @param CompanyUsers $companyUsers
      * @param ExtractCustomerData $customerData
-     * @param ResolverAccess $resolverAccess
-     * @param array $allowedResources
      */
     public function __construct(
         CompanyUsers $companyUsers,
-        ExtractCustomerData $customerData,
-        ResolverAccess $resolverAccess,
-        array $allowedResources = []
+        ExtractCustomerData $customerData
     ) {
         $this->companyUsers = $companyUsers;
         $this->customerData = $customerData;
-        $this->resolverAccess = $resolverAccess;
-        $this->allowedResources = $allowedResources;
     }
 
     /**
@@ -76,11 +59,6 @@ class Users implements ResolverInterface
             throw new GraphQlInputException(__('currentPage value must be greater than 0.'));
         }
 
-        // if (isset($value['isNewCompany']) && $value['isNewCompany'] === true) {
-        //     return null;
-        // }
-
-        //$this->resolverAccess->isAllowed($this->allowedResources);
         $company = $value['model'];
         $searchResults = $this->companyUsers->getCompanyUsers($company, $args);
         $companyUsers = [];
