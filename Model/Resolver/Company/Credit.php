@@ -55,13 +55,20 @@ class Credit implements ResolverInterface
         }
 
         $company = $value['model'];
-        $credit = $this->creditDataProvider->get($company->getId());
-        $currencyCode = $credit->getCurrencyCode();
-
-        return [
-            'outstanding_balance' => $this->balance->formatData($currencyCode, (float)$credit->getBalance()),
-            'available_credit' => $this->balance->formatData($currencyCode, (float)$credit->getAvailableLimit()),
-            'credit_limit' => $this->balance->formatData($currencyCode, (float)$credit->getCreditLimit())
-        ];
+        if ($company) {
+            $credit = $this->creditDataProvider->get($company->getId());
+            $currencyCode = $credit->getCurrencyCode();
+            return [
+                'outstanding_balance' => $this->balance->formatData($currencyCode, (float)$credit->getBalance()),
+                'available_credit' => $this->balance->formatData($currencyCode, (float)$credit->getAvailableLimit()),
+                'credit_limit' => $this->balance->formatData($currencyCode, (float)$credit->getCreditLimit())
+            ];
+        } else {
+            return [
+                'outstanding_balance' => '',
+                'available_credit' => '',
+                'credit_limit' => ''
+            ];
+        }
     }
 }

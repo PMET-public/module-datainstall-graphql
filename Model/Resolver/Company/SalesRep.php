@@ -53,14 +53,5 @@ class SalesRep implements ResolverInterface
         } else {
             return null;
         }
-       
-        //$value has email
-        // $company = $value['model'];
-        // $customer = $this->customerUser->getCustomerById((int)$this->idEncoder->decode($args['id']));
-        // $customerCompanyAttributes = $this->customerUser->getCustomerCompanyAttributes($customer);
-
-        // return $customerCompanyAttributes !== null
-        //     && (int)$customerCompanyAttributes->getCompanyId() === (int)$company->getId()
-        //     ? $this->customerData->execute($customer) : null;
     }
 }

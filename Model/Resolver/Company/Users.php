@@ -60,23 +60,35 @@ class Users implements ResolverInterface
         }
 
         $company = $value['model'];
-        $searchResults = $this->companyUsers->getCompanyUsers($company, $args);
-        $companyUsers = [];
+        if ($company) {
+            $searchResults = $this->companyUsers->getCompanyUsers($company, $args);
+            $companyUsers = [];
 
-        foreach ($searchResults->getItems() as $companyUser) {
-            $companyUsers[] = $this->customerData->execute($companyUser);
+            foreach ($searchResults->getItems() as $companyUser) {
+                $companyUsers[] = $this->customerData->execute($companyUser);
+            }
+
+            $pageSize = $searchResults->getSearchCriteria()->getPageSize();
+
+            return [
+                'items' => $companyUsers,
+                'total_count' => $searchResults->getTotalCount(),
+                'page_info' => [
+                    'page_size' => $pageSize,
+                    'current_page' => $searchResults->getSearchCriteria()->getCurrentPage(),
+                    'total_pages' => $pageSize ? ((int)ceil($searchResults->getTotalCount() / $pageSize)) : 0
+                ]
+            ];
+        } else {
+            return [
+                'items' => [],
+                'total_count' => 0,
+                'page_info' => [
+                    'page_size' => 0,
+                    'current_page' => 0,
+                    'total_pages' => 0
+                ]
+            ];
         }
-
-        $pageSize = $searchResults->getSearchCriteria()->getPageSize();
-
-        return [
-            'items' => $companyUsers,
-            'total_count' => $searchResults->getTotalCount(),
-            'page_info' => [
-                'page_size' => $pageSize,
-                'current_page' => $searchResults->getSearchCriteria()->getCurrentPage(),
-                'total_pages' => $pageSize ? ((int)ceil($searchResults->getTotalCount() / $pageSize)) : 0
-            ]
-        ];
     }
 }

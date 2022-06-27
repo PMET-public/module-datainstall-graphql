@@ -93,35 +93,47 @@ class Roles implements ResolverInterface
         }
 
         $company = $value['model'];
-        $companyRoles = $this->roleCollectionFactory->create()
+        if ($company) {
+            $companyRoles = $this->roleCollectionFactory->create()
             ->addFieldToFilter('company_id', $company->getId())
             ->setPageSize($args['pageSize'])
             ->setCurPage($args['currentPage']);
 
-        $companyRoleItems = [];
+            $companyRoleItems = [];
 
-        foreach ($companyRoles as $companyRole) {
-            $companyRole->setPermissions($this->rolePermission->getRolePermissions($companyRole));
-            $companyRoleItems[] = [
-                'id' => $this->idEncoder->encode((string)$companyRole->getId()),
-                'name' => $companyRole->getRoleName(),
-                'users_count' => $this->userRoleCollectionFactory->create()
-                    ->addFieldToFilter('role_id', $companyRole->getId())
-                    ->count(),
-                'permissions' => $this->permissionsFormatter->format($companyRole)
+            foreach ($companyRoles as $companyRole) {
+                $companyRole->setPermissions($this->rolePermission->getRolePermissions($companyRole));
+                $companyRoleItems[] = [
+                    'id' => $this->idEncoder->encode((string)$companyRole->getId()),
+                    'name' => $companyRole->getRoleName(),
+                    'users_count' => $this->userRoleCollectionFactory->create()
+                        ->addFieldToFilter('role_id', $companyRole->getId())
+                        ->count(),
+                    'permissions' => $this->permissionsFormatter->format($companyRole)
+                ];
+            }
+
+            $pageSize = $companyRoles->getPageSize();
+
+            return [
+                'items' => $companyRoleItems,
+                'total_count' => $companyRoles->count(),
+                'page_info' => [
+                    'page_size' => $pageSize,
+                    'current_page' => $companyRoles->getCurPage(),
+                    'total_pages' => $pageSize ? ((int)ceil($companyRoles->count() / $pageSize)) : 0,
+                ]
+            ];
+        } else {
+            return[
+                'items' => [],
+                'total_count' => 0,
+                'page_info' => [
+                    'page_size' => 0,
+                    'current_page' => 0,
+                    'total_pages' => 0,
+                ]
             ];
         }
-
-        $pageSize = $companyRoles->getPageSize();
-
-        return [
-            'items' => $companyRoleItems,
-            'total_count' => $companyRoles->count(),
-            'page_info' => [
-                'page_size' => $pageSize,
-                'current_page' => $companyRoles->getCurPage(),
-                'total_pages' => $pageSize ? ((int)ceil($companyRoles->count() / $pageSize)) : 0,
-            ]
-        ];
     }
 }
