@@ -400,6 +400,18 @@ type CompanySalesRepresentative {
 type Customer {
     placeholder_password: String @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Customer\\PlaceholderPassword") @doc(description: "Company Sales Rep default password 'Password1'")
     add_to_autofill: String @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Customer\\AddToAutofill") @doc(description: "Populate customer's data in the Autofill extension")
+        requisition_lists_export(
+        pageSize: Int = 20,
+        currentPage: Int = 1,
+        filter: RequisitionListFilterInput
+    ): RequisitionListsExport @resolver(class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Customer\\RequisitionList") @doc(description: "Contains the customer's requisition lists")
+
+}
+
+type RequisitionListsExport @doc(description: "Defines customer requisition lists")  {
+    items: [RequisitionList] @doc(description: "An array of requisition lists")
+    page_info: SearchResultPageInfo @doc(description: "Contains pagination metadata")
+    total_count: Int @doc(description: "The number of returned requisition lists")
 }
 
 interface ProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\ProductInterfaceTypeResolverComposite"){
