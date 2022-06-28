@@ -383,6 +383,13 @@ type Company {
         currentPage: Int = 1 @doc(description: "Specifies which page of results to return. The default value is 1"),
     ): CompanyUsers @resolver(class: "MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Company\\Users") @doc(description: "Returns a list of company users based on activity status")
     site_code: String @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Store\\SiteCode")
+    shared_catalog: SharedCatalog! @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Company\\SharedCatalog") @doc(description: "Shared catalog assigned to the company")
+}
+
+type SharedCatalog {
+    name: String  @doc(description: "Name of Catalog")
+    type: String  @doc(description: "Public or Custom")
+    description: String
 }
 
 type CompanyCreditExport {
