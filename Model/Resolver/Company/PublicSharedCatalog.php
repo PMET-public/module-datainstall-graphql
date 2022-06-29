@@ -10,7 +10,7 @@ use Magento\SharedCatalog\Api\SharedCatalogRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\SharedCatalog\Api\CompanyManagementInterface;
 
-class SharedCatalog implements ResolverInterface
+class PublicSharedCatalog implements ResolverInterface
 {
     /** @var SharedCatalogRepositoryInterface */
     protected $sharedCatalogRepository;
@@ -48,30 +48,15 @@ class SharedCatalog implements ResolverInterface
         array $args = null
     ) {
 
-        if (!isset($value['model'])) {
-            throw new LocalizedException(__('"model" value should be specified'));
-        }
-
-        $companyId = $value['model']->getId();
-
         $search = $this->searchCriteriaBuilder
-        ->addFilter(SharedCatalogInterface::SHARED_CATALOG_ID, 0, 'gt')->create();
+        ->addFilter(SharedCatalogInterface::TYPE, SharedCatalogInterface::TYPE_PUBLIC, 'eq')->create();
         $catalogList = $this->sharedCatalogRepository->getList($search)->getItems();
-        foreach ($catalogList as $catalog) {
-            $companies = explode(',', str_replace(
-                ['"','[',']'],
-                '',
-                $this->companyManagementInterface->getCompanies($catalog->getId())
-            ));
-            if (in_array($companyId, $companies, false)) {
+        $catalog = current($catalogList);
                 return [
                     'id' => $catalog->getId(),
                     'name' => $catalog->getName(),
                     'description' => $catalog->getDescription(),
                     'type' => ($catalog->getType()==0) ? 'Custom' : 'Public'
                 ];
-            }
-        }
-        return '';
     }
 }

@@ -56,6 +56,7 @@ type Query {
     companies(
         identifiers: [String] @doc(description: "Names or IDS of the Companies")
     ): Companies @resolver(class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Company\\Company") @doc(description: "Get List of Companies.")
+    publicSharedCatalog: PublicSharedCatalog @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Company\\PublicSharedCatalog") @doc(description: "Public or default Shared catalog")
 }
 
 type StoreConfig {
@@ -386,10 +387,22 @@ type Company {
     shared_catalog: SharedCatalog! @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Company\\SharedCatalog") @doc(description: "Shared catalog assigned to the company")
 }
 
+type PublicSharedCatalog {
+    name: String  @doc(description: "Name of Catalog")
+    type: String  @doc(description: "Public or Custom")
+    description: String
+    categories: [SharedCatalogCategories] @resolver(class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Company\\SharedCatalogCategories") @doc(description: "Array of categories assigned to a shared catalog")
+}
+
 type SharedCatalog {
     name: String  @doc(description: "Name of Catalog")
     type: String  @doc(description: "Public or Custom")
     description: String
+    categories: [SharedCatalogCategories] @resolver(class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Company\\SharedCatalogCategories") @doc(description: "Array of categories assigned to a shared catalog")
+}
+
+type SharedCatalogCategories {
+    path: String @doc(description: "Path of category to assign to shared catalog")
 }
 
 type CompanyCreditExport {
