@@ -117,6 +117,21 @@ type CartRule {
     actions_serialized: String
 }
 
+type ApprovalRules @doc(description: "Retrieves all requested B2B Approval Rules") {
+    items: [ApprovalRule] @doc(description: "An array containing the rules")
+}
+
+type ApprovalRule {
+    name: String
+    description: String
+    is_active: String
+    apply_to_roles: String @doc(description: "Comma delimited list of roles to apply the rule to. This includes any custom company roles created, along with Default User") 
+    conditions_serialized: String
+    approval_from: String @doc(description: "Comma delimited list of approval roles. This includes any custom company roles created, along with Default User,Company Administrator and Purchaser's Manager")
+    requires_manager_approval: String
+    requires_admin_approval: String
+}
+
 type CatalogRules @doc(description: "Retrieves all requested Catalog Rules") {
     items: [CatalogRule] @doc(description: "An array containing the catalog rules")
 }
@@ -385,6 +400,7 @@ type Company {
     ): CompanyUsers @resolver(class: "MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Company\\Users") @doc(description: "Returns a list of company users based on activity status")
     site_code: String @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Store\\SiteCode")
     shared_catalog: SharedCatalog! @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Company\\SharedCatalog") @doc(description: "Shared catalog assigned to the company")
+    approval_rules: ApprovalRules @resolver(class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Company\\ApprovalRules") @doc(description: "Get List of B2B Approval Rules.")
 }
 
 type PublicSharedCatalog {
