@@ -43,10 +43,11 @@ class CustomerGroup
                     $replacementString = '';
                     foreach ($groupIds as $groupId) {
                         $group = $this->groupRepository->getById($groupId);
-                        $groupId = $group->getCode();
-                        $replacementString.= $this->tokenStart.$groupId.$this->tokenEnd;
+                        $groupCode = $group->getCode();
+                        $replacementString.= $this->tokenStart.$groupCode.$this->tokenEnd;
                     }
-                    $content = str_replace($search['substring'].$idToReplace, $replacementString, $content);
+                    $content = str_replace($search['substring'].$idToReplace, 
+                    $search['substring'].$replacementString, $content);
                 }
             }
         }

@@ -112,7 +112,7 @@ Magento GraphQL uses the store scope, so the queries are limited to the store sc
 **categories**: Use to create the `categories.json` file. For the complete list of filtering options, see the GraphQL DevDocs.
 
     query{
-    	categories(filters: {  parent_id: {in: ["3","4","8"]}}} pageSize:50) {
+    	categories(filters: {  parent_id: {in: ["3","4","8"]}} pageSize:50) {
     	items {
     		id
     		store_view_code
