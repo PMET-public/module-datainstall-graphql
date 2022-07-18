@@ -46,8 +46,11 @@ class CustomerGroup
                         $groupCode = $group->getCode();
                         $replacementString.= $this->tokenStart.$groupCode.$this->tokenEnd;
                     }
-                    $content = str_replace($search['substring'].$idToReplace, 
-                    $search['substring'].$replacementString, $content);
+                    $content = str_replace(
+                        $search['substring'].$idToReplace,
+                        $search['substring'].$replacementString,
+                        $content
+                    );
                 }
             }
         }

@@ -3,8 +3,6 @@ namespace MagentoEse\DataInstallGraphQl\Model\Resolver\Company;
 
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Config\Element\Field;
-use Magento\Framework\GraphQl\Exception\GraphQlInputException;
-use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\PurchaseOrderRule\Api\RuleRepositoryInterface;
@@ -12,6 +10,7 @@ use Magento\PurchaseOrderRule\Api\Data\RuleInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Company\Api\RoleRepositoryInterface;
+use Magento\Customer\Api\CustomerRepositoryInterface;
 
 /**
  * Approval rule field resolver, used for GraphQL request processing
@@ -19,6 +18,12 @@ use Magento\Company\Api\RoleRepositoryInterface;
  */
 class ApprovalRules implements ResolverInterface
 {
+    
+    /**
+     * @var CustomerRepositoryInterface
+     */
+    private $customerRepository;
+
     /**
      * @var RuleRepositoryInterface
      */
@@ -35,15 +40,18 @@ class ApprovalRules implements ResolverInterface
     private $searchCriteria;
 
     /**
+     * @param CustomerRepositoryInterface $customerRepository
      * @param RuleRepositoryInterface $ruleRepository
      * @param RoleRepositoryInterface $roleRepository
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      */
     public function __construct(
+        CustomerRepositoryInterface $customerRepository,
         RuleRepositoryInterface $ruleRepository,
         RoleRepositoryInterface $roleRepository,
         SearchCriteriaBuilder $searchCriteriaBuilder
     ) {
+        $this->customerRepository = $customerRepository;
         $this->ruleRepository = $ruleRepository;
         $this->roleRepository = $roleRepository;
         $this->searchCriteria = $searchCriteriaBuilder;
@@ -93,7 +101,9 @@ class ApprovalRules implements ResolverInterface
                         "conditions_serialized" => $rule->getConditionsSerialized(),
                         "approval_from" => $this->getRoleIds($rule->getApproverRoleIds()),
                         "requires_manager_approval" => $rule->isManagerApprovalRequired(),
-                        "requires_admin_approval" => $rule->isAdminApprovalRequired()
+                        "requires_admin_approval" => $rule->isAdminApprovalRequired(),
+                        "applies_to_all" => $rule->isAppliesToAll(),
+                        "created_by" => $this->customerRepository->getById($rule->getCreatedBy())->getEmail()
                     ];
         }
         return $rulesData;

@@ -130,6 +130,8 @@ type ApprovalRule {
     approval_from: String @doc(description: "Comma delimited list of approval roles. This includes any custom company roles created, along with Default User,Company Administrator and Purchaser's Manager")
     requires_manager_approval: String
     requires_admin_approval: String
+    applies_to_all: String
+    created_by: String
 }
 
 type CatalogRules @doc(description: "Retrieves all requested Catalog Rules") {
