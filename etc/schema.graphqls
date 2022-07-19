@@ -71,6 +71,7 @@ interface CategoryInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model
     category_name: String @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Category\\CategoryName") @doc(description:"name with path delimiter escaped")
     page_layout: String
     custom_design: String
+    is_active: Boolean
 }
 
 type CmsBlock {

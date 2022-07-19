@@ -558,9 +558,10 @@ Magento GraphQL uses the store scope, so the queries are limited to the store sc
 Include the company names or Ids you want to include in the export.
 
 	query{
-		companies(identifiers: ["1"]) {
-			items {
-				legal_name
+  companies(identifiers: ["1"]) {
+  items {
+    site_code
+    legal_name
 				company_name:name
 				company_email:email
 				address:legal_address {
@@ -568,21 +569,116 @@ Include the company names or Ids you want to include in the export.
 					country_id:country_code
 					postcode
 					region{
-						region_code
+						region:region_code
 					}
 					street
 					telephone
 				}
 				reseller_id
 				vat_tax_id
-				credit {
-					credit_limit{
-						value
-					}
-					}
-				company_admin{
-					email
-				}
-			}
-		}
-	}
+				
+    company_admin{
+      email
+    }
+    approval_rules{
+      items{
+        name
+        description
+        is_active
+        apply_to_roles
+        conditions_serialized
+        approval_from
+        requires_admin_approval
+        requires_manager_approval
+        applies_to_all
+        created_by
+      }
+    }
+    shared_catalog{
+      name
+      description
+      type
+      categories{
+        path
+      }
+    }
+    credit_export{
+      credit_limit{
+        value
+      }
+    }
+    sales_representative{
+      firstname
+      lastname
+      email
+      username
+      role
+      password:placeholder_password
+    }
+    users_export(filter: {}, pageSize: 20, currentPage: 1) {
+      items{
+        firstname
+        lastname
+        email
+ 				password:placeholder_password
+        add_to_autofill
+        addresses{
+          street
+          city
+          region{
+            region
+          }
+          postcode
+          telephone
+          country_id:country_code
+        }
+        role{
+          name
+        }
+        team{
+          name
+        }
+        requisition_lists_export(pageSize: 20, currentPage: 1){
+          items{
+            name
+            description
+            items{
+              items{
+                product{
+                  sku
+                }
+                quantity
+              }
+            }
+          }
+        }
+      }
+    }
+    roles_export{
+      items{
+        name
+        permissions{
+          id
+          children{
+            id
+            children{
+            id
+              
+          }
+          }
+        }
+        
+      }
+    }
+    }
+  }
+  publicSharedCatalog{
+      name
+      description
+      type
+      categories{
+        path
+      }
+    }
+}
+
