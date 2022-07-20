@@ -157,19 +157,11 @@ class DynamicBlock
             'main_table.store_id DESC'
         );
 
-        //if ($this->_bannerTypesFilter) {
-            $select->joinInner(
-                ['banner' => $this->bannerResource->getTable('magento_banner')],
-                'main_table.banner_id = banner.banner_id'
-            );
-            // $filter = [];
-            // foreach ($this->_bannerTypesFilter as $type) {
-            //     $filter[] = $connection->prepareSqlCondition('banner.types', ['finset' => $type]);
-            // }
-            // $select->where(implode(' OR ', $filter));
-        //}
-
-        $r = $connection->fetchOne($select);
+        $select->joinInner(
+            ['banner' => $this->bannerResource->getTable('magento_banner')],
+            'main_table.banner_id = banner.banner_id'
+        );
+        
         return $connection->fetchOne($select);
     }
 

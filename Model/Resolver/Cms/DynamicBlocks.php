@@ -40,9 +40,9 @@ class DynamicBlocks implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        //$storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
+        $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
         $dynamicBlockIdentifiers = $this->getDynamicBlockIdentifiers($args);
-        $dynamicBlocksData = $this->getDynamicBlocksData($dynamicBlockIdentifiers, 0);
+        $dynamicBlocksData = $this->getDynamicBlocksData($dynamicBlockIdentifiers, $storeId);
 
         return [
             'items' => $dynamicBlocksData,
