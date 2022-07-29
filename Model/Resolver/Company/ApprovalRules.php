@@ -85,11 +85,11 @@ class ApprovalRules implements ResolverInterface
       * @return array
       * @throws NoSuchEntityException
       */
-    private function getRulesData($companyid): array
+    private function getRulesData($companyId): array
     {
         $rulesData = [];
         $search = $this->searchCriteria
-            ->addFilter(RuleInterface::KEY_COMPANY_ID, $companyid, 'eq')->create();
+            ->addFilter(RuleInterface::KEY_COMPANY_ID, $companyId, 'eq')->create();
             $ruleList = $this->ruleRepository->getList($search)->getItems();
           
         foreach ($ruleList as $rule) {

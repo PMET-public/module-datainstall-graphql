@@ -60,9 +60,9 @@ class Template
      * @return array
      * @throws NoSuchEntityException
      */
-    public function getDataByTemplateId(int $templateID): array
+    public function getDataByTemplateId(int $templateId): array
     {
-        $templateData = $this->fetchTemplateData($templateID, TemplateInterface::KEY_ID);
+        $templateData = $this->fetchTemplateData($templateId, TemplateInterface::KEY_ID);
 
         return $templateData;
     }

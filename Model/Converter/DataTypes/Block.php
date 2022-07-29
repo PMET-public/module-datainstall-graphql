@@ -5,8 +5,13 @@ use Magento\Cms\Api\BlockRepositoryInterface;
 
 class Block
 {
+     /** @var string */
     protected $tokenStart = '{{block code="';
+    
+    /** @var string */
     protected $tokenEnd = '"}}';
+    
+    /** @var string */
     protected $regexToSearch = [
         ['regex'=> '/block_id="([0-9]+)"/',
         'substring'=> 'block_id="']
@@ -15,6 +20,8 @@ class Block
     protected $blockRepository;
 
     /**
+     * Block constructor
+     *
      * @param BlockRepositoryInterface $blockRepository
      */
     public function __construct(
@@ -24,6 +31,8 @@ class Block
     }
 
     /**
+     * Replace block ids with tokens
+     *
      * @param string $content
      * @return string
      */

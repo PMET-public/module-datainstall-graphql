@@ -28,7 +28,7 @@ class AdminUser
 
     /**
      * @param RoleCollection $roleCollection
-     * @param UserCollection $ruleCollection
+     * @param UserCollection $userCollection
      */
     public function __construct(
         RoleCollection $roleCollection,
@@ -41,7 +41,7 @@ class AdminUser
     /**
      * Get admin user by username
      *
-     * @param string $roleName
+     * @param string $userName
      * @return array
      * @throws NoSuchEntityException
      */
@@ -55,7 +55,7 @@ class AdminUser
     /**
      * Get admin user by username
      *
-     * @param string $roleName
+     * @param string $email
      * @return array
      * @throws NoSuchEntityException
      */

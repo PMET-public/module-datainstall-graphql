@@ -5,8 +5,13 @@ use Magento\Customer\Api\GroupRepositoryInterface;
 
 class CustomerGroup
 {
+    /** @var string */
     protected $tokenStart = '{{customergroup name="';
+    
+    /** @var string */
     protected $tokenEnd = '"}}';
+
+    /** @var string */
     protected $regexToSearch = [
         ['regex'=> '/"attribute":"group_id","operator":"!=","value":"([0-9]+)"/',
         'substring'=> '"attribute":"group_id","operator":"!=","value":"'],
@@ -19,6 +24,8 @@ class CustomerGroup
     protected $groupRepository;
 
     /**
+     * Constructor
+     *
      * @param GroupRepositoryInterface $groupRepository
      */
     public function __construct(
@@ -28,6 +35,8 @@ class CustomerGroup
     }
 
     /**
+     * Replace group ids with tokens
+     *
      * @param string $content
      * @return string
      */

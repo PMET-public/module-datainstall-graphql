@@ -5,8 +5,13 @@ use Magento\Catalog\Api\CategoryRepositoryInterface;
 
 class CategoryId
 {
+    /** @var string */
     protected $tokenStart = '{{categoryid key="';
+    
+    /** @var string */
     protected $tokenEnd = '"}}';
+    
+    /** @var string */
     protected $regexToSearch = [
         ['regex'=>"/id_path='category\/([0-9]+)'/",
         'substring'=> "id_path='category/"],
@@ -35,6 +40,8 @@ class CategoryId
     protected $categoryRepository;
 
     /**
+     * CategoryId constructor
+     *
      * @param CategoryRepositoryInterface $categoryRepository
      */
     public function __construct(
@@ -44,6 +51,8 @@ class CategoryId
     }
 
     /**
+     * Replace category ids with tokens
+     *
      * @param string $content
      * @return string
      */

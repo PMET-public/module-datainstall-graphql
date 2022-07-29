@@ -87,8 +87,7 @@ class CartRule
     /**
      * Get rule data by name
      *
-     * @param string $segmentIdentifier
-     * @param int $storeId
+     * @param string $ruleName
      * @return array
      * @throws NoSuchEntityException
      */
@@ -102,8 +101,7 @@ class CartRule
     /**
      * Get block data by block_id
      *
-     * @param int $blockId
-     * @param int $storeId
+     * @param int $ruleId
      * @return array
      * @throws NoSuchEntityException
      */
@@ -162,6 +160,8 @@ class CartRule
            ];
     }
     /**
+     * Get website codes from ids
+     *
      * @param array $siteIds
      * @return string
      */
@@ -176,6 +176,8 @@ class CartRule
     }
 
     /**
+     * Get group names from ids
+     *
      * @param array $groupIds
      * @return string
      */
@@ -190,6 +192,8 @@ class CartRule
     }
 
     /**
+     * Get coupon code from rule
+     *
      * @param array $ruleId
      * @return string
      */

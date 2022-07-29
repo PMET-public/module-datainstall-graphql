@@ -32,7 +32,13 @@ class PageContent implements ResolverInterface
     
     /**
      * Converts the landing page page id into page identifier
-     * @inheritdoc
+     *
+     * @param Field $field
+     * @param Context $context
+     * @param ResolveInfo $info
+     * @param array $value
+     * @param array $args
+     * @return mixed
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {

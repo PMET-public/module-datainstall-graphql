@@ -5,7 +5,10 @@ use Magento\CustomerSegment\Model\ResourceModel\Segment\CollectionFactory as Seg
 
 class CustomerSegment
 {
+    /** @var string */
     protected $tokenStart = '{{segment name="';
+
+    /** @var string */    
     protected $tokenEnd = '"}}';
     // phpcs:ignoreFile Generic.Files.LineLength.TooLong
     protected $regexToSearch = [
@@ -24,6 +27,8 @@ class CustomerSegment
     protected $segmentCollection;
 
     /**
+     * Constructor
+     * 
      * @param SegmentCollection $segmentCollection
      */
     public function __construct(
@@ -33,6 +38,8 @@ class CustomerSegment
     }
 
     /**
+     * Replace segment ids with tokens
+     * 
      * @param string $content
      * @return string
      */

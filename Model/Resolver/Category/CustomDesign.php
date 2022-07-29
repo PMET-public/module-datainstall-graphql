@@ -32,7 +32,13 @@ class CustomDesign implements ResolverInterface
     
     /**
      * Converts the custom_design ID to theme path
-     * @inheritdoc
+     *
+     * @param Field $field
+     * @param Context $context
+     * @param ResolveInfo $info
+     * @param array $value
+     * @param array $args
+     * @return mixed
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {

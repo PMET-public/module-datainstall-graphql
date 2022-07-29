@@ -113,8 +113,6 @@ class Widget
                 __('The realated product rule with "%2" "%1" doesn\'t exist.', $identifier, $field)
             );
         }
-       // $t = $widget->getData('page_groups');
-        $t = $widget->getDataByKey('page_groups');
         return [
             'title' => $widget->getTitle(),
             'theme' => $widget->getThemeId(),
@@ -131,8 +129,10 @@ class Widget
         ];
     }
     /**
-     * @param array storeIds
-     * return string
+     * Get view codes from ids
+     *
+     * @param array $storeViewIds
+     * @return string
      */
     private function getStoreViewCodes($storeViewIds)
     {

@@ -34,7 +34,7 @@ class RewardExchangeRate
     private $websiteRepository;
 
     /**
-     * @param RateCollection $rateResourceModel
+     * @param RateCollection $rateCollection
      * @param CustomerGroupDataProvider $customerGroupDataProvider
      * @param WebsiteRepositoryInterface $websiteRepository
      */
@@ -91,6 +91,8 @@ class RewardExchangeRate
     }
 
     /**
+     * Get website code by id
+     *
      * @param int $siteId
      * @return string
      */
@@ -101,6 +103,8 @@ class RewardExchangeRate
     }
 
     /**
+     * Get exchange direction by id
+     *
      * @param int $directionId
      * @return string
      */

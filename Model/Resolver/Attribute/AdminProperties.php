@@ -71,7 +71,14 @@ class AdminProperties implements ResolverInterface
     }
 
     /**
-     * @inheritdoc
+     * Get additional properties of attibutes
+     *
+     * @param Field $field
+     * @param Context $context
+     * @param ResolveInfo $info
+     * @param array $value
+     * @param array $args
+     * @return mixed
      */
     public function resolve(
         Field $field,
@@ -89,6 +96,7 @@ class AdminProperties implements ResolverInterface
      * Format storefront properties
      *
      * @param AttributeInterface $attribute
+     * @param int $storeId
      * @return array
      */
     private function getStorefrontProperties($attribute, $storeId)
@@ -128,8 +136,9 @@ class AdminProperties implements ResolverInterface
 
     /**
      * Return enum for resolving use in layered navigation
+     *
      * @param AttributeInterface $attribute
-     * @param $storeId
+     * @param int $storeId
      * @return string
      */
     private function getFrontEndLabel(AttributeInterface $attribute, $storeId)
@@ -146,6 +155,12 @@ class AdminProperties implements ResolverInterface
         return $frontLabel;
     }
 
+    /**
+     * Get attribute sets attribute is assigned to
+     *
+     * @param AttributeInterface $attribute
+     * @return string
+     */
     private function getAttributeSets($attribute)
     {
         $attributeSetNames = [];

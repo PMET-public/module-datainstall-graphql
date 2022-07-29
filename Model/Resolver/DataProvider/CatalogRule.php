@@ -58,7 +58,6 @@ class CatalogRule
 
     /**
      * @param RuleCollection $ruleCollection
-     * @param CouponRepository $couponRepository
      * @param WebsiteRepositoryInterface $websiteRepository
      * @param GroupRepositoryInterface $groupRepositoryInterface
      * @param BannerResource $bannerResource
@@ -84,8 +83,7 @@ class CatalogRule
     /**
      * Get rule data by name
      *
-     * @param string $segmentIdentifier
-     * @param int $storeId
+     * @param string $ruleName
      * @return array
      * @throws NoSuchEntityException
      */
@@ -99,8 +97,7 @@ class CatalogRule
     /**
      * Get block data by block_id
      *
-     * @param int $blockId
-     * @param int $storeId
+     * @param int $ruleId
      * @return array
      * @throws NoSuchEntityException
      */
@@ -146,6 +143,8 @@ class CatalogRule
            ];
     }
     /**
+     * Get website codes by ids
+     *
      * @param array $siteIds
      * @return string
      */
@@ -160,6 +159,8 @@ class CatalogRule
     }
 
     /**
+     * Get customer group names by ids
+     *
      * @param array $groupIds
      * @return string
      */
@@ -174,6 +175,8 @@ class CatalogRule
     }
 
     /**
+     * Get banner names in rule
+     *
      * @param int $ruleId
      * @return string
      */

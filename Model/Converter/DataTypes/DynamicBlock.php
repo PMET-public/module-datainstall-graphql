@@ -5,8 +5,13 @@ use Magento\Banner\Model\ResourceModel\Banner\CollectionFactory as BannerCollect
 
 class DynamicBlock
 {
+    /** @var string */
     protected $tokenStart = '{{dynamicblock name="';
+    
+    /** @var string */
     protected $tokenEnd = '"}}';
+    
+    /** @var string */
     protected $regexToSearch = [
         ['regex'=> '/"banner_ids":"([0-9,]+)"/',
         'substring'=> '"banner_ids":"'],
@@ -17,6 +22,8 @@ class DynamicBlock
     protected $bannerCollection;
 
     /**
+     * Constructor
+     *
      * @param BannerCollection $bannerCollection
      */
     public function __construct(
@@ -26,6 +33,8 @@ class DynamicBlock
     }
 
     /**
+     * Replace dynamic block ids with tokens
+     *
      * @param string $content
      * @return string
      */
@@ -58,6 +67,8 @@ class DynamicBlock
         return $content;
     }
     /**
+     * StrLreplace
+     *
      * @param string $search
      * @param string $replace
      * @param string $subject

@@ -20,7 +20,14 @@ class AddToAutofill implements ResolverInterface
     }
     
     /**
-     * @inheritdoc
+     * Get autofill setting for customer
+     *
+     * @param Field $field
+     * @param Context $context
+     * @param ResolveInfo $info
+     * @param array $value
+     * @param array $args
+     * @return mixed
      */
     public function resolve(
         Field $field,
@@ -37,6 +44,8 @@ class AddToAutofill implements ResolverInterface
     }
 
      /**
+      * Get autofill setting for customer
+
       * @param string $email
       * @return string
       */

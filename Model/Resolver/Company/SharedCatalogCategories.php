@@ -51,7 +51,9 @@ class SharedCatalogCategories implements ResolverInterface
         return $sharedCatalogCategories;
     }
     /**
-     * @param string
+     * Get string path from numeric path
+     *
+     * @param string $numericPath
      * @return string
      */
     private function getCategoryPath($numericPath)

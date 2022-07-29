@@ -34,6 +34,8 @@ class Converter
     protected $customerAttribute;
 
     /**
+     * Converter constructor
+     *
      * @param Datatypes\CategoryId $categoryId
      * @param Datatypes\CustomerSegment $productId
      * @param Datatypes\ProductId $customerSegment
@@ -70,6 +72,8 @@ class Converter
     }
 
     /**
+     * Replace ids with tokens
+     *
      * @param string $content
      * @return string
      */

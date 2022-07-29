@@ -22,6 +22,8 @@ class AdminRoles implements ResolverInterface
     private $adminRoleDataProvider;
 
     /**
+     * AdminRoles Resolver constructor
+     *
      * @param AdminRoleProvider $adminRoleDataProvider
      */
     public function __construct(
@@ -31,7 +33,14 @@ class AdminRoles implements ResolverInterface
     }
 
     /**
-     * @inheritdoc
+     * Admin Roles Resolver
+     *
+     * @param Field $field
+     * @param Context $context
+     * @param ResolveInfo $info
+     * @param array $value
+     * @param array $args
+     * @return mixed
      */
     public function resolve(
         Field $field,
@@ -68,7 +77,6 @@ class AdminRoles implements ResolverInterface
      * Get role data
      *
      * @param array $roleIdentifiers
-     * @param int $storeId
      * @return array
      * @throws GraphQlNoSuchEntityException
      */

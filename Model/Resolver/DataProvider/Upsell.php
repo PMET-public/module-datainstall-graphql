@@ -120,6 +120,8 @@ class Upsell
     }
 
     /**
+     * Convert apply to id to text
+     *
      * @param Int $applyToId
      * @return string
      */
@@ -143,6 +145,8 @@ class Upsell
     }
 
     /**
+     * Get customer segments from rule
+     *
      * @param Rule $rule
      * @return string
      */

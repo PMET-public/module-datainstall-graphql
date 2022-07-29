@@ -66,7 +66,7 @@ class CartRules implements ResolverInterface
     /**
      * Get cart rule data
      *
-     * @param array $CartRule
+     * @param array $cartRuleIdentifiers
      * @return array
      * @throws GraphQlNoSuchEntityException
      */

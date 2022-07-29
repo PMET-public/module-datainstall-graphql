@@ -114,6 +114,8 @@ class MsiStock
     }
 
      /**
+      * Get stock source code by id
+      *
       * @param int $stockId
       * @return array
       * @throws NoSuchEntityException
@@ -132,6 +134,8 @@ class MsiStock
     }
 
     /**
+     * Get website codes in sales channel
+     *
      * @param mixed $salesChannels
      * @return array
      * @throws NoSuchEntityException

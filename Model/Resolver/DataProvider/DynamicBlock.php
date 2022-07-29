@@ -136,7 +136,7 @@ class DynamicBlock
     }
     /**
      * Get banner content by specific store id
-     * Copied from Magento\Banner\Model\ResourceMode\Banner
+     *
      * @param int $bannerId
      * @param int $storeId
      * @return string
@@ -164,7 +164,12 @@ class DynamicBlock
         
         return $connection->fetchOne($select);
     }
-
+    /**
+     * Get segment names by ids
+     *
+     * @param array $segmentIds
+     * @return string
+     */
     private function getSegmentNames(array $segmentIds)
     {
         $segmentResults = $this->segmentCollection->create()->addFieldToFilter('segment_id', [$segmentIds])->getItems();

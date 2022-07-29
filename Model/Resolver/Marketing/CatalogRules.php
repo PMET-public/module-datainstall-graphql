@@ -66,7 +66,7 @@ class CatalogRules implements ResolverInterface
     /**
      * Get catalog rule data
      *
-     * @param array $CatalogRule
+     * @param array $catalogRuleIdentifiers
      * @return array
      * @throws GraphQlNoSuchEntityException
      */

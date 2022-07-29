@@ -15,8 +15,8 @@ class LandingPage implements ResolverInterface
     /** @var BlockRepositoryInterface */
     protected $blockRepository;
     
-    /** @param BlockRepositoryInterface $blockRepository
-     * @param ThemeProviderInterface $themeProvider
+    /**
+     * @param BlockRepositoryInterface $blockRepository
      */
 
     public function __construct(BlockRepositoryInterface $blockRepository)
@@ -26,7 +26,13 @@ class LandingPage implements ResolverInterface
     
     /**
      * Converts the landing page block id into block identifier
-     * @inheritdoc
+     *
+     * @param Field $field
+     * @param Context $context
+     * @param ResolveInfo $info
+     * @param array $value
+     * @param array $args
+     * @return mixed
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {

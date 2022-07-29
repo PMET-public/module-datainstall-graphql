@@ -68,7 +68,6 @@ class CustomerGroups implements ResolverInterface
      * Get group data
      *
      * @param array $groupIdentifiers
-     * @param int $storeId
      * @return array
      * @throws GraphQlNoSuchEntityException
      */

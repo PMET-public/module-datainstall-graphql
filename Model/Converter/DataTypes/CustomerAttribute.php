@@ -5,7 +5,10 @@ use Magento\Eav\Api\AttributeOptionManagementInterface;
 
 class CustomerAttribute
 {
+    /** @var string */
     protected $tokenStart = '{{customerattribute code="';
+    
+    /** @var string */
     protected $tokenEnd = '"}}';
     // phpcs:ignoreFile Generic.Files.LineLength.TooLong
     protected $regexToSearch = [
@@ -39,6 +42,8 @@ class CustomerAttribute
     protected $attributeOptionManagement;
 
     /**
+     * Constructor
+     * 
      * @param AttributeOptionManagementInterface $attributeOptionManagement
      */
     public function __construct(
@@ -48,6 +53,8 @@ class CustomerAttribute
     }
 
     /**
+     * Replace attribute option ids with tokens
+     * 
      * @param string $content
      * @return string
      */
@@ -83,6 +90,8 @@ class CustomerAttribute
         return $content;
     }
      /**
+      * Strl function
+      *
       * @param string $search
       * @param string $replace
       * @param string $subject

@@ -104,7 +104,12 @@ class CustomerSegment
             'conditions_serialized' => $this->converter->convertContent($segment->getConditionsSerialized())
         ];
     }
-
+    /**
+     * Get website codes by ids
+     *
+     * @param array $siteIds
+     * @return string
+     */
     private function getWebsiteCodes($siteIds)
     {
         $siteCodes = [];

@@ -68,7 +68,6 @@ class AdminUsers implements ResolverInterface
      * Get user data
      *
      * @param array $userIdentifiers
-     * @param int $storeId
      * @return array
      * @throws GraphQlNoSuchEntityException
      */

@@ -5,8 +5,13 @@ use Magento\Cms\Api\PageRepositoryInterface;
 
 class PageId
 {
+    /** @var string */
     protected $tokenStart = '{{pageid key="';
+    
+    /** @var string */
     protected $tokenEnd = '"}}';
+    
+    /** @var string */
     protected $regexToSearch = [
         ['regex'=> "/page_id='([0-9]+)'/",
         'substring'=> "page_id='"]
@@ -15,6 +20,8 @@ class PageId
     protected $pageRepository;
 
     /**
+     * Constructor
+     *
      * @param PageRepositoryInterface $pageRepository
      */
     public function __construct(
@@ -24,6 +31,8 @@ class PageId
     }
 
     /**
+     * Replace page ids with tokens
+     *
      * @param string $content
      * @return string
      */

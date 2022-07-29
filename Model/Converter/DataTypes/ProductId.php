@@ -5,8 +5,13 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 
 class ProductId
 {
+    /** @var string */
     protected $tokenStart = '{{productid sku="';
+
+    /** @var string */
     protected $tokenEnd = '"}}';
+
+    /** @var string */
     protected $regexToSearch = [
         ['regex'=> "/id_path='product\/([0-9]+)'/",
         'substring'=> "id_path='product/"]
@@ -15,6 +20,8 @@ class ProductId
     protected $productRepository;
 
     /**
+     * Constructor
+     *
      * @param ProductRepositoryInterface $productRepository
      */
     public function __construct(
@@ -24,6 +31,8 @@ class ProductId
     }
 
     /**
+     * Replace product ids with tokens
+     *
      * @param string $content
      * @return string
      */

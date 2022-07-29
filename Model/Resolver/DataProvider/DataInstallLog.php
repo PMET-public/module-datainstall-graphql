@@ -23,7 +23,6 @@ class DataInstallLog
 
     /**
      * @param LoggerRepositoryInterface $loggerRepository
-     * @param FilterEmulate $widgetFilter
      */
     public function __construct(
         LoggerRepositoryInterface $loggerRepository
@@ -58,7 +57,7 @@ class DataInstallLog
     /**
      * Formats log data for return
      *
-     * @param mixed $iden$logResults
+     * @param mixed $logResults
      * @param string $identifier
      * @param string $type
      * @return array

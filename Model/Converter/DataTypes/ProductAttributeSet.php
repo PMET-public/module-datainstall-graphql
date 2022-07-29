@@ -5,8 +5,13 @@ use Magento\Eav\Api\AttributeSetRepositoryInterface;
 
 class ProductAttributeSet
 {
+    /** @var string */
     protected $tokenStart = '{{attributeset name="';
+
+    /** @var string */
     protected $tokenEnd = '"}}';
+
+    /** @var string */
     protected $regexToSearch = [
         ['regex'=> '/"attribute":"attribute_set_id","operator":"!=","value":"([0-9]+)"/',
         'substring'=> '"attribute":"attribute_set_id","operator":"!=","value":"'],
@@ -23,6 +28,8 @@ class ProductAttributeSet
     protected $attributeSetRepository;
 
     /**
+     * Constructor
+     *
      * @param AttributeSetRepositoryInterface $attributeSetRepository
      */
     public function __construct(
@@ -32,6 +39,8 @@ class ProductAttributeSet
     }
 
     /**
+     * Replace atribute set ids with tokens
+     *
      * @param string $content
      * @return string
      */

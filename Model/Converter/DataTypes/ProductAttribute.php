@@ -5,8 +5,13 @@ use Magento\Eav\Api\AttributeOptionManagementInterface;
 
 class ProductAttribute
 {
+    /** @var string */
     protected $tokenStart = '{{productattribute code="';
+    
+    /** @var string */
     protected $tokenEnd = '"}}';
+
+    /** @var string */
     // phpcs:ignoreFile Generic.Files.LineLength.TooLong
     protected $regexToSearch = [
         ['regex'=> '/Product\\\\Attributes","attribute":"([a-zA-Z0-9_]+)","operator":"==","value":\["([0-9,"]+)"\]/',
@@ -134,6 +139,8 @@ class ProductAttribute
     protected $attributeOptionManagement;
 
     /**
+     * Constructor
+     * 
      * @param AttributeOptionManagementInterface $attributeOptionManagement
      */
     public function __construct(
@@ -143,6 +150,7 @@ class ProductAttribute
     }
 
     /**
+     * Replace product attribute ids with tokens
      * @param string $content
      * @return string
      */

@@ -31,7 +31,14 @@ class CustomerSegments implements ResolverInterface
     }
 
     /**
-     * @inheritdoc
+     * Get customer segments
+     *
+     * @param Field $field
+     * @param Context $context
+     * @param ResolveInfo $info
+     * @param array $value
+     * @param array $args
+     * @return mixed
      */
     public function resolve(
         Field $field,
@@ -69,7 +76,6 @@ class CustomerSegments implements ResolverInterface
      * Get segment data
      *
      * @param array $segmentIdentifiers
-     * @param int $storeId
      * @return array
      * @throws GraphQlNoSuchEntityException
      */

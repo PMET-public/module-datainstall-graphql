@@ -23,7 +23,14 @@ class NamePath implements ResolverInterface
     }
     
     /**
-     * @inheritdoc
+     * Get category name path
+     *
+     * @param Field $field
+     * @param Context $context
+     * @param ResolveInfo $info
+     * @param array $value
+     * @param array $args
+     * @return mixed
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
@@ -32,7 +39,9 @@ class NamePath implements ResolverInterface
     }
 
     /**
-     * @param $path
+     * Get name path by number path
+     *
+     * @param string $path
      * @return string
      */
     private function getNamePath($path)

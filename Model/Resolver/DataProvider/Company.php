@@ -55,7 +55,7 @@ class Company
     /**
      * Get company by id
      *
-     * @param int $bannerId
+     * @param int $companyId
      * @return array
      * @throws NoSuchEntityException
      */
