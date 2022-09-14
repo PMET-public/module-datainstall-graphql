@@ -11,8 +11,6 @@ use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Framework\Filesystem\DriverInterface;
-use Magento\Framework\Setup\SampleData\FixtureManager;
 use MagentoEse\DataInstall\Model\Queue\ScheduleBulk;
 
 /**
@@ -21,33 +19,18 @@ use MagentoEse\DataInstall\Model\Queue\ScheduleBulk;
 class ScheduleJob implements ResolverInterface
 {
     /**
-     * @var DriverInterface
-     */
-    private $driverInterface;
-
-    /**
-     * @var FixtureManager
-     */
-    private $fixtureManager;
-
-    /**
      * @var ScheduleBulk
      */
     private $scheduleBulk;
 
     /**
-     * @param DriverInterface $driverInterface
+     *
      * @param ScheduleBulk $scheduleBulk
-     * @param FixtureManager $fixtureManager
      */
     public function __construct(
-        DriverInterface $driverInterface,
-        ScheduleBulk $scheduleBulk,
-        FixtureManager $fixtureManager
+        ScheduleBulk $scheduleBulk
     ) {
-        $this->driverInterface = $driverInterface;
         $this->scheduleBulk = $scheduleBulk;
-        $this->fixtureManager = $fixtureManager;
     }
     
     /**
