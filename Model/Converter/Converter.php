@@ -1,63 +1,74 @@
 <?php
 namespace MagentoEse\DataInstallGraphQl\Model\Converter;
 
+use MagentoEse\DataInstallGraphQl\Model\Converter\DataTypes\Block;
+use MagentoEse\DataInstallGraphQl\Model\Converter\DataTypes\CategoryId;
+use MagentoEse\DataInstallGraphQl\Model\Converter\DataTypes\CustomerAttribute;
+use MagentoEse\DataInstallGraphQl\Model\Converter\DataTypes\CustomerGroup;
+use MagentoEse\DataInstallGraphQl\Model\Converter\DataTypes\CustomerSegment;
+use MagentoEse\DataInstallGraphQl\Model\Converter\DataTypes\DynamicBlock;
+use MagentoEse\DataInstallGraphQl\Model\Converter\DataTypes\PageId;
+use MagentoEse\DataInstallGraphQl\Model\Converter\DataTypes\ProductAttribute;
+use MagentoEse\DataInstallGraphQl\Model\Converter\DataTypes\ProductAttributeSet;
+use MagentoEse\DataInstallGraphQl\Model\Converter\DataTypes\ProductId;
+
 class Converter
 {
-    /** @var Datatypes\CategoryId */
+    /** @var CategoryId */
     protected $categoryId;
 
-    /** @var Datatypes\ProductId */
+    /** @var ProductId */
     protected $productId;
 
-    /** @var Datatypes\CustomerSegment */
+    /** @var CustomerSegment */
     protected $customerSegment;
 
-    /** @var Datatypes\PageId */
+    /** @var PageId */
     protected $pageId;
 
-    /** @var Datatypes\Block */
+    /** @var Block */
     protected $block;
 
-    /** @var Datatypes\DynamicBlock */
+    /** @var DynamicBlock */
     protected $dynamicBlock;
 
-    /** @var Datatypes\CustomerGroup */
+    /** @var CustomerGroup */
     protected $customerGroup;
 
-    /** @var Datatypes\ProductAttributeSet */
+    /** @var ProductAttributeSet */
     protected $productAttributeSet;
 
-    /** @var Datatypes\ProductAttribute */
+    /** @var ProductAttribute */
     protected $productAttribute;
 
-    /** @var Datatypes\CustomerAttribute */
+    /** @var CustomerAttribute */
     protected $customerAttribute;
 
     /**
      * Converter constructor
      *
-     * @param Datatypes\CategoryId $categoryId
-     * @param Datatypes\CustomerSegment $productId
-     * @param Datatypes\ProductId $customerSegment
-     * @param Datatypes\PageId $pageId
-     * @param Datatypes\Block $block
-     * @param Datatypes\DynamicBlock $dynamicBlock
-     * @param Datatypes\CustomerGroup $customerGroup
-     * @param Datatypes\ProductAttributeSet $productAttributeSet
-     * @param Datatypes\ProductAttribute $productAttribute
-     * @param Datatypes\CustomerAttribute $customerAttribute
+     * @param CategoryId $categoryId
+     * @param CustomerSegment $productId
+     * @param ProductId $customerSegment
+     * @param PageId $pageId
+     * @param Block $block
+     * @param DynamicBlock $dynamicBlock
+     * @param CustomerGroup $customerGroup
+     * @param ProductAttributeSet $productAttributeSet
+     * @param ProductAttribute $productAttribute
+     * @param CustomerAttribute $customerAttribute
      */
     public function __construct(
-        Datatypes\CategoryId $categoryId,
-        Datatypes\ProductId $productId,
-        Datatypes\CustomerSegment $customerSegment,
-        Datatypes\PageId $pageId,
-        Datatypes\Block $block,
-        Datatypes\DynamicBlock $dynamicBlock,
-        Datatypes\CustomerGroup $customerGroup,
-        Datatypes\ProductAttributeSet $productAttributeSet,
-        Datatypes\ProductAttribute $productAttribute,
-        Datatypes\CustomerAttribute $customerAttribute
+        CategoryId $categoryId,
+        ProductId $productId,
+        CustomerSegment $customerSegment,
+        PageId $pageId,
+        Block $block,
+        DynamicBlock $dynamicBlock,
+        CustomerGroup $customerGroup,
+        ProductAttributeSet $productAttributeSet,
+        ProductAttribute $productAttribute,
+        CustomerAttribute $customerAttribute
     ) {
         $this->categoryId = $categoryId;
         $this->productId = $productId;
