@@ -59,6 +59,13 @@ type Query {
     publicSharedCatalog: PublicSharedCatalog @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Company\\PublicSharedCatalog") @doc(description: "Public or default Shared catalog")
 }
 
+type Mutation {
+  createDataInstallerJob(input: DataInstallerJobInput!): DataInstallerJobOutput
+    @resolver(
+      class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\DataInstall\\ScheduleJob"
+    )@doc(description: "Launch installation of data pack. Also includes remote retrieval of data pack")
+}
+
 type StoreConfig {
     root_cateogry_name: String @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Store\\RootCategoryName") @doc(description:"Name of Stores Root Category")
     theme: String @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Store\\Theme") @doc(description:"Path of the Store's Theme")
@@ -248,24 +255,24 @@ type DataInstallerLogRecord {
     add_date: String @doc(description: "Timestamp when record was added")
 }
 
-type Mutation {
-  createDataInstallerJob(input: DataInstallerJobInput!): DataInstallerJobOutput
-    @resolver(
-      class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\DataInstall\\ScheduleJob"
-    )
-    @doc(description: "launch installation of data pack")
-}
-
 type DataInstallerJobOutput {
   job_id: String
 }
 
+type RemoteDataPackOutput {
+  job_id: String @doc(description: "Id of job scheduled to load data pack")
+  status: String @doc(description: "Status of data pack retrieval, not installation")
+  message: String @doc(description: "Message from data pack retrieval, not installation")
+}
+
 input DataInstallerJobInput @doc(description: "datapack only required value") {
-  datapack: String @doc(description: "Name of module or path to Data Pack")
-  load: String @doc(description: "Subdirectory of data to load")
-  files: String @doc(description: "Comma delimited list of file so load")
-  host: String @doc(description: "Override for host value in stores file")
-  reload: Int @doc(description: "1 if reloading an existing Data Pack")
+  datapack: String @doc(description: "Required: Name of module or path to Data Pack if local. Url to Data Pack if remote")
+  load: String @doc(description: "Optional: Subdirectory of data to load")
+  files: String @doc(description: "Optional: Comma delimited list of file so load")
+  host: String @doc(description: "Optional: Override for host value in stores file")
+  reload: Int @doc(description: "Optional: 1 if reloading an already installed Data Pack")
+  auth_token: String @doc(description: "Token to include with request for remote Data Pack if required e.g. GitHub access token") 
+  is_remote: Boolean @doc(description: "Set to true if using remote data pack") 
 }
 
 type Attribute {

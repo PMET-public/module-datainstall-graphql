@@ -11,12 +11,20 @@ Details on query arguments and types are available in the online GraphQL docs.
 
 ## Data Installer Support
 
-**createDataInstallerJob**: Similiar to installing a data pack via CLI. This will schedule a data pack import, and return the `job_id` of the process
+**createDataInstallerJob**: Similiar to installing a data pack via CLI. This will schedule a data pack import, and return the `job_id` of the process. This also supports the retrieval of remote data packs.
 
-*example:*
+*example: data pack on instance*
 
 	mutation {
       createDataInstallerJob(input: {datapack:"MagentoEse_VerticalDataAuto"}) {
+        job_id
+      }
+    }
+
+*example: remote data pack*
+
+	mutation {
+      createDataInstallerJob(input: {datapack:"https://github.com/PMET-public/thisdoesntexist/archive/refs/heads/master.zip",is_remote:true,auth_token:"12345abcdef"}) {
         job_id
       }
     }
