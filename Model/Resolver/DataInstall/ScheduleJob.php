@@ -28,14 +28,14 @@ class ScheduleJob implements ResolverInterface
     /** @var InstallerJobInterfaceFactory */
     protected $installerJobInterface;
     
-
     /**
-     * 
-     * @param DataPackInterfaceFactory $dataPackInterface 
-     * @param InstallerJobInterfaceFactory $installerJobInterface 
-     * @return void 
+     *
+     * @param DataPackInterfaceFactory $dataPackInterface
+     * @param InstallerJobInterfaceFactory $installerJobInterface
+     * @return void
      */
-    public function __construct(DataPackInterfaceFactory $dataPackInterface,
+    public function __construct(
+        DataPackInterfaceFactory $dataPackInterface,
         InstallerJobInterfaceFactory $installerJobInterface
     ) {
         $this->dataPackInterface = $dataPackInterface;
@@ -43,14 +43,15 @@ class ScheduleJob implements ResolverInterface
     }
     
     /**
-     * 
-     * @param Field $field 
-     * @param ContextInterface $context 
-     * @param ResolveInfo $info 
-     * @param array|null $value 
-     * @param array|null $args 
-     * @return mixed|Value 
-     * @throws GraphQlInputException 
+     * Reslover for createDataInstallerJob
+     *
+     * @param Field $field
+     * @param ContextInterface $context
+     * @param ResolveInfo $info
+     * @param array|null $value
+     * @param array|null $args
+     * @return mixed|Value
+     * @throws GraphQlInputException
      */
     public function resolve(
         Field $field,
@@ -88,8 +89,7 @@ class ScheduleJob implements ResolverInterface
             $dataPack->setAuthToken($jobArgs['auth_token']);
         }
 
-        if($dataPack->getIsRemote()){
-            //$dataPack->getRemoteDataPack($dataPack->getDataPackLocation(),$dataPack->getAuthToken());
+        if ($dataPack->getIsRemote()) {
             $dataPack->setDataPackLocation($dataPack->getRemoteDataPack(
                 $dataPack->getDataPackLocation(),
                 $dataPack->getAuthToken()
@@ -102,7 +102,7 @@ class ScheduleJob implements ResolverInterface
             $jobId = $installerJob->scheduleImport($dataPack);
             return [
                 'job_id' => $jobId,
-           ];
+            ];
         } else {
             throw new GraphQlInputException(__('Data Pack could not be unzipped. Please check file format'));
         }
