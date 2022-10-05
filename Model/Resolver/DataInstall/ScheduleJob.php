@@ -87,6 +87,8 @@ class ScheduleJob implements ResolverInterface
         }
         if (!empty($jobArgs['auth_token'])) {
             $dataPack->setAuthToken($jobArgs['auth_token']);
+        } else {
+            $dataPack->setAuthToken('');
         }
 
         if ($dataPack->getIsRemote()) {
