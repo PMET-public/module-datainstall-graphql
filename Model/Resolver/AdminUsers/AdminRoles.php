@@ -8,6 +8,7 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use MagentoEse\DataInstallGraphQl\Model\Authentication;
 use function is_numeric;
 
 /**
@@ -16,20 +17,24 @@ use function is_numeric;
  */
 class AdminRoles implements ResolverInterface
 {
-    /**
-     * @var AdminRoleProvider
-     */
+    /** @var AdminRoleProvider */
     private $adminRoleDataProvider;
 
+    /** @var Authentication */
+    private $authentication;
+
     /**
-     * AdminRoles Resolver constructor
      *
      * @param AdminRoleProvider $adminRoleDataProvider
+     * @param Authentication $authentication
+     * @return void
      */
     public function __construct(
-        AdminRoleProvider $adminRoleDataProvider
+        AdminRoleProvider $adminRoleDataProvider,
+        Authentication $authentication
     ) {
         $this->adminRoleDataProvider = $adminRoleDataProvider;
+        $this->authentication = $authentication;
     }
 
     /**
@@ -49,6 +54,8 @@ class AdminRoles implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
+        $this->authentication->authorize();
+
         $roleIdentifiers = $this->getRoleIdentifiers($args);
         $roleData = $this->getRolesData($roleIdentifiers);
 

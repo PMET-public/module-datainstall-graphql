@@ -6,8 +6,11 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
+use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
+use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use MagentoEse\DataInstallGraphQl\Model\Authentication;
 use function is_numeric;
 
 /**
@@ -16,22 +19,37 @@ use function is_numeric;
  */
 class Widgets implements ResolverInterface
 {
-    /**
-     * @var WidgetDataProvider
-     */
+    /** @var WidgetDataProvider */
     private $widgetDataProvider;
 
+    /** @var Authentication */
+    private $authentication;
+
     /**
+     *
      * @param WidgetDataProvider $widgetDataProvider
+     * @param Authentication $authentication
+     * @return void
      */
     public function __construct(
-        WidgetDataProvider $widgetDataProvider
+        WidgetDataProvider $widgetDataProvider,
+        Authentication $authentication
     ) {
         $this->widgetDataProvider = $widgetDataProvider;
+        $this->authentication = $authentication;
     }
 
     /**
-     * @inheritdoc
+     * Return Widget Data
+     *
+     * @param Field $field
+     * @param ContextInterface $context
+     * @param ResolveInfo $info
+     * @param array|null $value
+     * @param array|null $args
+     * @return mixed|Value
+     * @throws GraphQlInputException
+     * @throws GraphQlNoSuchEntityException
      */
     public function resolve(
         Field $field,
@@ -40,6 +58,8 @@ class Widgets implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
+        $this->authentication->authorize();
+
         $widgetIdentifiers = $this->getWidgetIdentifiers($args);
         $widgetsData = $this->getWidgetsData($widgetIdentifiers);
 

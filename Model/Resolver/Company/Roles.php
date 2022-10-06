@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
+ * Copyright @ Adobe, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace MagentoEse\DataInstallGraphQl\Model\Resolver\Company;
 
+use Exception;
 use Magento\Company\Model\ResourceModel\Role\CollectionFactory as RoleCollectionFactory;
 use Magento\Company\Model\ResourceModel\UserRole\CollectionFactory;
 use Magento\Company\Model\Role\Permission;
@@ -16,63 +17,76 @@ use Magento\CompanyGraphQl\Model\Company\Role\PermissionsFormatter;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
+use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use MagentoEse\DataInstallGraphQl\Model\Authentication;
+use Zend_Db_Select_Exception;
 
 /**
  * Provides customer associated company roles
  */
 class Roles implements ResolverInterface
 {
-    /**
-     * @var CollectionFactory
-     */
+    /** @var CollectionFactory */
     private $userRoleCollectionFactory;
 
-    /**
-     * @var RoleCollectionFactory
-     */
+    /** @var RoleCollectionFactory */
     private $roleCollectionFactory;
 
-    /**
-     * @var IdEncoder
-     */
+    /** @var IdEncoder */
     private $idEncoder;
 
-    /**
-     * @var PermissionsFormatter
-     */
+    /** @var PermissionsFormatter */
     private $permissionsFormatter;
 
-    /**
-     * @var Permission
-     */
+    /** @var Permission */
     private $rolePermission;
 
+    /** @var Authentication */
+    private $authentication;
+
     /**
+     *
      * @param CollectionFactory $userRoleCollectionFactory
      * @param RoleCollectionFactory $roleCollectionFactory
      * @param IdEncoder $idEncoder
      * @param PermissionsFormatter $permissionsFormatter
      * @param Permission $permission
+     * @param Authentication $authentication
+     * @return void
      */
     public function __construct(
         CollectionFactory $userRoleCollectionFactory,
         RoleCollectionFactory $roleCollectionFactory,
         IdEncoder $idEncoder,
         PermissionsFormatter $permissionsFormatter,
-        Permission $permission
+        Permission $permission,
+        Authentication $authentication
     ) {
         $this->userRoleCollectionFactory = $userRoleCollectionFactory;
         $this->roleCollectionFactory = $roleCollectionFactory;
         $this->idEncoder = $idEncoder;
         $this->permissionsFormatter = $permissionsFormatter;
         $this->rolePermission = $permission;
+        $this->authentication = $authentication;
     }
 
-    /**
-     * @inheritDoc
-     */
+   /**
+    * Get Company user roles
+    *
+    * @param Field $field
+    * @param ContextInterface $context
+    * @param ResolveInfo $info
+    * @param array|null $value
+    * @param array|null $args
+    * @return mixed|Value
+    * @throws GraphQlInputException
+    * @throws LocalizedException
+    * @throws Zend_Db_Select_Exception
+    * @throws Exception
+    */
     public function resolve(
         Field $field,
         $context,
@@ -80,6 +94,8 @@ class Roles implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
+        $this->authentication->authorize();
+
         if ($args['pageSize'] < 1) {
             throw new GraphQlInputException(__('pageSize value must be greater than 0.'));
         }

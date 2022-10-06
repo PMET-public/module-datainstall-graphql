@@ -13,9 +13,9 @@ use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use MagentoEse\DataInstall\Model\Queue\ScheduleBulk;
 use MagentoEse\DataInstall\Api\Data\DataPackInterfaceFactory;
 use MagentoEse\DataInstall\Api\Data\InstallerJobInterfaceFactory;
+use MagentoEse\DataInstallGraphQl\Model\Authentication;
 
 /**
  * CMS blocks field resolver, used for GraphQL request processing
@@ -27,19 +27,25 @@ class ScheduleJob implements ResolverInterface
 
     /** @var InstallerJobInterfaceFactory */
     protected $installerJobInterface;
+
+    /** @var Authentication */
+    protected $authentication;
     
     /**
      *
      * @param DataPackInterfaceFactory $dataPackInterface
      * @param InstallerJobInterfaceFactory $installerJobInterface
+     * @param Authentication $authentication
      * @return void
      */
     public function __construct(
         DataPackInterfaceFactory $dataPackInterface,
-        InstallerJobInterfaceFactory $installerJobInterface
+        InstallerJobInterfaceFactory $installerJobInterface,
+        Authentication $authentication
     ) {
         $this->dataPackInterface = $dataPackInterface;
         $this->installerJobInterface = $installerJobInterface;
+        $this->authentication = $authentication;
     }
     
     /**
@@ -60,6 +66,9 @@ class ScheduleJob implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
+
+        $this->authentication->authorize();
+
         $jobArgs = $args['input'];
         if (empty($jobArgs['datapack'])) {
             throw new GraphQlInputException(__('"datapack" is required'));

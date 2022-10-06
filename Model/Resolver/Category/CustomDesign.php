@@ -6,6 +6,7 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
+use MagentoEse\DataInstallGraphQl\Model\Authentication;
 
 /**
  * @inheritdoc
@@ -13,21 +14,29 @@ use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
 class CustomDesign implements ResolverInterface
 {
     /** @var ScopeConfigInterface */
-    protected $scopeConfig;
+    private $scopeConfig;
 
-     /** @var ThemeProviderInterface */
-    protected $themeProvider;
+    /** @var ThemeProviderInterface */
+    private $themeProvider;
+
+    /** @var Authentication */
+    private $authentication;
     
-    /** @param ScopeConfigInterface $scopeConfig
+    /**
+     *
+     * @param ScopeConfigInterface $scopeConfig
      * @param ThemeProviderInterface $themeProvider
+     * @param Authentication $authentication
+     * @return void
      */
-
     public function __construct(
         ScopeConfigInterface $scopeConfig,
-        ThemeProviderInterface $themeProvider
+        ThemeProviderInterface $themeProvider,
+        Authentication $authentication
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->themeProvider = $themeProvider;
+        $this->authentication = $authentication;
     }
     
     /**
@@ -42,6 +51,8 @@ class CustomDesign implements ResolverInterface
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
+        $this->authentication->authorize();
+
         if (!empty($value['custom_design'])) {
             $theme = $this->themeProvider->getThemeById($value['custom_design']);
             return $theme->getThemePath();

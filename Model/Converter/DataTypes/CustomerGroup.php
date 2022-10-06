@@ -20,6 +20,7 @@ class CustomerGroup
         ['regex'=> '/"attribute":"group_id","operator":"","value":"([0-9]+)"/',
         'substring'=> '"attribute":"group_id","operator":"","value":"']
     ];
+    
     /** @var GroupRepositoryInterface */
     protected $groupRepository;
 

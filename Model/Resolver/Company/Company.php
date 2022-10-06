@@ -6,29 +6,47 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
+use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
+use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use MagentoEse\DataInstallGraphQl\Model\Authentication;
 use function is_numeric;
 
 class Company implements ResolverInterface
 {
-     /**
-      * @var CompanyDataProvider
-      */
+     /** @var CompanyDataProvider */
     private $companyDataProvider;
 
-    /**
-     * @param CompanyDataProvider $companyDataProvider
-     */
-    public function __construct(
-        CompanyDataProvider $companyDataProvider
-    ) {
-        $this->companyDataProvider = $companyDataProvider;
-    }
+    /** @var Authentication */
+    private $authentication;
 
     /**
-     * @inheritdoc
+     *
+     * @param CompanyDataProvider $companyDataProvider
+     * @param Authentication $authentication
+     * @return void
      */
+    public function __construct(
+        CompanyDataProvider $companyDataProvider,
+        Authentication $authentication
+    ) {
+        $this->companyDataProvider = $companyDataProvider;
+        $this->authentication = $authentication;
+    }
+
+   /**
+    * Get Company Data
+    *
+    * @param Field $field
+    * @param ContextInterface $context
+    * @param ResolveInfo $info
+    * @param array|null $value
+    * @param array|null $args
+    * @return mixed|Value
+    * @throws GraphQlInputException
+    * @throws GraphQlNoSuchEntityException
+    */
     public function resolve(
         Field $field,
         $context,
@@ -36,6 +54,8 @@ class Company implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
+        $this->authentication->authorize();
+
         $companyIdentifiers = $this->getCompanyIdentifiers($args);
         $companyData = $this->getCompanyData($companyIdentifiers);
 

@@ -6,6 +6,7 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Cms\Api\PageRepositoryInterface;
 use MagentoEse\DataInstallGraphQl\Model\Converter\Converter;
+use MagentoEse\DataInstallGraphQl\Model\Authentication;
 
 /**
  * @inheritdoc
@@ -13,21 +14,29 @@ use MagentoEse\DataInstallGraphQl\Model\Converter\Converter;
 class PageContent implements ResolverInterface
 {
     /** @var PageRepositoryInterface */
-    protected $pageRepository;
+    private $pageRepository;
 
     /** @var Converter */
-    protected $converter;
-    
-    /** @param PageRepositoryInterface $pageRepository
-     * @param Converter $converter
-     */
+    private $converter;
 
+    /** @var Authentication */
+    private $authentication;
+    
+    /**
+     *
+     * @param PageRepositoryInterface $pageRepository
+     * @param Converter $converter
+     * @param Authentication $authentication
+     * @return void
+     */
     public function __construct(
         PageRepositoryInterface $pageRepository,
-        Converter $converter
+        Converter $converter,
+        Authentication $authentication
     ) {
         $this->pageRepository = $pageRepository;
         $this->converter = $converter;
+        $this->authentication = $authentication;
     }
     
     /**
@@ -42,6 +51,8 @@ class PageContent implements ResolverInterface
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
+        $this->authentication->authorize();
+        
         if (!empty($value['identifier'])) {
             $page = $this->pageRepository->getById($value['page_id']);
             return $this->converter->convertContent($page->getContent());

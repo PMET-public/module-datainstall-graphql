@@ -8,37 +8,57 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\SharedCatalog\Api\Data\SharedCatalogInterface;
 use Magento\SharedCatalog\Api\SharedCatalogRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
+use Magento\Framework\GraphQl\Query\Resolver\Value;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\SharedCatalog\Api\CompanyManagementInterface;
+use MagentoEse\DataInstallGraphQl\Model\Authentication;
 
 class SharedCatalog implements ResolverInterface
 {
     /** @var SharedCatalogRepositoryInterface */
-    protected $sharedCatalogRepository;
+    private $sharedCatalogRepository;
 
     /** @var SearchCriteriaBuilder */
-    protected $searchCriteriaBuilder;
+    private $searchCriteriaBuilder;
 
     /** @var CompanyManagementInterface */
-    protected $companyManagementInterface;
+    private $companyManagementInterface;
+
+    /** @var Authentication */
+    private $authentication;
 
     /**
+     *
      * @param SharedCatalogRepositoryInterface $sharedCatalogRepository
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param CompanyManagementInterface $companyManagementInterface
+     * @param Authentication $authentication
+     * @return void
      */
-
     public function __construct(
         SharedCatalogRepositoryInterface $sharedCatalogRepository,
         SearchCriteriaBuilder $searchCriteriaBuilder,
-        CompanyManagementInterface $companyManagementInterface
+        CompanyManagementInterface $companyManagementInterface,
+        Authentication $authentication
     ) {
         $this->sharedCatalogRepository = $sharedCatalogRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->companyManagementInterface = $companyManagementInterface;
+        $this->authentication = $authentication;
     }
     
     /**
-     * @inheritdoc
+     * Get company shared catalog
+     *
+     * @param Field $field
+     * @param ContextInterface $context
+     * @param ResolveInfo $info
+     * @param array|null $value
+     * @param array|null $args
+     * @return mixed|Value
+     * @throws GraphQlInputException
+     * @throws LocalizedException
      */
     public function resolve(
         Field $field,
@@ -47,6 +67,7 @@ class SharedCatalog implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
+        $this->authentication->authorize();
 
         if (!isset($value['model'])) {
             throw new LocalizedException(__('"model" value should be specified'));

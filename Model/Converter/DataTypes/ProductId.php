@@ -16,6 +16,7 @@ class ProductId
         ['regex'=> "/id_path='product\/([0-9]+)'/",
         'substring'=> "id_path='product/"]
     ];
+    
     /** @var ProductRepositoryInterface */
     protected $productRepository;
 

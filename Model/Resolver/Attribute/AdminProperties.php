@@ -15,7 +15,7 @@ use Magento\Eav\Api\AttributeRepositoryInterface;
 use Magento\Eav\Api\AttributeSetRepositoryInterface;
 use Magento\Eav\Api\AttributeManagementInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Eav\Model\Config as EavConfig;
+use MagentoEse\DataInstallGraphQl\Model\Authentication;
 
 /**
  * Resolve data for custom attribute metadata requests
@@ -23,51 +23,42 @@ use Magento\Eav\Model\Config as EavConfig;
 class AdminProperties implements ResolverInterface
 {
 
-    /**
-     * @var AttributeRepositoryInterface
-     */
+    /** @var AttributeRepositoryInterface */
     private $attributeRepository;
 
-    /**
-     * @var AttributeSetRepositoryInterface
-     */
+    /** @var AttributeSetRepositoryInterface */
     private $attributeSetRepository;
 
-    /**
-     * @var AttributeManagementInterface
-     */
+    /** @var AttributeManagementInterface */
     private $attributeManagementInterface;
 
-    /**
-     * @var SearchCriteriaBuilder
-     */
+    /** @var SearchCriteriaBuilder */
     private $searchCriteria;
 
+    /** @var Authentication */
+    private $authentication;
+    
     /**
-     * @var EavConfig
+     *
+     * @param AttributeRepositoryInterface $attributeRepository
+     * @param AttributeSetRepositoryInterface $attributeSetRepository
+     * @param AttributeManagementInterface $attributeManagementInterface
+     * @param SearchCriteriaBuilder $searchCriteria
+     * @param Authentication $authentication
+     * @return void
      */
-    private $eavConfig;
-
-     /**
-      * @param AttributeRepositoryInterface $attributeRepository
-      * @param AttributeSetRepositoryInterface $attributeSetRepository
-      * @param AttributeManagementInterface $attributeManagementInterface
-      * @param SearchCriteriaBuilder $searchCriteria
-      * @param EavConfig $eavConfig
-      */
-
     public function __construct(
         AttributeRepositoryInterface $attributeRepository,
         AttributeSetRepositoryInterface $attributeSetRepository,
         AttributeManagementInterface $attributeManagementInterface,
         SearchCriteriaBuilder $searchCriteria,
-        EavConfig $eavConfig
+        Authentication $authentication
     ) {
         $this->attributeRepository = $attributeRepository;
         $this->attributeSetRepository = $attributeSetRepository;
         $this->attributeManagementInterface = $attributeManagementInterface;
         $this->searchCriteria = $searchCriteria;
-        $this->eavConfig = $eavConfig;
+        $this->authentication = $authentication;
     }
 
     /**
@@ -87,6 +78,8 @@ class AdminProperties implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
+        $this->authentication->authorize();
+
         $storeId = $context->getExtensionAttributes()->getStore()->getId();
         $attribute = $this->attributeRepository->get($value['entity_type'], $value['attribute_code']);
         return $this->getStorefrontProperties($attribute, $storeId);

@@ -16,13 +16,13 @@ use function is_numeric;
  */
 class Pages implements ResolverInterface
 {
-    /**
-     * @var PageDataProvider
-     */
+    /**  @var PageDataProvider */
     private $pageDataProvider;
 
     /**
+     *
      * @param PageDataProvider $pageDataProvider
+     * @return void
      */
     public function __construct(
         PageDataProvider $pageDataProvider

@@ -1,11 +1,11 @@
 # Magento 2 Data Install Module GraphQl
 
-**NOTICE: This module supports queries that retrieve data outside of session or admin authentication. It should not be installed on production systems**
-
 This module provides GraphQL support for the Data Install Module. There are two sets of functionality.
 
 1. Data Installer functions like launching a data pack import and retrieving log information about an import
 2. Exporting of data via a GraphQl query to be used in a data pack
+
+For some data, a valid admin user is required.  In the reqeust headers, add a header of `Authorization` with a value of `username|password`
 
 Details on query arguments and types are available in the online GraphQL docs. 
 

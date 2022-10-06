@@ -14,8 +14,7 @@ class NamePath implements ResolverInterface
     /** @var CategoryRepositoryInterface */
     protected $categoryRepository;
     
-    /** @param CategoryRepositoryInterface $categoryRepository
-     */
+    /** @param CategoryRepositoryInterface $categoryRepository */
 
     public function __construct(CategoryRepositoryInterface $categoryRepository)
     {

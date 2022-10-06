@@ -10,6 +10,7 @@ class CustomerSegment
 
     /** @var string */    
     protected $tokenEnd = '"}}';
+    
     // phpcs:ignoreFile Generic.Files.LineLength.TooLong
     protected $regexToSearch = [
         ['regex'=>'/{"type":"Magento\\\\CustomerSegment\\\\Model\\\\Segment\\\\Condition\\\\Segment","attribute":false,"operator":"==","value":"([0-9,]+)"/',

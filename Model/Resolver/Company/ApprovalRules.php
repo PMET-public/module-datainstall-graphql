@@ -11,6 +11,10 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Company\Api\RoleRepositoryInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
+use Magento\Framework\GraphQl\Query\Resolver\Value;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+use MagentoEse\DataInstallGraphQl\Model\Authentication;
 
 /**
  * Approval rule field resolver, used for GraphQL request processing
@@ -19,46 +23,56 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 class ApprovalRules implements ResolverInterface
 {
     
-    /**
-     * @var CustomerRepositoryInterface
-     */
+    /** @var CustomerRepositoryInterface */
     private $customerRepository;
 
-    /**
-     * @var RuleRepositoryInterface
-     */
+    /** @var RuleRepositoryInterface */
     private $ruleRepository;
 
-    /**
-     * @var RoleRepositoryInterface
-     */
+    /** @var RoleRepositoryInterface */
     private $roleRepository;
 
-    /**
-     * @var SearchCriteriaBuilder
-     */
+    /** @var SearchCriteriaBuilder */
     private $searchCriteria;
 
-    /**
-     * @param CustomerRepositoryInterface $customerRepository
-     * @param RuleRepositoryInterface $ruleRepository
-     * @param RoleRepositoryInterface $roleRepository
-     * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     */
+    /** @var Authentication */
+    private $authentication;
+
+   /**
+    *
+    * @param CustomerRepositoryInterface $customerRepository
+    * @param RuleRepositoryInterface $ruleRepository
+    * @param RoleRepositoryInterface $roleRepository
+    * @param SearchCriteriaBuilder $searchCriteriaBuilder
+    * @param Authentication $authentication
+    * @return void
+    */
     public function __construct(
         CustomerRepositoryInterface $customerRepository,
         RuleRepositoryInterface $ruleRepository,
         RoleRepositoryInterface $roleRepository,
-        SearchCriteriaBuilder $searchCriteriaBuilder
+        SearchCriteriaBuilder $searchCriteriaBuilder,
+        Authentication $authentication
     ) {
         $this->customerRepository = $customerRepository;
         $this->ruleRepository = $ruleRepository;
         $this->roleRepository = $roleRepository;
         $this->searchCriteria = $searchCriteriaBuilder;
+        $this->authentication = $authentication;
     }
 
     /**
-     * @inheritdoc
+     * Get PO Approval Rules
+     *
+     * @param Field $field
+     * @param ContextInterface $context
+     * @param ResolveInfo $info
+     * @param array|null $value
+     * @param array|null $args
+     * @return mixed|Value
+     * @throws GraphQlInputException
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
      */
     public function resolve(
         Field $field,
@@ -67,6 +81,8 @@ class ApprovalRules implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
+        $this->authentication->authorize();
+
         if (!isset($value['model'])) {
             throw new LocalizedException(__('"model" value should be specified'));
         }

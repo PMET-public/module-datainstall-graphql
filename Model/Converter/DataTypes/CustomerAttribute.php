@@ -10,6 +10,7 @@ class CustomerAttribute
     
     /** @var string */
     protected $tokenEnd = '"}}';
+    
     // phpcs:ignoreFile Generic.Files.LineLength.TooLong
     protected $regexToSearch = [
         ['regex'=> '/Customer\\\\Attributes","attribute":"([a-zA-Z0-9_]+)","operator":"==","value":\["([0-9,"]+)"\]/',

@@ -6,6 +6,7 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Cms\Api\BlockRepositoryInterface;
 use MagentoEse\DataInstallGraphQl\Model\Converter\Converter;
+use MagentoEse\DataInstallGraphQl\Model\Authentication;
 
 /**
  * @inheritdoc
@@ -17,17 +18,25 @@ class BlockContent implements ResolverInterface
 
     /** @var Converter */
     protected $converter;
-    
-    /** @param BlockRepositoryInterface $blockRepository
-     * @param Converter $converter
-     */
 
+    /** @var Authentication */
+    protected $authentication;
+    
+    /**
+     *
+     * @param BlockRepositoryInterface $blockRepository
+     * @param Converter $converter
+     * @param Authentication $authentication
+     * @return void
+     */
     public function __construct(
         BlockRepositoryInterface $blockRepository,
-        Converter $converter
+        Converter $converter,
+        Authentication $authentication
     ) {
         $this->blockRepository = $blockRepository;
         $this->converter = $converter;
+        $this->authentication = $authentication;
     }
     
     /**
@@ -42,6 +51,8 @@ class BlockContent implements ResolverInterface
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
+        $this->authentication->authorize();
+
         if (!empty($value['identifier'])) {
             $block = $this->blockRepository->getById($value['identifier']);
             return $this->converter->convertContent($block->getContent());

@@ -11,6 +11,7 @@ use MagentoEse\DataInstallGraphQl\Model\Resolver\DataProvider\DataInstallLog as 
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use MagentoEse\DataInstallGraphQl\Model\Authentication;
 
 class DataInstallLog implements ResolverInterface
 {
@@ -19,13 +20,21 @@ class DataInstallLog implements ResolverInterface
      */
     private $logDataProvider;
 
-    /**
-     * @param LogDataProvider $logDataProvider
-     */
+    /** @var Authentication */
+    protected $authentication;
+
+   /**
+    *
+    * @param LogDataProvider $logDataProvider
+    * @param Authentication $authentication
+    * @return void
+    */
     public function __construct(
-        LogDataProvider $logDataProvider
+        LogDataProvider $logDataProvider,
+        Authentication $authentication
     ) {
         $this->logDataProvider = $logDataProvider;
+        $this->authentication = $authentication;
     }
 
     /**
@@ -38,6 +47,8 @@ class DataInstallLog implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
+        $this->authentication->authorize();
+
         if (!empty($args['jobId'])) {
             $logData = $this->logDataProvider->getLogByJobId($args['jobId']);
         } elseif (!empty($args['datapack'])) {

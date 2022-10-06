@@ -1,38 +1,58 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
+ * Copyright @ Adobe, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
 
 namespace MagentoEse\DataInstallGraphQl\Model\Resolver\Company;
 
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Config\Element\Field;
+use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
+use Magento\Framework\GraphQl\Query\Resolver\Value;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use MagentoEse\DataInstallGraphQl\Model\Resolver\DataProvider\AdminUser as AdminUserProvider;
+use MagentoEse\DataInstallGraphQl\Model\Authentication;
 
 /**
  * Provides customer company user data
  */
 class SalesRep implements ResolverInterface
 {
-    /**
-     * @var AdminUserProvider
-     */
+    /** @var AdminUserProvider */
     private $adminUserDataProvider;
 
+    /** @var Authentication */
+    private $authentication;
+
     /**
+     *
      * @param AdminUserProvider $adminUserDataProvider
+     * @param Authentication $authentication
+     * @return void
      */
     public function __construct(
-        AdminUserProvider $adminUserDataProvider
+        AdminUserProvider $adminUserDataProvider,
+        Authentication $authentication
     ) {
         $this->adminUserDataProvider = $adminUserDataProvider;
+        $this->authentication = $authentication;
     }
 
     /**
-     * @inheritdoc
+     * Get company sales rep
+     *
+     * @param Field $field
+     * @param ContextInterface $context
+     * @param ResolveInfo $info
+     * @param array|null $value
+     * @param array|null $args
+     * @return mixed|Value
+     * @throws GraphQlInputException
+     * @throws NoSuchEntityException
      */
     public function resolve(
         Field $field,
@@ -41,6 +61,8 @@ class SalesRep implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
+        $this->authentication->authorize();
+
         if (!empty($value['email'])) {
             $user = $this->adminUserDataProvider->getAdminUserDataByEmail($value['email']);
             if ($field->getName()=='username') {

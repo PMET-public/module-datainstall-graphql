@@ -18,6 +18,7 @@ class DynamicBlock
         ['regex'=> '/banner_ids="([0-9,]+)"/',
         'substring'=> 'banner_ids="']
     ];
+    
     /** @var BannerCollection */
     protected $bannerCollection;
 

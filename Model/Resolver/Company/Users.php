@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
+ * Copyright @ Adobe, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
@@ -9,41 +9,58 @@ namespace MagentoEse\DataInstallGraphQl\Model\Resolver\Company;
 
 use Magento\CompanyGraphQl\Model\Company\Users as CompanyUsers;
 use Magento\CustomerGraphQl\Model\Customer\ExtractCustomerData;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
+use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use MagentoEse\DataInstallGraphQl\Model\Authentication;
 
 /**
  * Provides customer associated company users
  */
 class Users implements ResolverInterface
 {
-    /**
-     * @var CompanyUsers
-     */
+    /** @var CompanyUsers */
     private $companyUsers;
 
-    /**
-     * @var ExtractCustomerData
-     */
+    /** @var ExtractCustomerData */
     private $customerData;
 
+    /** @var Authentication */
+    private $authentication;
+
     /**
+     *
      * @param CompanyUsers $companyUsers
      * @param ExtractCustomerData $customerData
+     * @param Authentication $authentication
+     * @return void
      */
     public function __construct(
         CompanyUsers $companyUsers,
-        ExtractCustomerData $customerData
+        ExtractCustomerData $customerData,
+        Authentication $authentication
     ) {
         $this->companyUsers = $companyUsers;
         $this->customerData = $customerData;
+        $this->authentication = $authentication;
     }
 
-    /**
-     * @inheritdoc
-     */
+   /**
+    * Get company users
+    *
+    * @param Field $field
+    * @param ContextInterface $context
+    * @param ResolveInfo $info
+    * @param array|null $value
+    * @param array|null $args
+    * @return mixed|Value
+    * @throws GraphQlInputException
+    * @throws LocalizedException
+    */
     public function resolve(
         Field $field,
         $context,
@@ -51,6 +68,8 @@ class Users implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
+        $this->authentication->authorize();
+
         if ($args['pageSize'] < 1) {
             throw new GraphQlInputException(__('pageSize value must be greater than 0.'));
         }

@@ -8,6 +8,7 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use MagentoEse\DataInstallGraphQl\Model\Authentication;
 use function is_numeric;
 
 /**
@@ -16,18 +17,24 @@ use function is_numeric;
  */
 class DynamicBlocks implements ResolverInterface
 {
-    /**
-     * @var DynamicBlockDataProvider
-     */
+    /** @var DynamicBlockDataProvider */
     private $dynamicBlockDataProvider;
 
+    /** @var Authentication */
+    private $authentication;
+
     /**
+     *
      * @param DynamicBlockDataProvider $dynamicBlockDataProvider
+     * @param Authentication $authentication
+     * @return void
      */
     public function __construct(
-        DynamicBlockDataProvider $dynamicBlockDataProvider
+        DynamicBlockDataProvider $dynamicBlockDataProvider,
+        Authentication $authentication
     ) {
         $this->dynamicBlockDataProvider = $dynamicBlockDataProvider;
+        $this->authentication = $authentication;
     }
 
     /**
@@ -40,6 +47,8 @@ class DynamicBlocks implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
+        $this->authentication->authorize();
+
         $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
         $dynamicBlockIdentifiers = $this->getDynamicBlockIdentifiers($args);
         $dynamicBlocksData = $this->getDynamicBlocksData($dynamicBlockIdentifiers, $storeId);
