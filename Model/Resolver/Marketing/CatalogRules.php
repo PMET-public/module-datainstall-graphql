@@ -6,8 +6,11 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
+use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
+use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use MagentoEse\DataInstallGraphQl\Model\Authentication;
 use function is_numeric;
 
 /**
@@ -16,22 +19,37 @@ use function is_numeric;
  */
 class CatalogRules implements ResolverInterface
 {
-    /**
-     * @var CatalogRuleDataProvider
-     */
+    /** @var CatalogRuleDataProvider */
     private $catalogRuleDataProvider;
 
+    /** @var Authentication */
+    private $authentication;
+
     /**
+     *
      * @param CatalogRuleDataProvider $catalogRuleDataProvider
+     * @param Authentication $authentication
+     * @return void
      */
     public function __construct(
-        CatalogRuleDataProvider $catalogRuleDataProvider
+        CatalogRuleDataProvider $catalogRuleDataProvider,
+        Authentication $authentication
     ) {
         $this->catalogRuleDataProvider = $catalogRuleDataProvider;
+        $this->authentication = $authentication;
     }
 
     /**
-     * @inheritdoc
+     * Get Catalog Rules
+     *
+     * @param Field $field
+     * @param ContextInterface $context
+     * @param ResolveInfo $info
+     * @param array|null $value
+     * @param array|null $args
+     * @return mixed|Value
+     * @throws GraphQlInputException
+     * @throws GraphQlNoSuchEntityException
      */
     public function resolve(
         Field $field,
@@ -40,6 +58,8 @@ class CatalogRules implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
+        $this->authentication->authorize();
+
         $catalogRuleIdentifiers = $this->getCatalogRuleIdentifiers($args);
         $catalogRuleData = $this->getCatalogRulesData($catalogRuleIdentifiers);
 

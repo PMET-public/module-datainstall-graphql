@@ -6,8 +6,11 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
+use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
+use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use MagentoEse\DataInstallGraphQl\Model\Authentication;
 
 /**
  * Exchange Rate resolver, used for GraphQL request processing
@@ -15,22 +18,37 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
  */
 class RewardExchangeRates implements ResolverInterface
 {
-    /**
-     * @var ExchangeRateProvider
-     */
+    /** @var ExchangeRateProvider */
     private $exchangeRateProvider;
 
+    /** @var Authentication */
+    private $authentication;
+
     /**
+     *
      * @param ExchangeRateProvider $exchangeRateProvider
+     * @param Authentication $authentication
+     * @return void
      */
     public function __construct(
-        ExchangeRateProvider $exchangeRateProvider
+        ExchangeRateProvider $exchangeRateProvider,
+        Authentication $authentication
     ) {
         $this->exchangeRateProvider = $exchangeRateProvider;
+        $this->authentication = $authentication;
     }
 
     /**
-     * @inheritdoc
+     * Get rewards exchange rate
+     *
+     * @param Field $field
+     * @param ContextInterface $context
+     * @param ResolveInfo $info
+     * @param array|null $value
+     * @param array|null $args
+     * @return mixed|Value
+     * @throws GraphQlInputException
+     * @throws GraphQlNoSuchEntityException
      */
     public function resolve(
         Field $field,

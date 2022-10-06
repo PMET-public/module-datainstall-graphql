@@ -10,27 +10,45 @@ namespace MagentoEse\DataInstallGraphQl\Model\Resolver\DataInstall;
 use Magento\Framework\Bulk\BulkStatusInterface;
 use Magento\Framework\Bulk\BulkSummaryInterface as BulkSummary;
 use Magento\Framework\GraphQl\Config\Element\Field;
+use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
+use Magento\Framework\GraphQl\Query\Resolver\Value;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use MagentoEse\DataInstallGraphQl\Model\Authentication;
 
 class DataInstallJobStatus implements ResolverInterface
 {
-    /**
-     * @var BulkStatusInterface
-     */
+    /** @var BulkStatusInterface */
     private $bulkStatus;
 
+    /** @var Authentication */
+    private $authentication;
+
     /**
+     *
      * @param BulkStatusInterface $bulkStatus
+     * @param Authentication $authentication
+     * @return void
      */
     public function __construct(
-        BulkStatusInterface $bulkStatus
+        BulkStatusInterface $bulkStatus,
+        Authentication $authentication
     ) {
         $this->bulkStatus = $bulkStatus;
+        $this->authentication = $authentication;
     }
 
     /**
-     * @inheritdoc
+     * Get status of data installer job
+     *
+     * @param Field $field
+     * @param ContextInterface $context
+     * @param ResolveInfo $info
+     * @param array|null $value
+     * @param array|null $args
+     * @return mixed|Value
+     * @throws GraphQlInputException
      */
     public function resolve(
         Field $field,
@@ -39,6 +57,8 @@ class DataInstallJobStatus implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
+        $this->authentication->authorize();
+
         if (!empty($args['jobId'])) {
             $jobStatusText="UNKNOWN";
             $jobStatus = $this->bulkStatus->getBulkStatus($args['jobId']);

@@ -8,6 +8,7 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use MagentoEse\DataInstallGraphQl\Model\Authentication;
 use function is_numeric;
 
 /**
@@ -16,18 +17,24 @@ use function is_numeric;
  */
 class CustomerSegments implements ResolverInterface
 {
-    /**
-     * @var CustomerSegmentDataProvider
-     */
+    /** @var CustomerSegmentDataProvider */
     private $customerSegmentDataProvider;
 
+    /** @var Authentication */
+    private $authentication;
+
     /**
+     *
      * @param CustomerSegmentDataProvider $customerSegmentDataProvider
+     * @param Authentication $authentication
+     * @return void
      */
     public function __construct(
-        CustomerSegmentDataProvider $customerSegmentDataProvider
+        CustomerSegmentDataProvider $customerSegmentDataProvider,
+        Authentication $authentication
     ) {
         $this->customerSegmentDataProvider = $customerSegmentDataProvider;
+        $this->authentication = $authentication;
     }
 
     /**
@@ -47,7 +54,8 @@ class CustomerSegments implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
+        $this->authentication->authorize();
+
         $segmentIdentifiers = $this->getSegmentIdentifiers($args);
         $segmentData = $this->getSegmentsData($segmentIdentifiers);
 

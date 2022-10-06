@@ -6,8 +6,11 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
+use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
+use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use MagentoEse\DataInstallGraphQl\Model\Authentication;
 
 /**
  * Msi Stock field resolver, used for GraphQL request processing
@@ -15,22 +18,37 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
  */
 class MsiStock implements ResolverInterface
 {
-    /**
-     * @var MsiStockProvider
-     */
+    /** @var MsiStockProvider */
     private $msiStockProvider;
 
-    /**
-     * @param MsiStockProvider $msiStockProvider
-     */
+    /** @var Authentication */
+    private $authentication;
+
+   /**
+    *
+    * @param MsiStockProvider $msiStockProvider
+    * @param Authentication $authentication
+    * @return void
+    */
     public function __construct(
-        MsiStockProvider $msiStockProvider
+        MsiStockProvider $msiStockProvider,
+        Authentication $authentication
     ) {
         $this->msiStockProvider = $msiStockProvider;
+        $this->authentication = $authentication;
     }
 
     /**
-     * @inheritdoc
+     * Get MSI Stock Settings
+     *
+     * @param Field $field
+     * @param ContextInterface $context
+     * @param ResolveInfo $info
+     * @param array|null $value
+     * @param array|null $args
+     * @return mixed|Value
+     * @throws GraphQlInputException
+     * @throws GraphQlNoSuchEntityException
      */
     public function resolve(
         Field $field,
@@ -39,6 +57,8 @@ class MsiStock implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
+        $this->authentication->authorize();
+
         $stockIdentifiers = $this->getStockIdentifiers($args);
         $stockData = $this->getStockData($stockIdentifiers);
 

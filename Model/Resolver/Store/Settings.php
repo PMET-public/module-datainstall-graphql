@@ -2,20 +2,46 @@
 namespace MagentoEse\DataInstallGraphQl\Model\Resolver\Store;
 
 use Magento\Framework\GraphQl\Config\Element\Field;
+use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
+use Magento\Framework\GraphQl\Query\Resolver\Value;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use MagentoEse\DataInstallGraphQl\Model\Authentication;
 
 /**
  * @inheritdoc
  */
 class Settings implements ResolverInterface
 {
+    
+    /** @var Authentication */
+    private $authentication;
+
     /**
-     * @inheritdoc
+     *
+     * @param Authentication $authentication
+     * @return void
+     */
+    public function __construct(Authentication $authentication)
+    {
+        $this->authentication = $authentication;
+    }
+
+    /**
+     * Get data installer settings
+     *
+     * @param Field $field
+     * @param ContextInterface $context
+     * @param ResolveInfo $info
+     * @param array|null $value
+     * @param array|null $args
+     * @return mixed|Value
+     * @throws GraphQlInputException
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
-        $r = $context->getExtensionAttributes();
+        $this->authentication->authorize();
         $returnArray = [
             'site_code' => $context->getExtensionAttributes()->getStore()->getWebsite()->getCode(),
             'store_code' => $context->getExtensionAttributes()->getStore()->getGroup()->getCode(),

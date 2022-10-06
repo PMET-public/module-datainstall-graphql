@@ -18,6 +18,7 @@ use Magento\RequisitionList\Model\Config as ModuleConfig;
 use Magento\RequisitionListGraphQl\Model\RequisitionList\GetRequisitionList;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
+use MagentoEse\DataInstallGraphQl\Model\Authentication;
 
 /**
  * RequisitionList Resolver
@@ -29,29 +30,33 @@ class RequisitionList implements ResolverInterface
      */
     private $getRequisitionList;
 
-    /**
-     * @var \Magento\RequisitionList\Model\Config
-     */
+    /** @var ModuleConfig */
     private $moduleConfig;
 
-    /**
-     * @var CustomerRepositoryInterface
-     */
+    /** @var CustomerRepositoryInterface */
     private $customerRepository;
 
-    /**
-     * @param GetRequisitionList $getRequisitionList
-     * @param ModuleConfig $moduleConfig
-     * @param CustomerRepositoryInterface $customerRepository
-     */
+    /** @var Authentication */
+    private $authentication;
+
+   /**
+    *
+    * @param GetRequisitionList $getRequisitionList
+    * @param ModuleConfig $moduleConfig
+    * @param CustomerRepositoryInterface $customerRepository
+    * @param Authentication $authentication
+    * @return void
+    */
     public function __construct(
         GetRequisitionList $getRequisitionList,
         ModuleConfig $moduleConfig,
-        CustomerRepositoryInterface $customerRepository
+        CustomerRepositoryInterface $customerRepository,
+        Authentication $authentication
     ) {
         $this->getRequisitionList = $getRequisitionList;
         $this->moduleConfig = $moduleConfig;
         $this->customerRepository = $customerRepository;
+        $this->authentication = $authentication;
     }
 
     /**
@@ -69,6 +74,8 @@ class RequisitionList implements ResolverInterface
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
+        $this->authentication->authorize();
+
         if (!$this->moduleConfig->isActive()) {
             throw new GraphQlInputException(__('Requisition List feature is not available.'));
         }

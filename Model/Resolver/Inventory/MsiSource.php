@@ -6,8 +6,11 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
+use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
+use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use MagentoEse\DataInstallGraphQl\Model\Authentication;
 
 /**
  * Msi Source field resolver, used for GraphQL request processing
@@ -15,22 +18,37 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
  */
 class MsiSource implements ResolverInterface
 {
-    /**
-     * @var MsiSourceProvider
-     */
+    /** @var MsiSourceProvider */
     private $msiSourceProvider;
 
-    /**
-     * @param MsiSourceProvider $msiSourceProvider
-     */
+    /** @var Authentication */
+    private $authentication;
+
+   /**
+    *
+    * @param MsiSourceProvider $msiSourceProvider
+    * @param Authentication $authentication
+    * @return void
+    */
     public function __construct(
-        MsiSourceProvider $msiSourceProvider
+        MsiSourceProvider $msiSourceProvider,
+        Authentication $authentication
     ) {
         $this->msiSourceProvider = $msiSourceProvider;
+        $this->authentication = $authentication;
     }
 
     /**
-     * @inheritdoc
+     * Get MSI sources
+     *
+     * @param Field $field
+     * @param ContextInterface $context
+     * @param ResolveInfo $info
+     * @param array|null $value
+     * @param array|null $args
+     * @return mixed|Value
+     * @throws GraphQlInputException
+     * @throws GraphQlNoSuchEntityException
      */
     public function resolve(
         Field $field,
@@ -39,6 +57,8 @@ class MsiSource implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
+        $this->authentication->authorize();
+
         $sourceIdentifiers = $this->getSourceIdentifiers($args);
         $sourceData = $this->getSourceData($sourceIdentifiers);
 

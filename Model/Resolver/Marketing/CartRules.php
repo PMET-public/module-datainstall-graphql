@@ -6,8 +6,11 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
+use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
+use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use MagentoEse\DataInstallGraphQl\Model\Authentication;
 use function is_numeric;
 
 /**
@@ -16,22 +19,37 @@ use function is_numeric;
  */
 class CartRules implements ResolverInterface
 {
-    /**
-     * @var CartRuleDataProvider
-     */
+    /** @var CartRuleDataProvider */
     private $cartRuleDataProvider;
 
+    /** @var Authentication */
+    private $authentication;
+
     /**
+     *
      * @param CartRuleDataProvider $cartRuleDataProvider
+     * @param Authentication $authentication
+     * @return void
      */
     public function __construct(
-        CartRuleDataProvider $cartRuleDataProvider
+        CartRuleDataProvider $cartRuleDataProvider,
+        Authentication $authentication
     ) {
         $this->cartRuleDataProvider = $cartRuleDataProvider;
+        $this->authentication = $authentication;
     }
 
     /**
-     * @inheritdoc
+     * Get Cart rules
+     *
+     * @param Field $field
+     * @param ContextInterface $context
+     * @param ResolveInfo $info
+     * @param array|null $value
+     * @param array|null $args
+     * @return mixed|Value
+     * @throws GraphQlInputException
+     * @throws GraphQlNoSuchEntityException
      */
     public function resolve(
         Field $field,
@@ -40,6 +58,8 @@ class CartRules implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
+        $this->authentication->authorize();
+
         $cartRuleIdentifiers = $this->getCartRuleIdentifiers($args);
         $cartRuleData = $this->getCartRulesData($cartRuleIdentifiers);
 
