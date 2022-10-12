@@ -57,6 +57,9 @@ type Query {
         identifiers: [String] @doc(description: "Names or IDS of the Companies")
     ): Companies @resolver(class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Company\\Company") @doc(description: "Get List of Companies.")
     publicSharedCatalog: PublicSharedCatalog @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Company\\PublicSharedCatalog") @doc(description: "Public or default Shared catalog")
+    productExport(
+        categoryIds: [String] @doc(description: "List of Category Ids to export products from")
+    ): Export @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Export\\ProductExport") @doc(description:"csv encoded to json array of exported product data")
 }
 
 type Mutation {
@@ -458,6 +461,10 @@ type RequisitionListsExport @doc(description: "Defines customer requisition list
     items: [RequisitionList] @doc(description: "An array of requisition lists")
     page_info: SearchResultPageInfo @doc(description: "Contains pagination metadata")
     total_count: Int @doc(description: "The number of returned requisition lists")
+}
+
+type Export {
+    data: String
 }
 
 interface ProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\ProductInterfaceTypeResolverComposite"){

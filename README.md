@@ -5,7 +5,7 @@ This module provides GraphQL support for the Data Install Module. There are two 
 1. Data Installer functions like launching a data pack import and retrieving log information about an import
 2. Exporting of data via a GraphQl query to be used in a data pack
 
-For some data, a valid admin user is required.  In the reqeust headers, add a header of `Authorization` with a value of `username|password`
+For some data, a valid admin user is required.  In the reqeust headers, add a header of `Authorization` with a value of `username|password`. Or the value can be added in the Commerce UI under Stores->Configuration->Advanced->System->Data Installer Authorization. This will overide the value passed in the header
 
 Details on query arguments and types are available in the online GraphQL docs. 
 
@@ -521,6 +521,16 @@ Magento GraphQL uses the store scope, so the queries are limited to the store sc
 			}
 		}
 	}
+
+
+**productExport**: Use to create the `products.json` file. Creates the same data set as a native product export. At this time, the only product filter that is supported is a list of category ids to export products from.
+
+	query{
+		productExport(categoryIds:"47,46") {
+			data
+		}
+	}
+
 
 **products**: Use to create the `reviews.json` file. This product query will retrieve the information necessary to populate product reviews. Search and filter functionality follows the documented features of the products query
 
