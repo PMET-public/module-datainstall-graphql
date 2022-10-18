@@ -1,4 +1,9 @@
 <?php
+/**
+ * Copyright 2022 Adobe, Inc. All rights reserved.
+ * See LICENSE for license details.
+ */
+
 namespace MagentoEse\DataInstallGraphQl\Model\Resolver\Customer;
 
 use MagentoEse\DataInstallGraphQl\Model\Resolver\DataProvider\CustomerSegment as CustomerSegmentDataProvider;
@@ -11,10 +16,6 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use MagentoEse\DataInstallGraphQl\Model\Authentication;
 use function is_numeric;
 
-/**
- * Customer Segment field resolver, used for GraphQL request processing
- * copied from Magento\CmsGraphQl\Model\Resolver\Blocks
- */
 class CustomerSegments implements ResolverInterface
 {
     /** @var CustomerSegmentDataProvider */

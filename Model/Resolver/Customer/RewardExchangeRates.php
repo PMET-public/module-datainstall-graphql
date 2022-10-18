@@ -1,4 +1,9 @@
 <?php
+/**
+ * Copyright 2022 Adobe, Inc. All rights reserved.
+ * See LICENSE for license details.
+ */
+
 namespace MagentoEse\DataInstallGraphQl\Model\Resolver\Customer;
 
 use MagentoEse\DataInstallGraphQl\Model\Resolver\DataProvider\RewardExchangeRate as ExchangeRateProvider;
@@ -12,10 +17,6 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use MagentoEse\DataInstallGraphQl\Model\Authentication;
 
-/**
- * Exchange Rate resolver, used for GraphQL request processing
- * copied from Magento\CmsGraphQl\Model\Resolver\Blocks
- */
 class RewardExchangeRates implements ResolverInterface
 {
     /** @var ExchangeRateProvider */

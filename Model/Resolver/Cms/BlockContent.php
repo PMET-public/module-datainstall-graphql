@@ -1,4 +1,9 @@
 <?php
+/**
+ * Copyright 2022 Adobe, Inc. All rights reserved.
+ * See LICENSE for license details.
+ */
+
 namespace MagentoEse\DataInstallGraphQl\Model\Resolver\Cms;
 
 use Magento\Framework\GraphQl\Config\Element\Field;
@@ -8,9 +13,6 @@ use Magento\Cms\Api\BlockRepositoryInterface;
 use MagentoEse\DataInstallGraphQl\Model\Converter\Converter;
 use MagentoEse\DataInstallGraphQl\Model\Authentication;
 
-/**
- * @inheritdoc
- */
 class BlockContent implements ResolverInterface
 {
     /** @var BlockRepositoryInterface */

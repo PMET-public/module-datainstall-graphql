@@ -1,4 +1,9 @@
 <?php
+/**
+ * Copyright 2022 Adobe, Inc. All rights reserved.
+ * See LICENSE for license details.
+ */
+
 namespace MagentoEse\DataInstallGraphQl\Model\Resolver\Store;
 
 use Magento\Framework\GraphQl\Config\Element\Field;
@@ -11,9 +16,6 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
 use MagentoEse\DataInstallGraphQl\Model\Authentication;
 
-/**
- * @inheritdoc
- */
 class Theme implements ResolverInterface
 {
     /** @var ScopeConfigInterface */

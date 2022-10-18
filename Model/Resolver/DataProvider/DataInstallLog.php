@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Adobe, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe, Inc. All rights reserved.
+ * See LICENSE for license details.
  */
 declare(strict_types=1);
 
@@ -11,9 +11,6 @@ use MagentoEse\DataInstall\Api\LoggerRepositoryInterface;
 use MagentoEse\DataInstall\Api\Data\LoggerInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 
-/**
- * Data Installer Log data provider
- */
 class DataInstallLog
 {
     /**

@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © Adobe, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe, Inc. All rights reserved.
+ * See LICENSE for license details.
  */
+
 declare(strict_types=1);
 
 namespace MagentoEse\DataInstallGraphQl\Model\Resolver\Attribute;
@@ -17,9 +18,6 @@ use Magento\Eav\Api\AttributeManagementInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use MagentoEse\DataInstallGraphQl\Model\Authentication;
 
-/**
- * Resolve data for custom attribute metadata requests
- */
 class AdminProperties implements ResolverInterface
 {
 

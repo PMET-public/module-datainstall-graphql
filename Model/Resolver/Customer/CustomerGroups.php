@@ -1,4 +1,9 @@
 <?php
+/**
+ * Copyright 2022 Adobe, Inc. All rights reserved.
+ * See LICENSE for license details.
+ */
+
 namespace MagentoEse\DataInstallGraphQl\Model\Resolver\Customer;
 
 use MagentoEse\DataInstallGraphQl\Model\Resolver\DataProvider\CustomerGroup as CustomerGroupProvider;
@@ -13,10 +18,6 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use MagentoEse\DataInstallGraphQl\Model\Authentication;
 use function is_numeric;
 
-/**
- * Customer Group field resolver, used for GraphQL request processing
- * copied from Magento\CmsGraphQl\Model\Resolver\Blocks
- */
 class CustomerGroups implements ResolverInterface
 {
     /** @var CustomerGroupProvider */

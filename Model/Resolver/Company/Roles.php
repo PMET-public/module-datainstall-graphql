@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright @ Adobe, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe, Inc. All rights reserved.
+ * See LICENSE for license details.
  */
 
 declare(strict_types=1);
@@ -24,9 +24,6 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use MagentoEse\DataInstallGraphQl\Model\Authentication;
 use Zend_Db_Select_Exception;
 
-/**
- * Provides customer associated company roles
- */
 class Roles implements ResolverInterface
 {
     /** @var CollectionFactory */

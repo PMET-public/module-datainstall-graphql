@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Adobe, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe, Inc. All rights reserved.
+ * See LICENSE for license details.
  */
 declare(strict_types=1);
 
@@ -12,9 +12,6 @@ use Magento\TargetRule\Model\ResourceModel\Rule\CollectionFactory as RuleCollect
 use Magento\Framework\Exception\NoSuchEntityException;
 use MagentoEse\DataInstallGraphQl\Model\Converter\Converter;
 
-/**
- * Upsell data provider
- */
 class Upsell
 {
     /**

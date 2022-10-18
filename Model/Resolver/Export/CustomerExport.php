@@ -6,6 +6,7 @@
 
 namespace MagentoEse\DataInstallGraphQl\Model\Resolver\Export;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
@@ -18,7 +19,7 @@ use Magento\ImportExport\Model\Export\Entity\ExportInfoFactory;
 use Magento\ImportExport\Api\ExportManagementInterface;
 use Magento\Framework\Locale\ResolverInterface as LocaleResolver;
 
-class ProductExport implements ResolverInterface
+class CustomerExport implements ResolverInterface
 {
     /** @var ExportInfoFactory */
     private $exportInfoFactory;
@@ -53,7 +54,7 @@ class ProductExport implements ResolverInterface
     }
 
     /**
-     * Get Product Export Data
+     * Get Customer Export Data
      *
      * @param Field $field
      * @param ContextInterface $context
@@ -73,27 +74,27 @@ class ProductExport implements ResolverInterface
     ) {
         $this->authentication->authorize();
 
-        if (empty($args['categoryIds'])) {
+        if (empty($args['email'])) {
             $filter = [];
+            $filterValues = 1;
         } else {
-            $filter = ['category_ids'=>$args['categoryIds'][0]];
+            $filter = ['email'=>$args['email'][0]];
+            $filterValues = count(explode(',', $args['email'][0]));
         }
 
-         /** @var ExportInfoFactory $dataObject */
-        $exportInfo = $this->exportInfoFactory->create(
-            'csv', //file format
-            'catalog_product',
-            $filter, //filter
-            [], //skip attributes is done by attribute id, not by attribute code
-            $this->localeResolver->getLocale()
-        );
-
-        $exportData = $this->singleExport('catalog_product', $filter);
-
+        //export filter only takes a single email address. Multiple exports are needed for mulitple addresses
+ 
+        if ($filterValues ==1) {
+            $exportData = $this->singleExport('customer', $filter);
+        } else {
+            $exportData = $this->multipleExport('customer', $filter);
+        }
+        
         if (count($exportData) < 2) {
-            throw new GraphQlNoSuchEntityException(__('No Products Found'));
+            throw new GraphQlNoSuchEntityException(__('No Customers Found'));
         }
         $json = json_encode($exportData);
+       
         return [
             'data' => $json,
         ];
@@ -141,13 +142,14 @@ class ProductExport implements ResolverInterface
         }
         return $result;
     }
-     /**
-      * Export Data for a single filter or no filter
-      *
-      * @param string $exportType
-      * @param string $filter
-      * @return array
-      */
+
+    /**
+     * Export Data for a single filter or no filter
+     *
+     * @param string $exportType
+     * @param string $filter
+     * @return array
+     */
     private function singleExport($exportType, $filter)
     {
 
@@ -165,7 +167,95 @@ class ProductExport implements ResolverInterface
 
         //fix data in the case that data elements include line feeds
         $csvCleanData = $this->csvToArray($data, count($headerColumns));
-
+        $csvCleanData = $this->removeExtraQuotes($csvCleanData);
+        $csvCleanData = $this->setPasswords($csvCleanData, $headerColumns);
         return $csvCleanData;
+    }
+
+    /**
+     * Combine multilple exports when filter only supports single entity
+     *
+     * @param string $exportType
+     * @param array $filter
+     * @return array
+     */
+    private function multipleExport($exportType, $filter)
+    {
+
+        $filterKey = key($filter);
+        $filterValues = explode(",", $filter[$filterKey]);
+        $firstExport = true;
+        $totalExport = [];
+        foreach ($filterValues as $singleFilter) {
+            $export = $this->singleExport($exportType, [$filterKey => $singleFilter]);
+            if ($firstExport) {
+                $totalExport = $export;
+                $firstExport = false;
+            } else {
+                //add export row minus header
+                unset($export[0]);
+                // phpcs:ignore Magento2.Performance.ForeachArrayMerge.ForeachArrayMerge
+                $totalExport = array_merge($totalExport, $export);
+            }
+        }
+ 
+        return $totalExport;
+    }
+
+    /**
+     * Remove extra quotes at the start and end of values
+     *
+     * @param array $data
+     * @return array
+     */
+    private function removeExtraQuotes($data)
+    {
+        foreach ($data as $rowKey => $row) {
+            foreach ($row as $elementKey => $element) {
+                if (substr($element, 0, 1)=='"' && substr($element, strlen($element)-1, 1)=='"') {
+                    $newValue = str_replace('"', '', $element);
+                    $data[$rowKey][$elementKey] = $newValue;
+                }
+            }
+        }
+        return $data;
+    }
+
+    /**
+     * Remove password hash and set default password
+     *
+     * @param array $data
+     * @param array $headerColumns
+     * @return array
+     */
+    private function setPasswords($data, $headerColumns)
+    {
+        //get key for password, rp tokens, and password hash
+        foreach ($headerColumns as $headerKey => $header) {
+            switch ($header) {
+                case "password_hash":
+                    $hashKey = $headerKey;
+                    break;
+                case "password":
+                    $passwordKey = $headerKey;
+                    break;
+                case "rp_token":
+                    $rpTokenKey = $headerKey;
+                    break;
+                case "rp_token_created_at":
+                    $rpCreatedKey = $headerKey;
+                    break;
+            }
+        }
+        foreach ($data as $rowKey => $row) {
+            //skip header row
+            if ($rowKey > 0) {
+                $data[$rowKey][$hashKey] = '';
+                $data[$rowKey][$passwordKey] = 'Password1';
+                $data[$rowKey][$rpTokenKey] = '';
+                $data[$rowKey][$rpCreatedKey] = '';
+            }
+        }
+        return $data;
     }
 }

@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © Adobe, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe, Inc. All rights reserved.
+ * See LICENSE for license details.
  */
+
 declare(strict_types=1);
 
 namespace MagentoEse\DataInstallGraphQl\Model\Resolver\DataInstall;
@@ -17,9 +18,6 @@ use MagentoEse\DataInstall\Api\Data\DataPackInterfaceFactory;
 use MagentoEse\DataInstall\Api\Data\InstallerJobInterfaceFactory;
 use MagentoEse\DataInstallGraphQl\Model\Authentication;
 
-/**
- * CMS blocks field resolver, used for GraphQL request processing
- */
 class ScheduleJob implements ResolverInterface
 {
     /** @var DataPackInterfaceFactory */

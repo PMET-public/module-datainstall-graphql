@@ -6,6 +6,7 @@
 
 namespace MagentoEse\DataInstallGraphQl\Model\Resolver\Export;
 
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
@@ -18,7 +19,7 @@ use Magento\ImportExport\Model\Export\Entity\ExportInfoFactory;
 use Magento\ImportExport\Api\ExportManagementInterface;
 use Magento\Framework\Locale\ResolverInterface as LocaleResolver;
 
-class ProductExport implements ResolverInterface
+class CustomerAddressExport implements ResolverInterface
 {
     /** @var ExportInfoFactory */
     private $exportInfoFactory;
@@ -53,7 +54,7 @@ class ProductExport implements ResolverInterface
     }
 
     /**
-     * Get Product Export Data
+     * Get Customer Export Data
      *
      * @param Field $field
      * @param ContextInterface $context
@@ -73,26 +74,12 @@ class ProductExport implements ResolverInterface
     ) {
         $this->authentication->authorize();
 
-        if (empty($args['categoryIds'])) {
-            $filter = [];
-        } else {
-            $filter = ['category_ids'=>$args['categoryIds'][0]];
-        }
-
-         /** @var ExportInfoFactory $dataObject */
-        $exportInfo = $this->exportInfoFactory->create(
-            'csv', //file format
-            'catalog_product',
-            $filter, //filter
-            [], //skip attributes is done by attribute id, not by attribute code
-            $this->localeResolver->getLocale()
-        );
-
-        $exportData = $this->singleExport('catalog_product', $filter);
+        $exportData = $this->singleExport('customer_address', []);
 
         if (count($exportData) < 2) {
-            throw new GraphQlNoSuchEntityException(__('No Products Found'));
+            throw new GraphQlNoSuchEntityException(__('No Customer Addresses Found'));
         }
+
         $json = json_encode($exportData);
         return [
             'data' => $json,
@@ -141,6 +128,7 @@ class ProductExport implements ResolverInterface
         }
         return $result;
     }
+
      /**
       * Export Data for a single filter or no filter
       *
@@ -165,7 +153,27 @@ class ProductExport implements ResolverInterface
 
         //fix data in the case that data elements include line feeds
         $csvCleanData = $this->csvToArray($data, count($headerColumns));
-
+        $csvCleanData = $this->removeExtraQuotes($csvCleanData);
+        
         return $csvCleanData;
+    }
+
+    /**
+     * Remove extra quotes at the start and end of values
+     *
+     * @param array $data
+     * @return array
+     */
+    private function removeExtraQuotes($data)
+    {
+        foreach ($data as $rowKey => $row) {
+            foreach ($row as $elementKey => $element) {
+                if (substr($element, 0, 1)=='"' && substr($element, strlen($element)-1, 1)=='"') {
+                    $newValue = str_replace('"', '', $element);
+                    $data[$rowKey][$elementKey] = $newValue;
+                }
+            }
+        }
+        return $data;
     }
 }

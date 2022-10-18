@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © Adobe, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe, Inc. All rights reserved.
+ * See LICENSE for license details.
  */
+
 declare(strict_types=1);
 
 namespace MagentoEse\DataInstallGraphQl\Model\Resolver\Attribute;
@@ -18,9 +19,6 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Swatches\Helper\Data;
 use MagentoEse\DataInstallGraphQl\Model\Authentication;
 
-/**
- * Resolve data for custom attribute metadata requests
- */
 class SwatchValue implements ResolverInterface
 {
 

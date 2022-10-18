@@ -18,7 +18,7 @@ use Magento\ImportExport\Model\Export\Entity\ExportInfoFactory;
 use Magento\ImportExport\Api\ExportManagementInterface;
 use Magento\Framework\Locale\ResolverInterface as LocaleResolver;
 
-class ProductExport implements ResolverInterface
+class StockSourcesExport implements ResolverInterface
 {
     /** @var ExportInfoFactory */
     private $exportInfoFactory;
@@ -73,27 +73,24 @@ class ProductExport implements ResolverInterface
     ) {
         $this->authentication->authorize();
 
-        if (empty($args['categoryIds'])) {
+        if (empty($args['sourceCode'])) {
             $filter = [];
         } else {
-            $filter = ['category_ids'=>$args['categoryIds'][0]];
+            $filter = ['source_code'=>$args['sourceCode'][0]];
+            $filterValues = count(explode(',', $args['sourceCode'][0]));
         }
 
-         /** @var ExportInfoFactory $dataObject */
-        $exportInfo = $this->exportInfoFactory->create(
-            'csv', //file format
-            'catalog_product',
-            $filter, //filter
-            [], //skip attributes is done by attribute id, not by attribute code
-            $this->localeResolver->getLocale()
-        );
-
-        $exportData = $this->singleExport('catalog_product', $filter);
-
+        if ($filterValues ==1) {
+            $exportData = $this->singleExport('stock_sources', $filter);
+        } else {
+            $exportData = $this->multipleExport('stock_sources', $filter);
+        }
+        
         if (count($exportData) < 2) {
-            throw new GraphQlNoSuchEntityException(__('No Products Found'));
+            throw new GraphQlNoSuchEntityException(__('No Stock Sources Found'));
         }
         $json = json_encode($exportData);
+       
         return [
             'data' => $json,
         ];
@@ -141,13 +138,14 @@ class ProductExport implements ResolverInterface
         }
         return $result;
     }
-     /**
-      * Export Data for a single filter or no filter
-      *
-      * @param string $exportType
-      * @param string $filter
-      * @return array
-      */
+
+    /**
+     * Export Data for a single filter or no filter
+     *
+     * @param string $exportType
+     * @param string $filter
+     * @return array
+     */
     private function singleExport($exportType, $filter)
     {
 
@@ -167,5 +165,35 @@ class ProductExport implements ResolverInterface
         $csvCleanData = $this->csvToArray($data, count($headerColumns));
 
         return $csvCleanData;
+    }
+
+    /**
+     * Combine multilple exports when filter only supports single entity
+     *
+     * @param string $exportType
+     * @param array $filter
+     * @return array
+     */
+    private function multipleExport($exportType, $filter)
+    {
+
+        $filterKey = key($filter);
+        $filterValues = explode(",", $filter[$filterKey]);
+        $firstExport = true;
+        $totalExport = [];
+        foreach ($filterValues as $singleFilter) {
+            $export = $this->singleExport($exportType, [$filterKey => $singleFilter]);
+            if ($firstExport) {
+                $totalExport = $export;
+                $firstExport = false;
+            } else {
+                //add export row minus header
+                unset($export[0]);
+                // phpcs:ignore Magento2.Performance.ForeachArrayMerge.ForeachArrayMerge
+                $totalExport = array_merge($totalExport, $export);
+            }
+        }
+ 
+        return $totalExport;
     }
 }

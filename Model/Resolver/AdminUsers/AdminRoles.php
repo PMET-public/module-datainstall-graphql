@@ -1,4 +1,9 @@
 <?php
+/**
+ * Copyright 2022 Adobe, Inc. All rights reserved.
+ * See LICENSE for license details.
+ */
+
 namespace MagentoEse\DataInstallGraphQl\Model\Resolver\AdminUsers;
 
 use MagentoEse\DataInstallGraphQl\Model\Resolver\DataProvider\AdminRole as AdminRoleProvider;

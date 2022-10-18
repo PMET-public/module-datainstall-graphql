@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Adobe, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe, Inc. All rights reserved.
+ * See LICENSE for license details.
  */
 declare(strict_types=1);
 
@@ -11,9 +11,6 @@ use Magento\InventoryApi\Api\SourceRepositoryInterface;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 
-/**
- * Customer Segment data provider
- */
 class MsiSource
 {
     /**

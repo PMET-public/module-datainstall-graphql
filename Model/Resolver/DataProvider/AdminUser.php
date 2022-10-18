@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Adobe, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe, Inc. All rights reserved.
+ * See LICENSE for license details.
  */
 declare(strict_types=1);
 
@@ -11,9 +11,6 @@ use Magento\Authorization\Model\ResourceModel\Role\CollectionFactory as RoleColl
 use Magento\User\Model\ResourceModel\User\CollectionFactory as UserCollection;
 use Magento\Framework\Exception\NoSuchEntityException;
 
-/**
- * Customer Role data provider
- */
 class AdminUser
 {
     /**

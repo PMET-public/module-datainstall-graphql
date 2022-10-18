@@ -1,4 +1,9 @@
 <?php
+/**
+ * Copyright 2022 Adobe, Inc. All rights reserved.
+ * See LICENSE for license details.
+ */
+
 namespace MagentoEse\DataInstallGraphQl\Model\Resolver\Category;
 
 use Magento\Framework\GraphQl\Config\Element\Field;
@@ -8,9 +13,6 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
 use MagentoEse\DataInstallGraphQl\Model\Authentication;
 
-/**
- * @inheritdoc
- */
 class CustomDesign implements ResolverInterface
 {
     /** @var ScopeConfigInterface */

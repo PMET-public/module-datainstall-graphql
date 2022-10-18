@@ -1,4 +1,9 @@
 <?php
+/**
+ * Copyright 2022 Adobe, Inc. All rights reserved.
+ * See LICENSE for license details.
+ */
+
 namespace MagentoEse\DataInstallGraphQl\Model\Resolver\Company;
 
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -16,10 +21,6 @@ use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use MagentoEse\DataInstallGraphQl\Model\Authentication;
 
-/**
- * Approval rule field resolver, used for GraphQL request processing
- * copied from Magento\CmsGraphQl\Model\Resolver\Blocks
- */
 class ApprovalRules implements ResolverInterface
 {
     

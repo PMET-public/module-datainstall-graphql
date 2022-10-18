@@ -1,4 +1,9 @@
 <?php
+/**
+ * Copyright 2022 Adobe, Inc. All rights reserved.
+ * See LICENSE for license details.
+ */
+
 namespace MagentoEse\DataInstallGraphQl\Model\Resolver\Store;
 
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -11,9 +16,6 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Store\Api\WebsiteRepositoryInterface;
 use MagentoEse\DataInstallGraphQl\Model\Authentication;
 
-/**
- * @inheritdoc
- */
 class SiteCode implements ResolverInterface
 {
     

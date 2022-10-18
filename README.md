@@ -181,6 +181,22 @@ Magento GraphQL uses the store scope, so the queries are limited to the store sc
   		}
 	}
 
+**customerExport**: Use to create the `customers.json` file. Creates the same data set as a native customer export. At this time, the only filter that is supported is a comma delimited list of email addresses.
+
+	query{
+		customerExport(email:"me@example.com") {
+			data
+		}
+	}
+
+**customerAddressExport**: Use to create the `customer_addresses.json` file. Creates the same data set as a native customer address export. At this time no filters are supported.
+
+	query{
+		customerAddressExport{
+			data
+		}
+	}
+
 **customerGroups**: Use to create the `customer_groups.json` file. Include the group names or Ids you want to include in the export. 
 
 	query{
@@ -275,6 +291,15 @@ Magento GraphQL uses the store scope, so the queries are limited to the store sc
 				source_code
 				stock_name
 			}
+		}
+	}
+
+**stockSourcesExport**: Use to create the `stock_sources.json` file that sets product inventory for each source. Include the source codes to include in the export. 
+
+	query
+		{
+			stockSourcesExport(sourceCode: ["carvelo_trenton,carvelo_broadway,carvelo_long_island"]) {
+				data
 		}
 	}
 
@@ -527,6 +552,15 @@ Magento GraphQL uses the store scope, so the queries are limited to the store sc
 
 	query{
 		productExport(categoryIds:"47,46") {
+			data
+		}
+	}
+
+
+**advancedPricingExport**: Use to create the `advanced_pricing.json` file. Creates the same data set as a native advanced pricing export. At this time, the only product filter that is supported is a list of category ids to export products from.
+
+	query{
+		advancedPricingExport(categoryIds:"47,46") {
 			data
 		}
 	}

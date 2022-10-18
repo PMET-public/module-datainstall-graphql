@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Adobe, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe, Inc. All rights reserved.
+ * See LICENSE for license details.
  */
 declare(strict_types=1);
 
@@ -12,9 +12,6 @@ use Magento\Company\Api\Data\CompanyInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Exception\NoSuchEntityException;
 
-/**
- * Customer Banner data provider
- */
 class Company
 {
     /**

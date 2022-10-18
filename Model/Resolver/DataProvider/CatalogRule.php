@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Adobe, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe, Inc. All rights reserved.
+ * See LICENSE for license details.
  */
 declare(strict_types=1);
 
@@ -16,9 +16,6 @@ use Magento\Banner\Model\ResourceModel\Banner as BannerResource;
 use Magento\Banner\Model\ResourceModel\Banner\CollectionFactory as BannerCollection;
 use MagentoEse\DataInstallGraphQl\Model\Converter\Converter;
 
-/**
- * Customer Segment data provider
- */
 class CatalogRule
 {
      /**

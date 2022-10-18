@@ -1,4 +1,9 @@
 <?php
+/**
+ * Copyright 2022 Adobe, Inc. All rights reserved.
+ * See LICENSE for license details.
+ */
+
 namespace MagentoEse\DataInstallGraphQl\Model\Resolver\Cms;
 
 use MagentoEse\DataInstallGraphQl\Model\Resolver\DataProvider\Widget as WidgetDataProvider;
@@ -13,10 +18,6 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use MagentoEse\DataInstallGraphQl\Model\Authentication;
 use function is_numeric;
 
-/**
- * CMS widgets field resolver, used for GraphQL request processing
- * copied from Magento\CmsGraphQl\Model\Resolver\Blocks
- */
 class Widgets implements ResolverInterface
 {
     /** @var WidgetDataProvider */

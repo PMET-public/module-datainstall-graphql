@@ -1,3 +1,6 @@
+# Copyright 2022 Adobe, Inc. All rights reserved.
+# See LICENSE for license details.
+
 type Query {
     dataInstallerLogs(
         jobId: String @doc(description: "id of job if import was done via admin ui. If used, datapack value is ignored") 
@@ -60,7 +63,17 @@ type Query {
     productExport(
         categoryIds: [String] @doc(description: "List of Category Ids to export products from")
     ): Export @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Export\\ProductExport") @doc(description:"csv encoded to json array of exported product data")
-}
+    customerExport(
+        email: [String] @doc(description: "Email address to export. Can only take a single email.")
+    ): Export @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Export\\CustomerExport") @doc(description:"csv encoded to json array of exported customer data")
+    customerAddressExport: Export @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Export\\CustomerAddressExport") @doc(description:"csv encoded to json array of exported customer addresses")
+    stockSourcesExport(
+        sourceCode: [String] @doc(description: "List of source code to export inventory from")
+    ): Export @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Export\\StockSourcesExport") @doc(description:"csv encoded to json array of stock sources data")
+    advancedPricingExport(
+        categoryIds: [String] @doc(description: "List of Category Ids to export product pricing from")
+    ): Export @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Export\\AdvancedPricingExport") @doc(description:"csv encoded to json array of pricing data")
+ }
 
 type Mutation {
   createDataInstallerJob(input: DataInstallerJobInput!): DataInstallerJobOutput

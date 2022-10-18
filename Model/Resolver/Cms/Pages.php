@@ -1,4 +1,9 @@
 <?php
+/**
+ * Copyright 2022 Adobe, Inc. All rights reserved.
+ * See LICENSE for license details.
+ */
+
 namespace MagentoEse\DataInstallGraphQl\Model\Resolver\Cms;
 
 use Magento\CmsGraphQl\Model\Resolver\DataProvider\Page as PageDataProvider;
@@ -10,10 +15,6 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use function is_numeric;
 
-/**
- * CMS pages field resolver, used for GraphQL request processing
- * copied from Magento\CmsGraphQl\Model\Resolver\Blocks
- */
 class Pages implements ResolverInterface
 {
     /**  @var PageDataProvider */
