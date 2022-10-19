@@ -12,14 +12,16 @@ class Block
 {
      /** @var string */
     protected $tokenStart = '{{block code="';
-    
+        //"{"block_id":"3"}"
     /** @var string */
     protected $tokenEnd = '"}}';
     
     /** @var string */
     protected $regexToSearch = [
         ['regex'=> '/block_id="([0-9]+)"/',
-        'substring'=> 'block_id="']
+        'substring'=> 'block_id="'],
+        ['regex'=> '/block_id":"([0-9]+)"/',
+        'substring'=> 'block_id":"']
     ];
     /** @var BlockRepositoryInterface */
     protected $blockRepository;

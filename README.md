@@ -327,6 +327,7 @@ Magento GraphQL uses the store scope, so the queries are limited to the store sc
 				attribute_options {
 					value
 					label
+					swatch_value
 				}
 				storefront_properties {
 					is_filterable:use_in_layered_navigation

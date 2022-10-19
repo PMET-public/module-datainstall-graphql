@@ -165,7 +165,27 @@ class ProductExport implements ResolverInterface
 
         //fix data in the case that data elements include line feeds
         $csvCleanData = $this->csvToArray($data, count($headerColumns));
+        $csvCleanData = $this->removeExtraQuotes($csvCleanData);
 
         return $csvCleanData;
+    }
+
+    /**
+     * Remove extra quotes at the start and end of values
+     *
+     * @param array $data
+     * @return array
+     */
+    private function removeExtraQuotes($data)
+    {
+        foreach ($data as $rowKey => $row) {
+            foreach ($row as $elementKey => $element) {
+                if (substr($element, 0, 1)=='"' && substr($element, strlen($element)-1, 1)=='"') {
+                    $newValue = str_replace('"', '', $element);
+                    $data[$rowKey][$elementKey] = $newValue;
+                }
+            }
+        }
+        return $data;
     }
 }
