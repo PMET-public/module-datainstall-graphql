@@ -79,15 +79,6 @@ class ProductExport implements ResolverInterface
             $filter = ['category_ids'=>$args['categoryIds'][0]];
         }
 
-         /** @var ExportInfoFactory $dataObject */
-        $exportInfo = $this->exportInfoFactory->create(
-            'csv', //file format
-            'catalog_product',
-            $filter, //filter
-            [], //skip attributes is done by attribute id, not by attribute code
-            $this->localeResolver->getLocale()
-        );
-
         $exportData = $this->singleExport('catalog_product', $filter);
 
         if (count($exportData) < 2) {

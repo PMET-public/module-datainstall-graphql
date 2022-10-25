@@ -136,7 +136,8 @@ class CatalogRule
             'sort_order' => $rule->getSortOrder(),
             'simple_action' => $rule->getSimpleAction(),
             'discount_amount' => $rule->getDiscountAmount(),
-            'dynamic_blocks' => ($this->getBannerNames($rule->getRuleID()) !== "") ? $this->getBannerNames($rule->getRuleID()) : null
+            'dynamic_blocks' => ($this->getBannerNames($rule->getRuleID()) !== "") ?
+            $this->getBannerNames($rule->getRuleID()) : null
            ];
     }
     /**
