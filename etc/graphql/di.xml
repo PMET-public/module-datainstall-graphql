@@ -7,7 +7,7 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <type name="Magento\ConfigurableProduct\Model\ResourceModel\Attribute\OptionSelectBuilderInterface">
+        <plugin name="option_select_website_filter_override" type="MagentoEse\DataInstallGraphQl\Plugin\Model\ResourceModel\Attribute\ScopedOptionSelectBuilder"/>
         <plugin name="option_select_website_filter" disabled="true"/>
-        <plugin name="option_select_website_filter_custom" type="MagentoEse\DataInstallGraphQl\Plugin\Model\ResourceModel\Attribute\ScopedOptionSelectBuilder"/>
     </type>
 </config>

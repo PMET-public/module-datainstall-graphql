@@ -52,11 +52,13 @@ class ScopedOptionSelectBuilder
     public function afterGetSelect(OptionSelectBuilderInterface $subject, Select $select)
     {
         $store = $this->storeManager->getStore();
-        $select->joinInner(
-            ['entity_website' => $this->productWebsiteResource->getMainTable()],
-            'entity_website.product_id = entity.entity_id AND entity_website.website_id = ' . $store->getWebsiteId(),
-            []
-        );
+        if ($store->getWebsiteId()!=0) {
+            $select->joinInner(
+                ['entity_website' => $this->productWebsiteResource->getMainTable()],
+                'entity_website.product_id = entity.entity_id AND entity_website.website_id = '.$store->getWebsiteId(),
+                []
+            );
+        }
 
         return $select;
     }
