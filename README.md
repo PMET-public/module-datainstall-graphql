@@ -449,7 +449,7 @@ Magento GraphQL uses the store scope, so the queries are limited to the store sc
 	}
 
 
-**catalogRules**: Use to create the `cart_rules.json` file. Include the catalog rule names or Ids you want to include in the export. `conditions_serialized` and `actions_serialized` will include the raw content, so any id substitutions will need to be done manually as outlined in the Data Installer documentation https://github.com/PMET-public/module-data-install#content-substitution
+**catalogRules**: Use to create the `catalog_rules.json` file. Include the catalog rule names or Ids you want to include in the export. `conditions_serialized` and `actions_serialized` will include the raw content, so any id substitutions will need to be done manually as outlined in the Data Installer documentation https://github.com/PMET-public/module-data-install#content-substitution
 
 	query{
 		catalogRules(identifiers: ["Test Rule"]) {
@@ -567,7 +567,7 @@ Magento GraphQL uses the store scope, so the queries are limited to the store sc
 	}
 
 
-**products**: Use to create the `reviews.json` file. This product query will retrieve the information necessary to populate product reviews. Search and filter functionality follows the documented features of the products query
+**reviews (products)**: Use to create the `reviews.json` file. The product query contains the data necessary to populate product reviews. So, there is no unique reveiws query. Search and filter functionality follows the documented features of the products query
 
 	query{
 		products(
