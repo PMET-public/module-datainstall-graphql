@@ -523,16 +523,14 @@ Magento GraphQL uses the store scope, so the queries are limited to the store sc
 	}
 
 
-**Gift Cards**: Use to create the `gift_cards.json` file. There is an issue with the giftcard product type where an imported gift card isn't correct until it is saved. This file will load in the product and save it, thus completing the process. It is a simple file with just sku as a value, so it uses the existing products query
+**Gift Cards**: Used to create the `gift_cards.json` file. When Gift Cards are imported along with other products, the row will be skipped with an error. Gift cards need to be imported separatly. The same `productExport` query is used, just restricted to only Gift Cards. There is no issue if the Gift Cards are also included in the main products file as they will be skipped during import.
 
 	query{
-		products(filter: {sku: { in: ["spagiftcard"] }})
-		{
-			items{
-				sku
-			}
+		productExport(categoryIds:"41") {
+			data
 		}
 	}
+
 
 **dynamicBlocksExport**: Use to create the `dynamic_blocks.json` file. Include the Dynamic Block names or Ids you want to include in the export. This is different than the core *dynamicBlocks* query. It does use the same DynamicBlock Type, but it will not return all the information that the core query returns.
 
