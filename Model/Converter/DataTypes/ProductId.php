@@ -53,9 +53,7 @@ class ProductId
                     $productIds = explode(",", $idToReplace);
                     $replacementString = '';
                     foreach ($productIds as $productId) {
-                        $product = $this->productRepository->getById($productId);
-                        $sku = $product->getSku();
-                        $replacementString.= $this->tokenStart.$sku.$this->tokenEnd;
+                        $replacementString.= $this->getProductIdTag($productId);
                     }
                     $content = str_replace(
                         $search['substring'].$idToReplace,
@@ -66,5 +64,17 @@ class ProductId
             }
         }
         return $content;
+    }
+
+    /**
+     * 
+     * @param int $productId 
+     * @return string 
+     * @throws NoSuchEntityException 
+     */
+    public function getProductIdTag($productId){
+        $product = $this->productRepository->getById($productId);
+        $sku = $product->getSku();
+        return $this->tokenStart.$sku.$this->tokenEnd;
     }
 }

@@ -53,9 +53,7 @@ class PageId
                     $pageIds = explode(",", $idToReplace);
                     $replacementString = '';
                     foreach ($pageIds as $pageId) {
-                        $page = $this->pageRepository->getById($pageId);
-                        $identifier = $page->getIdentifier();
-                        $replacementString.= $this->tokenStart.$identifier.$this->tokenEnd;
+                        $replacementString.= $this->getPageIdTag($pageId);
                     }
                     $content = str_replace(
                         $search['substring'].$idToReplace,
@@ -66,5 +64,17 @@ class PageId
             }
         }
         return $content;
+    }
+
+    /**
+     * 
+     * @param int $pageId 
+     * @return string 
+     * @throws NoSuchEntityException 
+     */
+    public function getPageIdTag($pageId){
+        $page = $this->pageRepository->getById($pageId);
+        $identifier = $page->getIdentifier();
+        return $this->tokenStart.$identifier.$this->tokenEnd;
     }
 }

@@ -12,6 +12,9 @@ use Magento\Widget\Model\Widget\Instance as WidgetInstance;
 use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use MagentoEse\DataInstallGraphQl\Model\Converter\Converter;
+use MagentoEse\DataInstallGraphQl\Model\Converter\DataTypes\ProductId;
+use MagentoEse\DataInstallGraphQl\Model\Converter\DataTypes\CategoryId;
+use MagentoEse\DataInstallGraphQl\Model\Converter\DataTypes\PageId;
 
 class Widget
 {
@@ -36,21 +39,47 @@ class Widget
     private $converter;
 
     /**
-     * @param WidgetCollection $widgetCollection
-     * @param WidgetInstance $widgetInstance
-     * @param StoreRepositoryInterface $storeRepository
-     * @param Converter $converter
+     * @var PageId
+     */
+    private $pageId;
+
+    /**
+     * @var CategoryId
+     */
+    private $categoryId;
+
+    /**
+     * @var ProductId
+     */
+    private $ProductId;
+
+    /**
+     * 
+     * @param CollectionFactory $widgetCollection 
+     * @param WidgetInstance $widgetInstance 
+     * @param StoreRepositoryInterface $storeRepository 
+     * @param Converter $converter 
+     * @param PageId $pageId 
+     * @param CategoryId $categoryId 
+     * @param ProductId $productId 
+     * @return void 
      */
     public function __construct(
         WidgetCollection $widgetCollection,
         WidgetInstance $widgetInstance,
         StoreRepositoryInterface $storeRepository,
-        Converter $converter
+        Converter $converter,
+        PageId $pageId,
+        CategoryId $categoryId,
+        ProductId $productId
     ) {
         $this->widgetCollection = $widgetCollection;
         $this->widgetInstance = $widgetInstance;
         $this->storeRepository = $storeRepository;
         $this->converter = $converter;
+        $this->pageId = $pageId;
+        $this->categoryId = $categoryId;
+        $this->ProductId = $productId;
     }
 
     /**
@@ -110,6 +139,21 @@ class Widget
                 __('The realated product rule with "%2" "%1" doesn\'t exist.', $identifier, $field)
             );
         }
+
+        //get entities values for substitution
+        if($pageGroups['page_for']=='specific'){
+            switch(true){
+                case strpos($pageGroups['page_group'],'products'):
+                    $pageGroups['entities']=$this->getProductIdTags($pageGroups['entities']);
+                break;
+                case strpos($pageGroups['page_group'],'categories'):
+                    $pageGroups['entities']=$this->getCategoryIdTags($pageGroups['entities']);
+                break;  
+                case strpos($pageGroups['page_group'],'page'):
+                    $pageGroups['entities']=$this->getPageIdTags($pageGroups['entities']);
+                break;      
+            }
+        }
         return [
             'title' => $widget->getTitle(),
             'theme' => $widget->getThemeId(),
@@ -140,4 +184,50 @@ class Widget
         }
         return implode(",", $storeCodes);
     }
+
+    /**
+     * 
+     * @param string $categoryIds 
+     * @return string 
+     * @throws NoSuchEntityException 
+     */
+    private function getCategoryIdTags($categoryIds){
+        $tagArray = [];
+        $categoryIds = explode(',',$categoryIds);
+        foreach($categoryIds as $categoryId){
+            $tagArray[] = $this->categoryId->getCategoryIdTag($categoryId);
+        }
+        return implode(',',$tagArray);
+    }
+
+    /**
+     * 
+     * @param string $productIds 
+     * @return string 
+     * @throws NoSuchEntityException 
+     */
+    private function getProductIdTags($productIds){
+        $tagArray = [];
+        $productIds = explode(',',$productIds);
+        foreach($productIds as $productId){
+            $tagArray[] = $this->productId->getProductIdTag($productId);
+        }
+        return implode(',',$tagArray);
+    }
+
+    /**
+     * 
+     * @param string $pageIds 
+     * @return string 
+     * @throws NoSuchEntityException 
+     */
+    private function getPageIdTags($pageIds){
+        $tagArray = [];
+        $pageIds = explode(',',$pageIds);
+        foreach($pageIds as $pageId){
+            $tagArray[] = $this->pageId->getPageIdTag($pageId);
+        }
+        return implode(',',$tagArray);
+    }
+    
 }

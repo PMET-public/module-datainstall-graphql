@@ -7,6 +7,7 @@
 namespace MagentoEse\DataInstallGraphQl\Model\Converter\DataTypes;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 class CategoryId
 {
@@ -72,9 +73,7 @@ class CategoryId
                     $categoryIds = explode(",", $idToReplace);
                     $replacementArr = [];
                     foreach ($categoryIds as $categoryId) {
-                        $category = $this->categoryRepository->get($categoryId);
-                        $urlKey = $category->getUrlKey();
-                        $replacementArr[]= $this->tokenStart.$urlKey.$this->tokenEnd;
+                        $replacementArr[]= $this->getCategoryIdTag($categoryId);
                     }
                     $content = str_replace(
                         $search['substring'].$idToReplace,
@@ -85,5 +84,17 @@ class CategoryId
             }
         }
         return $content;
+    }
+
+    /**
+     * 
+     * @param int $categoryId 
+     * @return string 
+     * @throws NoSuchEntityException 
+     */
+    public function getCategoryIdTag($categoryId){
+        $category = $this->categoryRepository->get($categoryId);
+        $urlKey = $category->getUrlKey();
+        return $this->tokenStart.$urlKey.$this->tokenEnd;
     }
 }
