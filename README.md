@@ -5,13 +5,13 @@ This module provides GraphQL support for the Data Install Module. There are two 
 1. Data Installer functions like launching a data pack import and retrieving log information about an import
 2. Exporting of data via a GraphQl query to be used in a data pack
 
-For some data, a valid admin user is required.  In the reqeust headers, add a header of `Authorization` with a value of `username|password`. Or the value can be added in the Commerce UI under Stores->Configuration->Advanced->System->Data Installer Authorization. This will overide the value passed in the header
+For most queries and mutations, a valid admin user is required.  In the reqeust headers, add a header of `Authorization` with a value of `username|password`. Or the value can be added in the Commerce UI under Stores->Configuration->Advanced->System->Data Installer Authorization. This will overide the value passed in the header
 
 Details on query arguments and types are available in the online GraphQL docs. 
 
 ## Data Installer Support
 
-**createDataInstallerJob**: Similiar to installing a data pack via CLI. This will schedule a data pack import, and return the `job_id` of the process. This also supports the retrieval of remote data packs.
+**createDataInstallerJob**: Similiar to installing a data pack via CLI. This will schedule a data pack import, and return the `job_id` of the process. This also supports the retrieval of remote data packs from GitHub. If you are accessing a private repository, you will need to create a [Personal Access Token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token). This token can be used as an option in the mutation. Or it can be added to the Commerce instance under *Stores->Configuration->Advanced->System->Data Installer Authorization*. When setting up the token, you will need to give access to the `repo` scope.
 
 *example: data pack on instance*
 
