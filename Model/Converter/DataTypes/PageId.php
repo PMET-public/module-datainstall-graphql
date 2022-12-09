@@ -67,12 +67,14 @@ class PageId
     }
 
     /**
-     * 
-     * @param int $pageId 
-     * @return string 
-     * @throws NoSuchEntityException 
+     * Get tag to replace page id
+     *
+     * @param int $pageId
+     * @return string
+     * @throws NoSuchEntityException
      */
-    public function getPageIdTag($pageId){
+    public function getPageIdTag($pageId)
+    {
         $page = $this->pageRepository->getById($pageId);
         $identifier = $page->getIdentifier();
         return $this->tokenStart.$identifier.$this->tokenEnd;

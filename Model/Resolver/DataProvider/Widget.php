@@ -54,15 +54,15 @@ class Widget
     private $ProductId;
 
     /**
-     * 
-     * @param CollectionFactory $widgetCollection 
-     * @param WidgetInstance $widgetInstance 
-     * @param StoreRepositoryInterface $storeRepository 
-     * @param Converter $converter 
-     * @param PageId $pageId 
-     * @param CategoryId $categoryId 
-     * @param ProductId $productId 
-     * @return void 
+     *
+     * @param CollectionFactory $widgetCollection
+     * @param WidgetInstance $widgetInstance
+     * @param StoreRepositoryInterface $storeRepository
+     * @param Converter $converter
+     * @param PageId $pageId
+     * @param CategoryId $categoryId
+     * @param ProductId $productId
+     * @return void
      */
     public function __construct(
         WidgetCollection $widgetCollection,
@@ -141,17 +141,17 @@ class Widget
         }
 
         //get entities values for substitution
-        if($pageGroups['page_for']=='specific'){
-            switch(true){
-                case strpos($pageGroups['page_group'],'products'):
+        if ($pageGroups['page_for']=='specific') {
+            switch (true) {
+                case strpos($pageGroups['page_group'], 'products'):
                     $pageGroups['entities']=$this->getProductIdTags($pageGroups['entities']);
-                break;
-                case strpos($pageGroups['page_group'],'categories'):
+                    break;
+                case strpos($pageGroups['page_group'], 'categories'):
                     $pageGroups['entities']=$this->getCategoryIdTags($pageGroups['entities']);
-                break;  
-                case strpos($pageGroups['page_group'],'page'):
+                    break;
+                case strpos($pageGroups['page_group'], 'page'):
                     $pageGroups['entities']=$this->getPageIdTags($pageGroups['entities']);
-                break;      
+                    break;
             }
         }
         return [
@@ -186,48 +186,53 @@ class Widget
     }
 
     /**
-     * 
-     * @param string $categoryIds 
-     * @return string 
-     * @throws NoSuchEntityException 
+     * Get tags to replace category ids
+     *
+     * @param string $categoryIds
+     * @return string
+     * @throws NoSuchEntityException
      */
-    private function getCategoryIdTags($categoryIds){
+    private function getCategoryIdTags($categoryIds)
+    {
         $tagArray = [];
-        $categoryIds = explode(',',$categoryIds);
-        foreach($categoryIds as $categoryId){
+        $categoryIds = explode(',', $categoryIds);
+        foreach ($categoryIds as $categoryId) {
             $tagArray[] = $this->categoryId->getCategoryIdTag($categoryId);
         }
-        return implode(',',$tagArray);
+        return implode(',', $tagArray);
     }
 
     /**
-     * 
-     * @param string $productIds 
-     * @return string 
-     * @throws NoSuchEntityException 
+     * Get tags to replace product ids
+     *
+     * @param string $productIds
+     * @return string
+     * @throws NoSuchEntityException
      */
-    private function getProductIdTags($productIds){
+    private function getProductIdTags($productIds)
+    {
         $tagArray = [];
-        $productIds = explode(',',$productIds);
-        foreach($productIds as $productId){
+        $productIds = explode(',', $productIds);
+        foreach ($productIds as $productId) {
             $tagArray[] = $this->productId->getProductIdTag($productId);
         }
-        return implode(',',$tagArray);
+        return implode(',', $tagArray);
     }
 
     /**
-     * 
-     * @param string $pageIds 
-     * @return string 
-     * @throws NoSuchEntityException 
+     * Get tags to replace page ids
+     *
+     * @param string $pageIds
+     * @return string
+     * @throws NoSuchEntityException
      */
-    private function getPageIdTags($pageIds){
+    private function getPageIdTags($pageIds)
+    {
         $tagArray = [];
-        $pageIds = explode(',',$pageIds);
-        foreach($pageIds as $pageId){
+        $pageIds = explode(',', $pageIds);
+        foreach ($pageIds as $pageId) {
             $tagArray[] = $this->pageId->getPageIdTag($pageId);
         }
-        return implode(',',$tagArray);
+        return implode(',', $tagArray);
     }
-    
 }

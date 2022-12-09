@@ -87,12 +87,14 @@ class CategoryId
     }
 
     /**
-     * 
-     * @param int $categoryId 
-     * @return string 
-     * @throws NoSuchEntityException 
+     * Get tag to replace category id
+     *
+     * @param int $categoryId
+     * @return string
+     * @throws NoSuchEntityException
      */
-    public function getCategoryIdTag($categoryId){
+    public function getCategoryIdTag($categoryId)
+    {
         $category = $this->categoryRepository->get($categoryId);
         $urlKey = $category->getUrlKey();
         return $this->tokenStart.$urlKey.$this->tokenEnd;

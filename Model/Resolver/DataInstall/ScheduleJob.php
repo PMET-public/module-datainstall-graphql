@@ -104,7 +104,7 @@ class ScheduleJob implements ResolverInterface
                 $dataPack->getAuthToken()
             ));
         }
-        if($dataPack->getIsRemote()){
+        if ($dataPack->getIsRemote()) {
             $dataPack->unZipDataPack();
         }
         if ($dataPack->getDataPackLocation()) {

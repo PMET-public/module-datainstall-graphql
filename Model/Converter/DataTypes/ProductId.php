@@ -67,12 +67,14 @@ class ProductId
     }
 
     /**
-     * 
-     * @param int $productId 
-     * @return string 
-     * @throws NoSuchEntityException 
+     * Get tag to replace product id
+     *
+     * @param int $productId
+     * @return string
+     * @throws NoSuchEntityException
      */
-    public function getProductIdTag($productId){
+    public function getProductIdTag($productId)
+    {
         $product = $this->productRepository->getById($productId);
         $sku = $product->getSku();
         return $this->tokenStart.$sku.$this->tokenEnd;
