@@ -85,6 +85,7 @@ type Mutation {
 type StoreConfig {
     root_cateogry_name: String @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Store\\RootCategoryName") @doc(description:"Name of Stores Root Category")
     theme: String @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Store\\Theme") @doc(description:"Path of the Store's Theme")
+    fallback_theme: String @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Store\\Theme") @doc(description:"If a fallback theme is needed, the result will need to be edited manually")
 }
 interface CategoryInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\CategoryInterfaceTypeResolver") {
     custom_design_theme: String @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Category\\CustomDesign") @doc(description:"Path of the Theme")

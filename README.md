@@ -99,7 +99,7 @@ Details on query arguments and types are available in the online GraphQL docs.
 These queries are written to return data in a format that can be saved as a file to be used by the Data Installer. There is a combination of extensions to native queries along with some that are custom. 
 Magento GraphQL uses the store scope, so the queries are limited to the store scope as defined in the request header. Another limitation is the query will only return Active items.  You will not be able to export any Pages, Blocks, etc. that are set as Inactive
 
-**storeConfig**: Use to create the `stores.json` file
+**storeConfig**: Use to create the `stores.json` file. The value of `fallback_theme` will be the same as `theme`, so it will have to be changed if needed.
 
     query {
     	storeConfig {
@@ -116,6 +116,7 @@ Magento GraphQL uses the store scope, so the queries are limited to the store sc
     		site_name:website_name
     		store_root_category:root_cateogry_name
     		theme
+			fallback_theme
     	}
     }
 
