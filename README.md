@@ -116,7 +116,7 @@ Magento GraphQL uses the store scope, so the queries are limited to the store sc
     		site_name:website_name
     		store_root_category:root_cateogry_name
     		theme
-			fallback_theme
+			theme_fallback
     	}
     }
 
