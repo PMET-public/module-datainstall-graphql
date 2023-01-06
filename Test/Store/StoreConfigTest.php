@@ -1,6 +1,6 @@
 <?php
 
-namespace MagentoEse\DataInstallGraphQl\Tests\Store;
+namespace MagentoEse\DataInstallGraphQl\Test\Store;
 
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\TestFramework\TestCase\GraphQl\ResponseContainsErrorsException;

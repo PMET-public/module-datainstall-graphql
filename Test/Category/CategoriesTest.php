@@ -1,6 +1,6 @@
 <?php
 
-namespace MagentoEse\DataInstallGraphQl\Tests\Category;
+namespace MagentoEse\DataInstallGraphQl\Test\Category;
 
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\TestFramework\TestCase\GraphQl\ResponseContainsErrorsException;
@@ -29,7 +29,7 @@ class CategoriesTest extends GraphQlAbstract
 	}
 	QUERY;
     /**
-     * @magentoDataFixture MagentoEse_DataInstallGraphQl::Tests/_files/categories.php
+     * @magentoDataFixture MagentoEse_DataInstallGraphQl::Test/_files/categories.php
      */
     public function testCategories()
     {

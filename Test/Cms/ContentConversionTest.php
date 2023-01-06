@@ -1,6 +1,6 @@
 <?php
 
-namespace MagentoEse\DataInstallGraphQl\Tests\Cms;
+namespace MagentoEse\DataInstallGraphQl\Test\Cms;
 
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\TestFramework\TestCase\GraphQl\ResponseContainsErrorsException;
@@ -23,7 +23,7 @@ class ContentConversionTest extends GraphQlAbstract
 	QUERY;
 
     /**
-     * @magentoDataFixture MagentoEse_DataInstallGraphQl::Tests/_files/categories.php
+     * @magentoDataFixture MagentoEse_DataInstallGraphQl::Test/_files/categories.php
      */
     public function testContentConversion()
     {

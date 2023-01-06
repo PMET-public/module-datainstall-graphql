@@ -20,9 +20,9 @@ Make the following edits. In our current deployment `TESTS_WEBSERVICE_USER` is t
 `vendor/bin/phpunit -c dev/tests/api-functional/phpunit_graphql.xml vendor/magentoese/module-data-install-graph-ql`
 
 #####Run tests for a data type
-example:`vendor/bin/phpunit -c dev/tests/api-functional/phpunit_graphql.xml vendor/magentoese/module-data-install-graph-ql/Tests/Cms`
+example:`vendor/bin/phpunit -c dev/tests/api-functional/phpunit_graphql.xml vendor/magentoese/module-data-install-graph-ql/Test/Cms`
 
 #####Run single test
-`vendor/bin/phpunit  -c dev/tests/api-functional/phpunit_graphql.xml vendor/magentoese/module-data-install-graph-ql/Tests/Cms/CmsBlocksTest.php`
+`vendor/bin/phpunit  -c dev/tests/api-functional/phpunit_graphql.xml vendor/magentoese/module-data-install-graph-ql/Test/Cms/CmsBlocksTest.php`
 
 add the ` --testdox ` option for more verbose output
