@@ -287,8 +287,8 @@ input DataInstallerJobInput @doc(description: "datapack only required value") {
   load: String @doc(description: "Optional: Subdirectory of data to load")
   files: String @doc(description: "Optional: Comma delimited list of file so load")
   host: String @doc(description: "Optional: Override for host value in stores file")
-  reload: Int @doc(description: "Optional: 1 if reloading an already installed Data Pack")
-  is_default_website: Int @doc(description: "Optional: 1 if you want the website loaded to be set as the default")
+  reload: Boolean @doc(description: "Optional: true if reloading an already installed Data Pack")
+  is_default_website: Boolean @doc(description: "Optional: true if you want the website loaded to be set as the default")
   auth_token: String @doc(description: "Token to include with request for remote Data Pack if required e.g. GitHub access token") 
   is_remote: Boolean @doc(description: "Set to true if using remote data pack") 
 }
