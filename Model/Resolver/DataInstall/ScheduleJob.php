@@ -85,7 +85,9 @@ class ScheduleJob implements ResolverInterface
         if (!empty($jobArgs['host'])) {
             $dataPack->setHost($jobArgs['host']);
         }
-
+        if (!empty($jobArgs['is_default_website'])) {
+            $dataPack->setIsDefaultWebsite($jobArgs['is_default_website']);
+        }
         if (!empty($jobArgs['reload'])) {
             $dataPack->setReload($jobArgs['reload']);
         }
