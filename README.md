@@ -11,7 +11,8 @@ Details on query arguments and types are available in the online GraphQL docs.
 
 ## Data Installer Support
 
-**createDataInstallerJob**: Similiar to installing a data pack via CLI. This will schedule a data pack import, and return the `job_id` of the process. This also supports the retrieval of remote data packs from GitHub. If you are accessing a private repository, you will need to create a [Personal Access Token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token). This token can be used as an option in the mutation. Or it can be added to the Commerce instance under *Stores->Configuration->Advanced->System->Data Installer Authorization*. When setting up the token, you will need to give access to the `repo` scope.
+**createDataInstallerJob**: Similiar to installing a data pack via CLI. This will schedule a data pack import, and return the `job_id` of the process. This also supports the retrieval of remote data packs from GitHub. If you are accessing a private repository, you will need to create a [Personal Access Token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token). This token can be used as an option in the mutation. Or it can be added to the Commerce instance under *Stores->Configuration->Advanced->System->Data Installer Authorization*. 
+  - When setting up the token, create a "classic" token, and check the box to give access to the `repo` scope
 
 *example: data pack on instance*
 
