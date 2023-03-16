@@ -12,7 +12,7 @@ use Exception;
 use Magento\Company\Model\ResourceModel\Role\CollectionFactory as RoleCollectionFactory;
 use Magento\Company\Model\ResourceModel\UserRole\CollectionFactory;
 use Magento\Company\Model\Role\Permission;
-use Magento\CompanyGraphQl\Model\Company\IdEncoder;
+use Magento\Framework\GraphQl\Query\Uid;
 use Magento\CompanyGraphQl\Model\Company\Role\PermissionsFormatter;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
@@ -32,7 +32,7 @@ class Roles implements ResolverInterface
     /** @var RoleCollectionFactory */
     private $roleCollectionFactory;
 
-    /** @var IdEncoder */
+    /** @var Uid */
     private $idEncoder;
 
     /** @var PermissionsFormatter */
@@ -48,7 +48,7 @@ class Roles implements ResolverInterface
      *
      * @param CollectionFactory $userRoleCollectionFactory
      * @param RoleCollectionFactory $roleCollectionFactory
-     * @param IdEncoder $idEncoder
+     * @param Uid $idEncoder
      * @param PermissionsFormatter $permissionsFormatter
      * @param Permission $permission
      * @param Authentication $authentication
@@ -57,7 +57,7 @@ class Roles implements ResolverInterface
     public function __construct(
         CollectionFactory $userRoleCollectionFactory,
         RoleCollectionFactory $roleCollectionFactory,
-        IdEncoder $idEncoder,
+        Uid $idEncoder,
         PermissionsFormatter $permissionsFormatter,
         Permission $permission,
         Authentication $authentication
