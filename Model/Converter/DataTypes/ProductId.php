@@ -17,7 +17,7 @@ class ProductId
     protected $tokenEnd = '"}}';
 
     /** @var array */
-    protected $array = [
+    protected $regexToSearch = [
         ['regex'=> "/id_path='product\/([0-9]+)'/",
         'substring'=> "id_path='product/"]
     ];
