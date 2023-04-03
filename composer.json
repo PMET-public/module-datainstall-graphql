@@ -2,7 +2,7 @@
     "name": "magentoese/module-data-install-graph-ql",
     "description": "GraphQL support for the Data Installer",
     "type": "magento2-module",
-    "version": "1.2.2",
+    "version": "1.2.3",
     "autoload": {
       "psr-4": {
         "MagentoEse\\DataInstallGraphQl\\": ""

@@ -16,7 +16,7 @@ class ProductAttributeSet
     /** @var string */
     protected $tokenEnd = '"}}';
 
-    /** @var string */
+    /** @var array */
     protected $regexToSearch = [
         ['regex'=> '/"attribute":"attribute_set_id","operator":"!=","value":"([0-9]+)"/',
         'substring'=> '"attribute":"attribute_set_id","operator":"!=","value":"'],

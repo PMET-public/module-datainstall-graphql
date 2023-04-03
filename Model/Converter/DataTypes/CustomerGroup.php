@@ -16,7 +16,7 @@ class CustomerGroup
     /** @var string */
     protected $tokenEnd = '"}}';
 
-    /** @var string */
+    /** @var array */
     protected $regexToSearch = [
         ['regex'=> '/"attribute":"group_id","operator":"!=","value":"([0-9]+)"/',
         'substring'=> '"attribute":"group_id","operator":"!=","value":"'],

@@ -16,7 +16,7 @@ class ProductAttribute
     /** @var string */
     protected $tokenEnd = '"}}';
 
-    /** @var string */
+    /** @var array */
     // phpcs:ignoreFile Generic.Files.LineLength.TooLong
     protected $regexToSearch = [
         ['regex'=> '/Product\\\\Attributes","attribute":"([a-zA-Z0-9_]+)","operator":"==","value":\["([0-9,"]+)"\]/',

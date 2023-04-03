@@ -17,7 +17,7 @@ class CategoryId
     /** @var string */
     protected $tokenEnd = '"}}';
     
-    /** @var string */
+    /** @var array */
     protected $regexToSearch = [
         ['regex'=>"/id_path='category\/([0-9]+)'/",
         'substring'=> "id_path='category/"],

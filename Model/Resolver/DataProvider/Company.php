@@ -22,7 +22,7 @@ class Company
     /**
      * @var SearchCriteriaBuilder
      */
-    private $searchCriteriabuilder;
+    private $searchCriteriaBuilder;
 
     /**
      * @param CompanyRepositoryInterface $companyRepository

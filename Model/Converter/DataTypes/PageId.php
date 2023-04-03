@@ -16,7 +16,7 @@ class PageId
     /** @var string */
     protected $tokenEnd = '"}}';
     
-    /** @var string */
+    /** @var array */
     protected $regexToSearch = [
         ['regex'=> "/page_id='([0-9]+)'/",
         'substring'=> "page_id='"]

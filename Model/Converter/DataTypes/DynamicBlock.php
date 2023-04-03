@@ -16,7 +16,7 @@ class DynamicBlock
     /** @var string */
     protected $tokenEnd = '"}}';
     
-    /** @var string */
+    /** @var array */
     protected $regexToSearch = [
         ['regex'=> '/"banner_ids":"([0-9,]+)"/',
         'substring'=> '"banner_ids":"'],

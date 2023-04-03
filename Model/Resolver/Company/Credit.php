@@ -21,6 +21,9 @@ use MagentoEse\DataInstallGraphQl\Model\Authentication;
 
 class Credit implements ResolverInterface
 {
+    /** @var array */
+    private $allowedResources;
+
     /** @var CreditDataProviderInterface */
     private $creditDataProvider;
 

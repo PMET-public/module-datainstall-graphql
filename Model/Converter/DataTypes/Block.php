@@ -16,7 +16,7 @@ class Block
     /** @var string */
     protected $tokenEnd = '"}}';
     
-    /** @var string */
+    /** @var array */
     protected $regexToSearch = [
         ['regex'=> '/block_id="([0-9]+)"/',
         'substring'=> 'block_id="'],

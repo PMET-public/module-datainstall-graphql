@@ -51,7 +51,7 @@ class Widget
     /**
      * @var ProductId
      */
-    private $ProductId;
+    private $productId;
 
     /**
      *
@@ -79,7 +79,7 @@ class Widget
         $this->converter = $converter;
         $this->pageId = $pageId;
         $this->categoryId = $categoryId;
-        $this->ProductId = $productId;
+        $this->productId = $productId;
     }
 
     /**
