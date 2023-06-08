@@ -27,7 +27,7 @@ class CategoriesTest extends GraphQlAbstract
 			}
 		}
 	}
-	QUERY;
+    QUERY;
     /**
      * @magentoDataFixture MagentoEse_DataInstallGraphQl::Test/_files/categories.php
      */

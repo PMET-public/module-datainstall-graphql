@@ -28,7 +28,7 @@ class ScheduleJobTest extends GraphQlAbstract
 			theme_fallback
 		}
 	}
-	QUERY;
+    QUERY;
     
     public function testCreateWithLocalModule()
     {

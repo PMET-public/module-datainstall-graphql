@@ -121,6 +121,32 @@ Magento GraphQL uses the store scope, so the queries are limited to the store sc
     	}
     }
 
+**storeConfigurations**: Use to create the `store_configurations.json` file.  `additionalSettings` is optional. This would include the `path` from `core_config_data` of settings not included in the default list.
+Configurations are retrieved from the store view scope and uses the same inheritance as the configuration. For example, if you do not have `Welcome Text` set at your Store View scope, it will return the value set for Website or Default. If a setting has no value set that path will not be included in the query results.
+It is important to note that at this time only the Store View scope is used. There are many options that are set at the Website scope. Those would be retrieved, but then interpreted as Store View scope, so therefore would be imported but not used.  If you need to use other scopes, or a mixture of scopes, you should supplement this file with the manual .csv configuration files available
+
+**Default Settings Included**
+| Setting  | Path  |
+| ------------ | ------------ |
+| Stores->Configuration->Catalog->Catalog->Date & Time Custom Options->Use JavaScript Calendar  | catalog/custom_options/use_calendar  |
+| Content->Configuration->HTML Head->Scripts & Style Sheets  | design/head/includes  |
+| Content->Configuration->HTML Head->Favicon  | design/head/shortcut_icon  |
+| Content->Configuration->Header->Logo Image  | design/header/logo_src |
+| Content->Configuration->Header->Welcome Text  | design/header/welcome  |
+| Stores->Configuration->General->General->Store Information->Store Name  | general/store_information/name |
+| Stores->Configuration->General->Web->Default Pages->CMS Home Page  | web/default/cms_home_page |
+
+    query {
+		storeConfigurations(additionalSettings:["design/theme/theme_id"])  {
+		items {
+			path
+			scope
+			scope_code
+			value
+		}
+		}
+	}
+
 **categories**: Use to create the `categories.json` file. For the complete list of filtering options, see the GraphQL DevDocs.
 
     query{

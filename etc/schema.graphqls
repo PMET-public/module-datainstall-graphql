@@ -73,6 +73,9 @@ type Query {
     advancedPricingExport(
         categoryIds: [String] @doc(description: "List of Category Ids to export product pricing from")
     ): Export @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Export\\AdvancedPricingExport") @doc(description:"csv encoded to json array of pricing data")
+    storeConfigurations(
+        additionalSettings: [String] @doc(description: "Optional: Additional store configurations to return expressed as path value from core_config_data table. Example: web/secure/base_url")
+    ): StoreConfigurations @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Store\\Configurations") @doc(description:"Store Admin Configuration Settings")
  }
 
 type Mutation {
@@ -87,6 +90,18 @@ type StoreConfig {
     theme: String @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Store\\Theme") @doc(description:"Path of the Store's Theme")
     theme_fallback: String @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Store\\Theme") @doc(description:"If a fallback theme is needed, the result will need to be edited manually")
 }
+
+type StoreConfigurations @doc(description: "Misc configuration settings that are set via the store admin"){
+    items: [StoreConfiguration] 
+}
+
+type StoreConfiguration {
+    path: String
+    scope: String
+    scope_code: String
+    value: String
+}
+
 interface CategoryInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\CategoryInterfaceTypeResolver") {
     custom_design_theme: String @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Category\\CustomDesign") @doc(description:"Path of the Theme")
     landing_page_identifier: String @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Category\\LandingPage") @doc(description:"identifier of landing page")

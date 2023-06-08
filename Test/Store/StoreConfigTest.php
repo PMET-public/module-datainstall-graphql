@@ -28,7 +28,7 @@ class StoreConfigTest extends GraphQlAbstract
 			theme_fallback
 		}
 	}
-	QUERY;
+    QUERY;
     
     public function testStoreConfig()
     {
