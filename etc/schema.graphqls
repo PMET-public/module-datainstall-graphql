@@ -1,4 +1,4 @@
-# Copyright 2022 Adobe, Inc. All rights reserved.
+# Copyright 2023 Adobe, Inc. All rights reserved.
 # See LICENSE for license details.
 
 type Query {
@@ -76,6 +76,10 @@ type Query {
     storeConfigurations(
         additionalSettings: [String] @doc(description: "Optional: Additional store configurations to return expressed as path value from core_config_data table. Example: web/secure/base_url")
     ): StoreConfigurations @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Store\\Configurations") @doc(description:"Store Admin Configuration Settings")
+    imagesExtract(
+        categoryIds: String @doc(description: "Product Category Ids to extract images from. Comma separated list of category ids. Example: 1,2,3")
+        cmsDir: String @doc(description: "Directory under media\\wysiwyg to extract images from. If left empty all wystwyg images will be extracted.")
+    ): ImageZipFile @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Export\\ImageZipFile") @doc(description:"Get a zip file of images to include in a Data Pack")
  }
 
 type Mutation {
@@ -155,6 +159,9 @@ type CartRule {
     reward_points_delta: String
     conditions_serialized: String
     actions_serialized: String
+    rule_id: Int
+    sort_order: Int
+    is_active: Int
 }
 
 type ApprovalRules @doc(description: "Retrieves all requested B2B Approval Rules") {
@@ -190,6 +197,8 @@ type CatalogRule {
     simple_action: String
     discount_amount: Float
     dynamic_blocks: String
+    is_active: Int
+    rule_id: Int
 }
 
 type CustomerGroups @doc(description: "Retrieves all requested Customer Groups") {
@@ -218,6 +227,7 @@ type PageBuilderTemplate {
     created_for: String
     preview_image: String
     content: String
+    template_id: Int
 }
 
 type PageBuilderTemplates @doc(description: "Retrieves all requested Page Builder templates") {
@@ -277,6 +287,11 @@ type DataIntstallerLog @doc(description: "Retrieves all records from a Data inst
 type DataIntstallerJobStatus @doc(description: "Retrieves status information Data install Job") {
     job_status_text: String @doc(description: "Status Id")
     job_status: String @doc(description: "Current status of job")
+}
+
+type ImageZipFile @doc(description: "Retrieves a zip file containing all images for a product") {
+    zip_file_download: String @doc(description: "Zip file with images in Data Pack directory structure")
+    zip_file_server_path: String @doc(description: "Server path to zip file")
 }
 
 type DataInstallerLogRecord {
@@ -365,6 +380,8 @@ type Upsell {
     apply_to: String
     sort_order: Int
     customer_segments: String
+    is_active: Int
+    rule_id: Int
 }
 
 type Widgets @doc(description: "Retrieves all requested Widgets") {
@@ -423,6 +440,9 @@ type DynamicBlock {
     store_view_code: String @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Store\\StoreViewCode")
     type: String
     banner_content: String
+    banner_id: Int
+    is_enabled: Int
+    ui_type: String
 }
 
 type Companies @doc(description: "List of Companies") {

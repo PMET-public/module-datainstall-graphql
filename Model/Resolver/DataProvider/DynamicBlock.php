@@ -9,6 +9,7 @@ namespace MagentoEse\DataInstallGraphQl\Model\Resolver\DataProvider;
 
 use Magento\Banner\Model\ResourceModel\Banner\CollectionFactory as BannerCollection;
 use Magento\Banner\Model\ResourceModel\Banner as BannerResource;
+use Magento\Banner\Model\Config;
 use Magento\BannerCustomerSegment\Model\ResourceModel\BannerSegmentLink;
 use Magento\CustomerSegment\Model\ResourceModel\Segment\CollectionFactory as SegmentCollection;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -32,6 +33,11 @@ class DynamicBlock
     private $bannerSegmentLink;
 
     /**
+     * @var Config
+     */
+    private $bannerConfig;
+
+    /**
      * @var SegmentCollection
      */
     private $segmentCollection;
@@ -45,6 +51,7 @@ class DynamicBlock
      * @param BannerCollection $bannerCollection
      * @param BannerResource $bannerResource
      * @param BannerSegmentLink $bannerSegmentLink
+     * @param Config $bannerConfig
      * @param SegmentCollection $segmentCollection
      * @param Converter $converter
      */
@@ -52,12 +59,14 @@ class DynamicBlock
         BannerCollection $bannerCollection,
         BannerResource $bannerResource,
         BannerSegmentLink $bannerSegmentLink,
+        Config $bannerConfig,
         SegmentCollection $segmentCollection,
         Converter $converter
     ) {
         $this->bannerCollection = $bannerCollection;
         $this->bannerResource = $bannerResource;
         $this->bannerSegmentLink = $bannerSegmentLink;
+        $this->bannerConfig = $bannerConfig;
         $this->segmentCollection = $segmentCollection;
         $this->converter = $converter;
     }
@@ -103,11 +112,11 @@ class DynamicBlock
      */
     private function fetchBannerData($identifier, string $field, int $storeId): array
     {
+        $bannerTypes = $this->bannerConfig->getTypes();
         $bannerResults = $this->bannerCollection->create()->addFieldToFilter($field, [$identifier])->getItems();
         $banner = current($bannerResults);
         $bannerId = $banner->getBannerId();
         //get content and segments
-        //$bannerContent = $this->bannerResource->getBannersContent([$bannerId],$storeId);
         $bannerContent = $this->getStoreContent($bannerId, $storeId);
         $bannerSegmentIds = $this->bannerSegmentLink->loadBannerSegments($bannerId);
         $r = $banner->getTypes();
@@ -126,11 +135,54 @@ class DynamicBlock
                 'name' => $banner->getName(),
                 'segments' => $segmentNames,
                 'type' => implode(",", $banner->getTypes()),
-                'banner_content' => $this->converter->convertContent($bannerContent)
+                'banner_content' => $this->converter->convertContent($bannerContent),
+                'is_enabled' => $banner->getIsEnabled(),
+                'banner_id' => $banner->getBannerId(),
+                'ui_type' => $this->getUiBannerTypes($banner->getTypes())
                 ];
 
         return $banners;
     }
+
+    /**
+     * Get segment names
+     *
+     * @param array $savedTypes
+     * @return string
+     */
+    private function getUiBannerTypes(array $savedTypes) :string
+    {
+        $types = [];
+        $bannerTypes = $this->bannerConfig->getTypes();
+        //iterate over types defined for banner
+        foreach ($savedTypes as $savedType) {
+            //iterate over types defined in config
+            foreach ($bannerTypes as $type => $value) {
+                //if type matches, add to array
+                if ($savedType == $type) {
+                    $types[] = $bannerTypes[$type]->getText();
+                }
+            }
+        }
+        return implode(",", $types);
+    }
+
+    /**
+     * Get all banner ids
+     *
+     * @return array
+     */
+    public function getAllBannerIds(): array
+    {
+        $bannerQuery = $this->bannerCollection->create();
+        $bannerResults = $bannerQuery->getItems();
+        $bannerIds = [];
+        foreach ($bannerResults as $banner) {
+             $bannerIds[] = $banner->getBannerId();
+        }
+        return $bannerIds;
+    }
+
     /**
      * Get banner content by specific store id
      *

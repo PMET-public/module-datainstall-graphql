@@ -55,13 +55,14 @@ class Configurations implements ResolverInterface
 
     /**
      * Get data store configuration settings
-     * @param Field $field 
-     * @param ContextInterface $context 
-     * @param ResolveInfo $info 
-     * @param array|null $value 
-     * @param array|null $args 
-     * @return mixed|Value 
-     * @throws GraphQlInputException 
+     *
+     * @param Field $field
+     * @param ContextInterface $context
+     * @param ResolveInfo $info
+     * @param array|null $value
+     * @param array|null $args
+     * @return mixed|Value
+     * @throws GraphQlInputException
      */
     public function resolve(
         Field $field,

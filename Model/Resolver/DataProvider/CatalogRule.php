@@ -116,7 +116,7 @@ class CatalogRule
     private function fetchRuleData($identifier, string $field): array
     {
         $ruleResults = $this->ruleCollection->create()->addFieldToFilter($field, [$identifier])->getItems();
-
+        
         if (empty($ruleResults)) {
             throw new NoSuchEntityException(
                 __('The rule with "%2" "%1" doesn\'t exist.', $identifier, $field)
@@ -137,9 +137,28 @@ class CatalogRule
             'simple_action' => $rule->getSimpleAction(),
             'discount_amount' => $rule->getDiscountAmount(),
             'dynamic_blocks' => ($this->getBannerNames($rule->getRuleID()) !== "") ?
-            $this->getBannerNames($rule->getRuleID()) : null
+            $this->getBannerNames($rule->getRuleID()) : null,
+            'is_active' => $rule->getIsActive(),
+            'rule_id' => $rule->getRuleId()
            ];
     }
+
+    /**
+     * Get all rule ids
+     *
+     * @return array
+     */
+    public function getAllRuleIds(): array
+    {
+        $ruleQuery = $this->ruleCollection->create();
+        $ruleResults = $ruleQuery->getItems();
+        $ruleIds = [];
+        foreach ($ruleResults as $rule) {
+             $ruleIds[] = $rule->getRuleId();
+        }
+        return $ruleIds;
+    }
+
     /**
      * Get website codes by ids
      *

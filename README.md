@@ -250,7 +250,7 @@ It is important to note that at this time only the Store View scope is used. The
   		}
 	}
 
-**cartRules**: Use to create the `cart_rules.json` file. Include the cart rule names or Ids you want to include in the export. `conditions_serialized` and `actions_serialized` will include the raw content, so any id substitutions will need to be done manually as outlined in the Data Installer documentation https://github.com/PMET-public/module-data-install#content-substitution
+**cartRules**: Use to create the `cart_rules.json` file. Include the cart rule names or Ids you want to include in the export. `conditions_serialized` and `actions_serialized` will include the raw content, so any id substitutions will need to be done manually as outlined in the Data Installer documentation https://github.com/PMET-public/module-data-install#content-substitution. If you need a list of all cart rules, set the input to an empty string `identifiers: [""]`. `rule_id` is also available, but not necessary for a data pack
 
 	query{
 		cartRules(identifiers: ["1","2","3","4","5"]) {
@@ -278,6 +278,8 @@ It is important to note that at this time only the Store View scope is used. The
 				use_auto_generation
 				uses_per_coupon
 				uses_per_customer
+				sort_by
+				is_active
 			}
 		}
 	}
@@ -439,7 +441,7 @@ It is important to note that at this time only the Store View scope is used. The
 		}
 	}
 
-**upsells**: Use to create the `upsells.json` file to populate Related Products Cross Sells and Upsells. Include the Ids or names you want to include in the export. `conditions_serialized` and `actions_serialized` will include the raw content, so any id substitutions will need to be done manually as outlined in the Data Installer documentation https://github.com/PMET-public/module-data-install#content-substitution
+**upsells**: Use to create the `upsells.json` file to populate Related Products Cross Sells and Upsells. Include the Ids or names you want to include in the export. `conditions_serialized` and `actions_serialized` will include the raw content, so any id substitutions will need to be done manually as outlined in the Data Installer documentation https://github.com/PMET-public/module-data-install#content-substitution. If you need a list of all related product rules, set the input to an empty string `identifiers: [""]`. `rule_id` is also available, but not necessary for a data pack
 
 	query{
 		upsells(identifiers: ["4","3"]) {
@@ -451,6 +453,7 @@ It is important to note that at this time only the Store View scope is used. The
 				name
 				sort_order
 				positions_limit
+				is_active
 			}
 		}
 	}
@@ -477,7 +480,7 @@ It is important to note that at this time only the Store View scope is used. The
 	}
 
 
-**catalogRules**: Use to create the `catalog_rules.json` file. Include the catalog rule names or Ids you want to include in the export. `conditions_serialized` and `actions_serialized` will include the raw content, so any id substitutions will need to be done manually as outlined in the Data Installer documentation https://github.com/PMET-public/module-data-install#content-substitution
+**catalogRules**: Use to create the `catalog_rules.json` file. Include the catalog rule names or Ids you want to include in the export. `conditions_serialized` and `actions_serialized` will include the raw content, so any id substitutions will need to be done manually as outlined in the Data Installer documentation https://github.com/PMET-public/module-data-install#content-substitution. If you need a list of all catalog rules, set the input to an empty string `identifiers: [""]`. `rule_id` is also available, but not necessary for a data pack
 
 	query{
 		catalogRules(identifiers: ["Test Rule"]) {
@@ -493,6 +496,7 @@ It is important to note that at this time only the Store View scope is used. The
 				site_code
 				sort_order
 				stop_rules_processing
+				is_active
 			}
 		}
 	}
@@ -560,7 +564,7 @@ It is important to note that at this time only the Store View scope is used. The
 	}
 
 
-**dynamicBlocksExport**: Use to create the `dynamic_blocks.json` file. Include the Dynamic Block names or Ids you want to include in the export. This is different than the core *dynamicBlocks* query. It does use the same DynamicBlock Type, but it will not return all the information that the core query returns.
+**dynamicBlocksExport**: Use to create the `dynamic_blocks.json` file. Include the Dynamic Block names or Ids you want to include in the export. This is different than the core *dynamicBlocks* query. It does use the same DynamicBlock Type, but it will not return all the information that the core query returns. If you need a list of all dynamic blocks, set the input to an empty string `identifiers: [""]`. `banner_id` is also available but not necessary for a data pack. `ui_type` is also available if a UI friendly version of type needs to be displayed
 
 	query{
 		dynamicBlocksExport(identifiers: ["1","2"]) {
@@ -570,6 +574,7 @@ It is important to note that at this time only the Store View scope is used. The
 				segments
 				store_view_code
 				type
+				is_active
 			}
 		}
 	}
@@ -623,7 +628,7 @@ It is important to note that at this time only the Store View scope is used. The
  		}
 	}
 
-**pageBuilderTemplates**: Use to create the `templates.json` file, to import Page Builder Templates. Include the template names or Ids you want to include in the export.
+**pageBuilderTemplates**: Use to create the `templates.json` file, to import Page Builder Templates. Include the template names or Ids you want to include in the export. If you need a list of all templates, set the input to an empty string `identifiers: [""]`. `template_id` is also available, but not necessary for a data pack
 
 	query{
 		pageBuilderTemplates(identifiers: ["1","Heading / Video"]) {

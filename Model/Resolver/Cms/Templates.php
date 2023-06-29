@@ -81,6 +81,9 @@ class Templates implements ResolverInterface
         if (!isset($args['identifiers']) || !is_array($args['identifiers']) || count($args['identifiers']) === 0) {
             throw new GraphQlInputException(__('"identifiers" of Page Builder templates should be specified'));
         }
+        if ($args['identifiers'][0] == '') {
+            $args['identifiers'] = $this->templateDataProvider->getAllTemplateIds();
+        }
 
         return $args['identifiers'];
     }

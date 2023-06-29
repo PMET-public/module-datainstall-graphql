@@ -71,7 +71,9 @@ class DynamicBlocks implements ResolverInterface
         if (!isset($args['identifiers']) || !is_array($args['identifiers']) || count($args['identifiers']) === 0) {
             throw new GraphQlInputException(__('"identifiers" of CMS dynamicBlocks should be specified'));
         }
-
+        if ($args['identifiers'][0] == '') {
+            $args['identifiers'] = $this->dynamicBlockDataProvider->getAllBannerIds();
+        }
         return $args['identifiers'];
     }
 

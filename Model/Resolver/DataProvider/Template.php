@@ -65,6 +65,22 @@ class Template
     }
 
     /**
+     * Get all template ids
+     *
+     * @return array
+     */
+    public function getAllTemplateIds(): array
+    {
+        $templateQuery = $this->templateCollection->create();
+        $templateResults = $templateQuery->getItems();
+        $templateIds = [];
+        foreach ($templateResults as $template) {
+             $templateIds[] = $template->getTemplateId();
+        }
+        return $templateIds;
+    }
+
+    /**
      * Fetch template data by field
      *
      * @param mixed $identifier
@@ -77,7 +93,7 @@ class Template
         $template = $this->templateCollection->create()
         ->addFieldToFilter($field, ['eq' => $identifier])->getFirstItem();
         
-        if (empty($template)) {
+        if ($template->getId() === null || empty($template->getId())) {
             throw new NoSuchEntityException(
                 __('The template with "%2" "%1" doesn\'t exist.', $identifier, $field)
             );
@@ -87,7 +103,8 @@ class Template
             'name' => $template->getName(),
             'created_for' => $template->getCreatedFor(),
             'preview_image' => str_replace('.template-manager/', '', $template->getPreviewImage()),
-            'content' => $this->converter->convertContent($template->getTemplate())
+            'content' => $this->converter->convertContent($template->getTemplate()),
+            'template_id' => $template->getTemplateId(),
         ];
     }
 }

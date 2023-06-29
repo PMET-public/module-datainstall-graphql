@@ -90,8 +90,13 @@ class Upsell
      */
     private function fetchUpsellData($identifier, string $field): array
     {
-        $ruleResults = $this->ruleCollection->create()->addFieldToFilter($field, [$identifier])->getItems();
-
+        $this->getAllRuleIds();
+        $ruleQuery = $this->ruleCollection->create();
+        if ($identifier != null) {
+            $ruleQuery->addFieldToFilter($field, [$identifier]);
+        }
+        $ruleResults = $ruleQuery->getItems();
+        
         if (empty($ruleResults)) {
             throw new NoSuchEntityException(
                 __('The related product rule with "%2" "%1" doesn\'t exist.', $identifier, $field)
@@ -113,7 +118,25 @@ class Upsell
             'apply_to' => $this->getApplyToText((int)$rule->getApplyTo()),
             'sort_order' => $rule->getSortOrder(),
             'customer_segments' => $this->getCustomerSegments($rule),
+            'is_active' => $rule->getIsActive(),
+            'rule_id' => $rule->getRuleId()
         ];
+    }
+
+    /**
+     * Get all rule ids
+     *
+     * @return array
+     */
+    public function getAllRuleIds(): array
+    {
+        $ruleQuery = $this->ruleCollection->create();
+        $ruleResults = $ruleQuery->getItems();
+        $ruleIds = [];
+        foreach ($ruleResults as $rule) {
+             $ruleIds[] = $rule->getRuleId();
+        }
+        return $ruleIds;
     }
 
     /**

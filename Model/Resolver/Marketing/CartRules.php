@@ -81,6 +81,9 @@ class CartRules implements ResolverInterface
         if (!isset($args['identifiers']) || !is_array($args['identifiers']) || count($args['identifiers']) === 0) {
             throw new GraphQlInputException(__('"identifiers" of Cart Rules should be specified'));
         }
+        if ($args['identifiers'][0] == '') {
+            $args['identifiers'] = $this->cartRuleDataProvider->getAllRuleIds();
+        }
         return $args['identifiers'];
     }
 

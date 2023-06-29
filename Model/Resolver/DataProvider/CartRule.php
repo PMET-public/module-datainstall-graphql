@@ -119,6 +119,7 @@ class CartRule
      */
     private function fetchRuleData($identifier, string $field): array
     {
+        
         $ruleResults = $this->ruleCollection->create()->addFieldToFilter($field, [$identifier])->getItems();
 
         if (empty($ruleResults)) {
@@ -153,9 +154,29 @@ class CartRule
             'times_used' => $rule->getTimesUsed(),
             'use_auto_generation' => $rule->getUseAutoGeneration(),
             'uses_per_coupon' => $rule->getUsesPerCoupon(),
-            'uses_per_customer' => $rule->getUsesPerCustomer()
+            'uses_per_customer' => $rule->getUsesPerCustomer(),
+            'rule_id' => $rule->getRuleId(),
+            'sort_order' => $rule->getSortOrder(),
+            'is_active' => $rule->getIsActive()
            ];
     }
+
+    /**
+     * Get all rule ids
+     *
+     * @return array
+     */
+    public function getAllRuleIds(): array
+    {
+        $ruleQuery = $this->ruleCollection->create();
+        $ruleResults = $ruleQuery->getItems();
+        $ruleIds = [];
+        foreach ($ruleResults as $rule) {
+             $ruleIds[] = $rule->getRuleId();
+        }
+        return $ruleIds;
+    }
+
     /**
      * Get website codes from ids
      *

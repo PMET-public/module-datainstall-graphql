@@ -9,14 +9,11 @@ namespace MagentoEse\DataInstallGraphQl\Model\Resolver\Category;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
 use MagentoEse\DataInstallGraphQl\Model\Authentication;
 
 class CustomDesign implements ResolverInterface
 {
-    /** @var ScopeConfigInterface */
-    private $scopeConfig;
 
     /** @var ThemeProviderInterface */
     private $themeProvider;
@@ -26,17 +23,14 @@ class CustomDesign implements ResolverInterface
     
     /**
      *
-     * @param ScopeConfigInterface $scopeConfig
      * @param ThemeProviderInterface $themeProvider
      * @param Authentication $authentication
      * @return void
      */
     public function __construct(
-        ScopeConfigInterface $scopeConfig,
         ThemeProviderInterface $themeProvider,
         Authentication $authentication
     ) {
-        $this->scopeConfig = $scopeConfig;
         $this->themeProvider = $themeProvider;
         $this->authentication = $authentication;
     }
