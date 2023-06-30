@@ -401,6 +401,8 @@ type Widget {
     page_for: String
     entities: String
     page_template: String
+    ui_type: String
+    widget_id: Int
 }
 
 type AdminRoles @doc(description: "Retrieves all requested Roles and settings") {

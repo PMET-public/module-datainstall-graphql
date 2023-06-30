@@ -81,7 +81,9 @@ class Widgets implements ResolverInterface
         if (!isset($args['identifiers']) || !is_array($args['identifiers']) || count($args['identifiers']) === 0) {
             throw new GraphQlInputException(__('"identifiers" of Widgets should be specified'));
         }
-
+        if ($args['identifiers'][0] == '') {
+            $args['identifiers'] = $this->widgetDataProvider->getAllWidgetIds();
+        }
         return $args['identifiers'];
     }
 

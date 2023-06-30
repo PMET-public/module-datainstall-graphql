@@ -145,7 +145,7 @@ class DynamicBlock
     }
 
     /**
-     * Get segment names
+     * Get banner types names
      *
      * @param array $savedTypes
      * @return string

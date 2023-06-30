@@ -15,6 +15,7 @@ use MagentoEse\DataInstallGraphQl\Model\Converter\Converter;
 use MagentoEse\DataInstallGraphQl\Model\Converter\DataTypes\ProductId;
 use MagentoEse\DataInstallGraphQl\Model\Converter\DataTypes\CategoryId;
 use MagentoEse\DataInstallGraphQl\Model\Converter\DataTypes\PageId;
+use Magento\Widget\Model\WidgetFactory;
 
 class Widget
 {
@@ -54,14 +55,20 @@ class Widget
     private $productId;
 
     /**
+     * @var WidgetFactory
+     */
+    private $widgetFactory;
+
+    /**
      *
-     * @param CollectionFactory $widgetCollection
+     * @param WidgetCollection $widgetCollection
      * @param WidgetInstance $widgetInstance
      * @param StoreRepositoryInterface $storeRepository
      * @param Converter $converter
      * @param PageId $pageId
      * @param CategoryId $categoryId
      * @param ProductId $productId
+     * @param WidgetFactory $widgetFactory
      * @return void
      */
     public function __construct(
@@ -71,7 +78,8 @@ class Widget
         Converter $converter,
         PageId $pageId,
         CategoryId $categoryId,
-        ProductId $productId
+        ProductId $productId,
+        WidgetFactory $widgetFactory
     ) {
         $this->widgetCollection = $widgetCollection;
         $this->widgetInstance = $widgetInstance;
@@ -80,10 +88,11 @@ class Widget
         $this->pageId = $pageId;
         $this->categoryId = $categoryId;
         $this->productId = $productId;
+        $this->widgetFactory = $widgetFactory;
     }
 
     /**
-     * Get upsell by name
+     * Get widget by name
      *
      * @param string $widgetName
      * @return array
@@ -97,7 +106,7 @@ class Widget
     }
 
     /**
-     * Get group data by id
+     * Get widget data by id
      *
      * @param int $widgetId
      * @return array
@@ -111,7 +120,7 @@ class Widget
     }
 
     /**
-     * Fetch upsell data by either id or field
+     * Fetch widget data by either id or field
      *
      * @param mixed $identifier
      * @param string $field
@@ -166,9 +175,47 @@ class Widget
             'block_reference' =>  $pageGroups['block_reference'],
             'page_for' =>  $pageGroups['page_for'],
             'entities' => $pageGroups['entities'],
-            'page_template' =>  $pageGroups['page_template']
+            'page_template' =>  $pageGroups['page_template'],
+            'ui_type' => $this->getUiWidgetType($widget->getType()),
+            'widget_id' => $widget->getId()
         ];
     }
+
+    /**
+     * Get widget types name
+     *
+     * @param array $savedType
+     * @return string
+     */
+    private function getUiWidgetType(string $savedType) :string
+    {
+        $types = [];
+        $widgetTypes = $this->widgetFactory->create()->getWidgetsArray();
+        //iterate over types defined for widget
+        foreach ($widgetTypes as $type) {
+            //if type matches, return
+            if ($savedType == $type['type']) {
+                return $type['name']->getText();
+            }
+        }
+    }
+
+    /**
+     * Get all widget ids
+     *
+     * @return array
+     */
+    public function getAllWidgetIds(): array
+    {
+        $widgetQuery = $this->widgetCollection->create();
+        $widgetResults = $widgetQuery->getItems();
+        $widgetIds = [];
+        foreach ($widgetResults as $widget) {
+             $widgetIds[] = $widget->getId();
+        }
+        return $widgetIds;
+    }
+
     /**
      * Get view codes from ids
      *

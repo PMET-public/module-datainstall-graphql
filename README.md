@@ -458,7 +458,7 @@ It is important to note that at this time only the Store View scope is used. The
 		}
 	}
 
-**widgets**: Use to create the `widgets.json` file to populate Widgets. Include the Ids or names you want to include in the export. 
+**widgets**: Use to create the `widgets.json` file to populate Widgets. Include the Ids or names you want to include in the export. If you need a list of all widgets, set the input to an empty string `identifiers: [""]`. `widget_id` is also available but not necessary for a data pack. `ui_type` is also available if a UI friendly version of type needs to be displayed
 
 	query{
 		widgets(identifiers: ["1","2","3"]) {
