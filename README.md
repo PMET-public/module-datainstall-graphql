@@ -191,6 +191,19 @@ It is important to note that at this time only the Store View scope is used. The
     	}
     }
 
+**cmsBlocksList**: Returns a list of all CMS Blocks. Not needed for a data pack, but used to drive a UI selection list. All data that is returned from `cmsBlocks` query can be returned
+
+    query{
+    	cmsBlocksList{
+    		items {
+    			store_view_code
+    			title
+    			identifier
+    			block_id
+    		}
+    	}
+    }
+
 **cmsPages**: Use to create the `pages.json` file. Include the page identifiers or Ids you want to include in the export. `content` will include the raw content, so any Page builder id substitutions will need to be done manually as outlined in the Data Installer documentation https://github.com/PMET-public/module-data-install#content-substitution
 
 	query{

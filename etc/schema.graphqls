@@ -24,6 +24,7 @@ type Query {
     cmsPages(
         identifiers: [String] @doc(description: "Identifiers or IDS of the CMS pages")
     ): CmsPages @resolver(class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Cms\\Pages") @doc(description: "Get CMS Pages from store.")
+    cmsBlocksList: CmsBlocks @resolver(class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Cms\\BlocksList") @doc(description: "Get CMS Pages from store.")
     msiSource(
         identifiers: [String] @doc(description: "Code of the Msi Source")
     ): MsiSources @resolver(class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Inventory\\MsiSource") @doc(description: "Get Msi Sources.")
@@ -120,6 +121,7 @@ interface CategoryInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model
 type CmsBlock {
     store_view_code: String @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Store\\StoreViewCode")
     block_content: String @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Cms\\BlockContent") @doc(description:"raw block content")
+    block_id: String @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Cms\\BlockId") @doc(description:"Returns given id")
 }
 
 type CmsPages @doc(description: "CMS pages information") {
