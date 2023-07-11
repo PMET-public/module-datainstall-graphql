@@ -204,7 +204,7 @@ It is important to note that at this time only the Store View scope is used. The
     	}
     }
 
-**cmsPages**: Use to create the `pages.json` file. Include the page identifiers or Ids you want to include in the export. `content` will include the raw content, so any Page builder id substitutions will need to be done manually as outlined in the Data Installer documentation https://github.com/PMET-public/module-data-install#content-substitution
+**cmsPages**: Use to create the `pages.json` file. Include the page identifiers or Ids you want to include in the export. `content` will include the raw content, so any Page builder id substitutions will need to be done manually as outlined in the Data Installer documentation https://github.com/PMET-public/module-data-install#content-substitution. If you need a list of all pages, set the input to an empty string `identifiers: [""]`. `page_id` is also available, but not necessary for a data pack
 
 	query{
   		cmsPages(identifiers: ["anais-clement-quiz-p4","anais-clement-quiz-p3"]){

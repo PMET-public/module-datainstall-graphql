@@ -7,6 +7,9 @@
 namespace MagentoEse\DataInstallGraphQl\Model\Resolver\Cms;
 
 use Magento\CmsGraphQl\Model\Resolver\DataProvider\Page as PageDataProvider;
+use Magento\Cms\Api\PageRepositoryInterface;
+use Magento\Cms\Api\Data\PageInterface;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
@@ -20,15 +23,26 @@ class Pages implements ResolverInterface
     /**  @var PageDataProvider */
     private $pageDataProvider;
 
+    /** @var PageRepositoryInterface */
+    private $pageRepository;
+
+    /** @var SearchCriteriaBuilder */
+    private $searchCriteriaBuilder;
+
     /**
      *
      * @param PageDataProvider $pageDataProvider
+     * @param PageRepositoryInterface $pageRepository
      * @return void
      */
     public function __construct(
-        PageDataProvider $pageDataProvider
+        PageDataProvider $pageDataProvider,
+        PageRepositoryInterface $pageRepository,
+        SearchCriteriaBuilder $searchCriteriaBuilder
     ) {
         $this->pageDataProvider = $pageDataProvider;
+        $this->pageRepository = $pageRepository;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
     }
 
     /**
@@ -42,8 +56,12 @@ class Pages implements ResolverInterface
         array $args = null
     ) {
         $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
-        $pageIdentifiers = $this->getPageIdentifiers($args);
-        $pagesData = $this->getPagesData($pageIdentifiers, $storeId);
+        if ($args['identifiers'][0] == '') {
+            $pagesData = $this->getAllPages($storeId);
+        } else{
+            $pageIdentifiers = $this->getPageIdentifiers($args);
+            $pagesData = $this->getPagesData($pageIdentifiers, $storeId);
+        }
 
         return [
             'items' => $pagesData,
@@ -89,6 +107,20 @@ class Pages implements ResolverInterface
             } catch (NoSuchEntityException $e) {
                 $pagesData[$pageIdentifier] = new GraphQlNoSuchEntityException(__($e->getMessage()), $e);
             }
+        }
+        return $pagesData;
+    }
+
+    private function getAllPages($storeId){
+        $pagesData = [];
+        $search = $this->searchCriteriaBuilder
+            //->addFilter(BlockInterface::BLOCK_ID, [0], 'in')
+            ->create();
+        $pageList = $this->pageRepository->getList($search)->getItems();
+        
+        foreach ($pageList as $page) {
+            $pagesData[$page->getId()] = $this->pageDataProvider
+            ->getDataByPageId((int)$page->getId(), $storeId);
         }
         return $pagesData;
     }

@@ -131,7 +131,10 @@ type CmsPages @doc(description: "CMS pages information") {
 type CmsPage {
     store_view_code: String @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Store\\StoreViewCode")
     page_content: String @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Cms\\PageContent") @doc(description:"raw page content")
+    page_id: Int @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Cms\\PageId") @doc(description:"Returns given id")
 }
+
+
 
 type CartRules @doc(description: "Retrieves all requested Cart Rules") {
     items: [CartRule] @doc(description: "An array containing the cart rules")
