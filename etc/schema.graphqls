@@ -81,6 +81,9 @@ type Query {
         categoryIds: String @doc(description: "Product Category Ids to extract images from. Comma separated list of category ids. Example: 1,2,3")
         cmsDir: String @doc(description: "Directory under media\\wysiwyg to extract images from. If left empty all wystwyg images will be extracted.")
     ): ImageZipFile @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Export\\ImageZipFile") @doc(description:"Get a zip file of images to include in a Data Pack")
+    attributeList(
+        entityType: [String] @doc(description: "catalog_product or customer")
+    ): AttributeList @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Attribute\\AttributeList") @doc(description:"List of attributes")
  }
 
 type Mutation {
@@ -105,6 +108,18 @@ type StoreConfiguration {
     scope: String
     scope_code: String
     value: String
+}
+
+type AttributeList @doc(description: "List of custom attributes that are set via the store admin"){
+    items: [AttributeListItem] 
+}
+
+type AttributeListItem {
+    attribute_code: String
+    default_label: String
+    scope: String
+    is_user_defined: String
+    is_core: Boolean
 }
 
 interface CategoryInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\CategoryInterfaceTypeResolver") {

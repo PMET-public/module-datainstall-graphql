@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2022 Adobe, Inc. All rights reserved.
+ * Copyright 2023 Adobe, Inc. All rights reserved.
  * See LICENSE for license details.
  */
 
@@ -8,7 +8,6 @@ namespace MagentoEse\DataInstallGraphQl\Model\Resolver\Cms;
 
 use Magento\CmsGraphQl\Model\Resolver\DataProvider\Page as PageDataProvider;
 use Magento\Cms\Api\PageRepositoryInterface;
-use Magento\Cms\Api\Data\PageInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Config\Element\Field;
@@ -33,6 +32,7 @@ class Pages implements ResolverInterface
      *
      * @param PageDataProvider $pageDataProvider
      * @param PageRepositoryInterface $pageRepository
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @return void
      */
     public function __construct(
@@ -58,7 +58,7 @@ class Pages implements ResolverInterface
         $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
         if ($args['identifiers'][0] == '') {
             $pagesData = $this->getAllPages($storeId);
-        } else{
+        } else {
             $pageIdentifiers = $this->getPageIdentifiers($args);
             $pagesData = $this->getPagesData($pageIdentifiers, $storeId);
         }
@@ -111,7 +111,14 @@ class Pages implements ResolverInterface
         return $pagesData;
     }
 
-    private function getAllPages($storeId){
+    /**
+     * Get all pages data
+     *
+     * @param int $storeId
+     * @return array
+     */
+    private function getAllPages($storeId)
+    {
         $pagesData = [];
         $search = $this->searchCriteriaBuilder
             //->addFilter(BlockInterface::BLOCK_ID, [0], 'in')

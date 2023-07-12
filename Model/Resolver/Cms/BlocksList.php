@@ -1,16 +1,13 @@
 <?php
 /**
- * Copyright 2022 Adobe, Inc. All rights reserved.
+ * Copyright 2023 Adobe, Inc. All rights reserved.
  * See LICENSE for license details.
  */
 
 namespace MagentoEse\DataInstallGraphQl\Model\Resolver\Cms;
 
-use Elasticsearch\Endpoints\Eql\Search;
 use Magento\Cms\Api\BlockRepositoryInterface;
-use Magento\Cms\Api\Data\BlockInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
@@ -19,7 +16,6 @@ use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use MagentoEse\DataInstallGraphQl\Model\Authentication;
-use function is_numeric;
 
 class BlocksList implements ResolverInterface
 {

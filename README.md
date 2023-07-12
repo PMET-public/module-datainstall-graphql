@@ -440,6 +440,21 @@ It is important to note that at this time only the Store View scope is used. The
 		}
 	}
 
+
+
+**attributeList**: Used to display user defined attributes for selection from a UI. The same query can be used across all attribute types, but only `customer` and `catalog_product` are currently supported by data installer. The `is_core` flag indicates attributes that are installed by the core code but are still classified as user defined and not system. It is likely that these attributes do not need to be exported unless they have been edited. This list will also return any attributes installed by extensions or sample data. For example the Luma sample data will include product attributes like `size`, `material` and `activity`. Unless those attributes have been edited or are used by the current data pack, it is likley they will not be need to be included.
+
+	query{
+		attributeList(entityType: "catalog_product") {
+			items {
+				attribute_code
+				default_label
+				scope
+				is_core
+			}
+		}
+	}
+
 **rewardsPointsExchangeRate**: Use to create the `reward_exchange_rate.json` file. Include the Ids you want to include in the export. 
 
 	query{
