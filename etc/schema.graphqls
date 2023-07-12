@@ -84,6 +84,7 @@ type Query {
     attributeList(
         entityType: [String] @doc(description: "catalog_product or customer")
     ): AttributeList @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Attribute\\AttributeList") @doc(description:"List of attributes")
+    storeList: StoreList @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Store\\StoreList") @doc(description:"List of stores and their group and website")
  }
 
 type Mutation {
@@ -120,6 +121,19 @@ type AttributeListItem {
     scope: String
     is_user_defined: String
     is_core: Boolean
+}
+
+type StoreList @doc(description: "List of stores and their group and website"){
+    items: [StoreListListItem] 
+}
+
+type StoreListListItem {
+    store_code: String
+    store_name: String
+    group_code: String
+    group_name: String
+    website_code: String
+    website_name: String
 }
 
 interface CategoryInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\CategoryInterfaceTypeResolver") {

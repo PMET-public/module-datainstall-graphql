@@ -16,7 +16,6 @@ use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Setup\Module\I18n\Context;
 use MagentoEse\DataInstallGraphQl\Model\Authentication;
 
 class AttributeList implements ResolverInterface
