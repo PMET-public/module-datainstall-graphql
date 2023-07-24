@@ -79,8 +79,13 @@ type Query {
     ): StoreConfigurations @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Store\\Configurations") @doc(description:"Store Admin Configuration Settings")
     imagesExtract(
         categoryIds: String @doc(description: "Product Category Ids to extract images from. Comma separated list of category ids. Example: 1,2,3")
-        cmsDir: String @doc(description: "Directory under media\\wysiwyg to extract images from. If left empty all wystwyg images will be extracted.")
+        blockIds: String @doc(description: "Comma separated list of block ids to extract images from. Example: 1,2,3")
+        dynamicBlockIds: String @doc(description: "Comma separated list of dynamic block ids to extract images from. Example: 1,2,3")
+        pageIds: String @doc(description: "Comma separated list of page ids to extract images from. Example: 1,2,3")
+        templateIds: String @doc(description: "Comma separated list of template ids to retrieve thumbnail images for admin UI. Example: 1,2,3")
+        cmsDir: String @doc(description: "Optional: Only include if you need to extract additional images not included in the existing blocks, pages, etc. Directory under media\\wysiwyg to extract images from. If left empty all wystwyg images will be extracted.")
     ): ImageZipFile @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Export\\ImageZipFile") @doc(description:"Get a zip file of images to include in a Data Pack")
+    
     attributeList(
         entityType: [String] @doc(description: "catalog_product or customer")
     ): AttributeList @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Attribute\\AttributeList") @doc(description:"List of attributes")
