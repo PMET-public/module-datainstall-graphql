@@ -67,6 +67,38 @@ class ProductId
     }
 
     /**
+     * Get required product ids
+     *
+     * @param string $content
+     * @param string $type
+     * @return array
+     */
+    public function getRequiredProductIds($content, $type)
+    {
+        $requiredData = [];
+        foreach ($this->regexToSearch as $search) {
+            preg_match_all($search['regex'], $content, $matchesProductId, PREG_SET_ORDER);
+            foreach ($matchesProductId as $match) {
+                $requiredProduct = [];
+                $idRequired = $match[1];
+                if ($idRequired) {
+                    //ids may be a list
+                    $productIds = explode(",", $idRequired);
+                    foreach ($productIds as $productId) {
+                        $product = $this->productRepository->getById($productId);
+                        $requiredProduct['name'] = $product->getName();
+                        $requiredProduct['id'] = $product->getId();
+                        $requiredProduct['type'] = $type;
+                        $requiredProduct['identifier'] = $product->getSku();
+                        $requiredData[] = $requiredProduct;
+                    }
+                }
+            }
+        }
+        return $requiredData;
+    }
+
+    /**
      * Get tag to replace product id
      *
      * @param int $productId

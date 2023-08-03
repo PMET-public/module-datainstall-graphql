@@ -7,6 +7,8 @@
 namespace MagentoEse\DataInstallGraphQl\Model\Converter\DataTypes;
 
 use Magento\Customer\Api\GroupRepositoryInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\LocalizedException;
 
 class CustomerGroup
 {
@@ -70,5 +72,39 @@ class CustomerGroup
             }
         }
         return $content;
+    }
+
+    /**
+     * Get required data
+     *
+     * @param mixed $content
+     * @param mixed $type
+     * @return array
+     * @throws NoSuchEntityException
+     * @throws LocalizedException
+     */
+    public function getRequiredCustomerGroups($content, $type)
+    {
+        $requiredData = [];
+        foreach ($this->regexToSearch as $search) {
+            preg_match_all($search['regex'], $content, $matchesGroupId, PREG_SET_ORDER);
+            foreach ($matchesGroupId as $match) {
+                $requiredBanner = [];
+                $idRequired = $match[1];
+                if ($idRequired) {
+                    //ids may be a list
+                    $groupIds = explode(",", $idRequired);
+                    foreach ($groupIds as $groupId) {
+                        $group = $this->groupRepository->getById($groupId);
+                        $requiredGroup['name'] = $group->getCode();
+                        $requiredGroup['id'] = $group->getId();
+                        $requiredGroup['type'] = $type;
+                        $requiredGroup['identifier'] = '';
+                        $requiredData[] = $requiredGroup;
+                    }
+                }
+            }
+        }
+        return $requiredData;
     }
 }

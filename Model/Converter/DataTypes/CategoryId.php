@@ -87,6 +87,37 @@ class CategoryId
     }
 
     /**
+     * Replace category ids with tokens
+     *
+     * @param string $content
+     * @param string $type
+     * @return array
+     */
+    public function getRequiredCategoryIds($content, $type)
+    {
+        $requiredData = [];
+        foreach ($this->regexToSearch as $search) {
+            preg_match_all($search['regex'], $content, $matchesCategoryId, PREG_SET_ORDER);
+            foreach ($matchesCategoryId as $match) {
+                $requiredCategory = [];
+                $idRequired = $match[1];
+                if ($idRequired) {
+                    //ids may be a list
+                    $categoryIds = explode(",", $idRequired);
+                    foreach ($categoryIds as $categoryId) {
+                        $category = $this->categoryRepository->get($categoryId);
+                        $requiredCategory['name'] = $category->getName();
+                        $requiredCategory['id'] = $category->getId();
+                        $requiredCategory['type'] = $type;
+                        $requiredData[] = $requiredCategory;
+                    }
+                }
+            }
+        }
+        return $requiredData;
+    }
+
+    /**
      * Get tag to replace category id
      *
      * @param int $categoryId

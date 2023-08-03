@@ -7,6 +7,7 @@
 namespace MagentoEse\DataInstallGraphQl\Model\Converter\DataTypes;
 
 use Magento\Eav\Api\AttributeSetRepositoryInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 class ProductAttributeSet
 {
@@ -73,5 +74,36 @@ class ProductAttributeSet
             }
         }
         return $content;
+    }
+
+    /**
+     * Get required attribute sets
+     *
+     * @param mixed $content
+     * @param mixed $type
+     * @return array
+     * @throws NoSuchEntityException
+     */
+    public function getRequiredProductAttributeSets($content, $type)
+    {
+        $requiredData = [];
+        foreach ($this->regexToSearch as $search) {
+            preg_match_all($search['regex'], $content, $matchesSetId, PREG_SET_ORDER);
+            foreach ($matchesSetId as $match) {
+                $requiredSet = [];
+                $idRequired = $match[1];
+                if ($idRequired) {
+                    //ids may be a list
+                    $setIds = explode(",", $idRequired);
+                    foreach ($setIds as $setId) {
+                        $set = $this->attributeSetRepository->get($setId);
+                        $requiredSet['name'] = $set->getAttributeSetName();
+                        $requiredSet['type'] = $type;
+                        $requiredData[] = $requiredSet;
+                    }
+                }
+            }
+        }
+        return $requiredData;
     }
 }

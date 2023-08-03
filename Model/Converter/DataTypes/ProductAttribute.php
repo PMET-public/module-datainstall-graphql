@@ -7,6 +7,8 @@
 namespace MagentoEse\DataInstallGraphQl\Model\Converter\DataTypes;
 
 use Magento\Eav\Api\AttributeOptionManagementInterface;
+use Magento\Framework\Exception\StateException;
+use Magento\Framework\Exception\InputException;
 
 class ProductAttribute
 {
@@ -189,6 +191,44 @@ class ProductAttribute
         }
         return $content;
     }
+
+    /**
+     * Get required product attribute options
+     * 
+     * @param string $content
+     * @param string $type
+     * @return array
+     */
+    public function getRequiredAttributeOptions($content,$type){
+        $requiredData = [];
+        foreach ($this->regexToSearch as $search) {
+            preg_match_all($search['regex'], $content, $matchesOptions, PREG_SET_ORDER);
+            foreach ($matchesOptions as $match) {
+                $requiredOption = [];
+                $attributeCode = $match[1];
+                $idRequired = $match[2];
+                $attributeOptions = $this->attributeOptionManagement->getItems(4, $attributeCode);
+                if ($idRequired) {
+                    //may be list of ids
+                    $optionIds = explode(",", str_replace('"', '', str_replace('`', '', $idRequired)));
+                    foreach ($optionIds as $optionId) {
+                        foreach ($attributeOptions as $attributeOption) {
+                            if ($attributeOption->getvalue()==$optionId) {
+                                $requiredOption['name'] = 'Attribute Code='.$attributeCode.'/Attribute Value='.$attributeOption->getLabel();
+                                //$requiredOption['id'] = $attributeOption->getValue();
+                                $requiredOption['type'] = $type;
+                                $requiredOption['identifier'] = $attributeOption->getLabel();
+                                $requiredData[] = $requiredOption;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return $requiredData;
+    }
+
      /**
       * @param string $search
       * @param string $replace

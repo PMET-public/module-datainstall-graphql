@@ -72,6 +72,41 @@ class DynamicBlock
         }
         return $content;
     }
+
+    /**
+     * Get required dynamic blocks
+     *
+     * @param string $content
+     * @param string $type
+     * @return array
+     */
+    public function getRequiredDynamicBlocks($content, $type): array
+    {
+        $requiredData = [];
+        foreach ($this->regexToSearch as $search) {
+            preg_match_all($search['regex'], $content, $matchesBannerId, PREG_SET_ORDER);
+            foreach ($matchesBannerId as $match) {
+                $requiredBanner = [];
+                $idRequired = $match[1];
+                if ($idRequired) {
+                    //id may be a list
+                    $bannerIds = explode(",", $idRequired);
+
+                    foreach ($bannerIds as $bannerId) {
+                        $bannerResults = $this->bannerCollection->create()
+                        ->addFieldToFilter('banner_id', [$bannerId])->getItems();
+                        $banner = current($bannerResults);
+                        $requiredBanner['name'] = $banner->getName();
+                        $requiredBanner['id'] = $banner->getId();
+                        $requiredBanner['type'] = $type;
+                        $requiredBanner['identifier'] = $banner->getIdentifier();
+                        $requiredData[] = $requiredBanner;
+                    }
+                }
+            }
+        }
+        return $requiredData;
+    }
     /**
      * StrLreplace
      *

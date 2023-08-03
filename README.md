@@ -617,7 +617,7 @@ It is important to note that at this time only the Store View scope is used. The
 				segments
 				store_view_code
 				type
-				is_active
+				is_enabled
 			}
 		}
 	}
@@ -684,7 +684,7 @@ It is important to note that at this time only the Store View scope is used. The
 		}
 	}
 
-**imagesExtract**: creates a downloadabe, Data Installer compatible .zip archive of all images contained in the given elements. `categoryIds` is the list of categories containing the products to retrieve media from (likely the identical list from the  `productExport` query). `cmsDir`` is optional: Value is single directory under media\\wysiwyg to extract images from. Only include if you need to extract additional images not included in the existing blocks, pages, etc. If left empty all wysiwyg images will be extracted.
+**imagesExtract**: creates a downloadable, Data Installer compatible .zip archive of all images contained in the given elements. `categoryIds` is the list of categories containing the products to retrieve media from (likely the identical list from the  `productExport` query). `cmsDir`` is optional: Value is single directory under media\\wysiwyg to extract images from. Only include if you need to extract additional images not included in the existing blocks, pages, etc. If left empty all wysiwyg images will be extracted.
 
 	query{
 		imagesExtract(
