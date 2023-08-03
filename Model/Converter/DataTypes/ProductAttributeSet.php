@@ -97,9 +97,12 @@ class ProductAttributeSet
                     $setIds = explode(",", $idRequired);
                     foreach ($setIds as $setId) {
                         $set = $this->attributeSetRepository->get($setId);
-                        $requiredSet['name'] = $set->getAttributeSetName();
-                        $requiredSet['type'] = $type;
-                        $requiredData[] = $requiredSet;
+                        //dont include the default set
+                        if ($set->getAttributeSetName()!='Default') {
+                            $requiredSet['name'] = $set->getAttributeSetName();
+                            $requiredSet['type'] = $type;
+                            $requiredData[] = $requiredSet;
+                        }
                     }
                 }
             }

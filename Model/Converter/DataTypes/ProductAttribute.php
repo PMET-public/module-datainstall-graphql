@@ -12,6 +12,7 @@ use Magento\Framework\Exception\InputException;
 
 class ProductAttribute
 {
+   
     /** @var string */
     protected $tokenStart = '{{productattribute code="';
     
