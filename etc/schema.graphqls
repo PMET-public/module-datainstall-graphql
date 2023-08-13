@@ -90,6 +90,9 @@ type Query {
         entityType: [String] @doc(description: "catalog_product or customer")
     ): AttributeList @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Attribute\\AttributeList") @doc(description:"List of attributes")
     storeList: StoreList @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Store\\StoreList") @doc(description:"List of stores and their group and website")
+    negotiableQuotesExport(
+        identifiers: [String] @doc(description: "IDS of the Negotiable Quotes")
+    ): NegotiableQuotesExportOutput @resolver(class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Sales\\NegotiableQuotes") @doc(description: "Get List of Negotiable Quotes.")
  }
 
 type Mutation {
@@ -560,4 +563,96 @@ type Export {
 
 interface ProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\ProductInterfaceTypeResolverComposite"){
     store_view_code: String @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Store\\StoreViewCode")
+}
+
+type NegotiableQuotesExportOutput @doc(description: "Contains a list of negotiable quotes that match the specified ids.") {
+    items: [NegotiableQuoteExport]! @doc(description: "A list of negotiable quotes")
+}
+
+type NegotiableQuoteExport {
+    store_view_code: String @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Store\\StoreViewCode")
+    site_code: String @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Store\\SiteCode")
+    product: [NegotiableQuoteItem] @doc(description: "The list of items in the negotiable quote.")
+    expiration_period: String @doc(description: "Specifies Negotiated expiration period")
+    creator_type_id: String @doc(description: "Specifies creator type  period")
+    creator: String @doc(description: "Specifies creator period")
+    currency: String @doc(description: "Specifies currency ")
+    negotiated_price_type: String @doc(description: "Specifies Negotiation type  for Cart Item")
+    negotiated_price_value: String @doc(description: "Specifies Negotiated Price for Cart Item")
+    proposed_shipping_amount: Float @doc(description: "Specifies proposed shipping Price for Negotiated Cart")
+    snapshot: String @doc(description: "Specifies Negotiated Snapshot")
+    uid: ID! @doc(description: "The unique ID of a `NegotiableQuote` object.")
+    name: String! @doc(description: "The title assigned to the negotiable quote.")
+    comments: [NegotiableQuoteComment!] @doc(description: "A list of comments made by the buyer and seller.")
+    history: [NegotiableQuoteHistoryEntry!] @doc(description: "A list of status and price changes for the negotiable quote.")
+    shipping_addresses: [NegotiableQuoteShippingAddressExport] @doc(description: "A list of shipping addresses applied to the negotiable quote.")
+    billing_address: NegotiableQuoteBillingAddress @resolver(class: "\\Magento\\NegotiableQuoteGraphQl\\Model\\Resolver\\BillingAddress") @doc(description: "The billing address applied to the negotiable quote.")
+    email: String @resolver @doc(description: "The email address of the company user.")
+    selected_payment_method: SelectedPaymentMethod @doc(description: "The payment method that was applied to the negotiable quote.")
+    status: String! @doc(description: "The status of the negotiable quote.")
+    total_quantity: Float! @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartTotalQuantity") @doc(description: "The total number of items in the negotiable quote.")
+    created_at: String @doc(description: "Timestamp indicating when the negotiable quote was created.")
+    updated_at: String @doc(description: "Timestamp indicating when the negotiable quote was updated.")
+}
+
+type NegotiableQuoteItem @doc(description: "An implementation for negotiable quote product cart items.") {
+    sku: String
+    parent_sku: String
+    qty: String @doc(description: "The quantity of this item in the cart.")
+    type: String @doc(description: "Get product type.")
+    super_attribute: String @doc(description: "Get product options.")
+    negotiated_price_type: String @doc(description: "Specifies Negotiation type  for Cart Item")
+    negotiated_price_value: String @doc(description: "Specifies Negotiated Price for Cart Item")
+    note: [ItemNote] @doc(description: "The seller's quote line item note.")
+}
+
+type ItemNote @doc(description: "The note object for quote line item.") {
+    creator: String @doc(description: "creator who submitted a note.")
+    creator_type_id: String
+}
+
+type SelectedPaymentMethod {
+    additional_data: String @doc(description: "The additional data.")
+    po_number: String @doc(description: "PO number.")
+}
+
+type NegotiableQuoteComment {
+    creator: String
+    creator_type_id: String
+    is_decline: String
+    is_draft: String
+    files: [NegotiableQuoteCommentAttachments]
+}
+
+type NegotiableQuoteCommentAttachments @doc(description: "Attachments with comment") {
+    file_name: String
+    file_path: String
+    file_type: String
+}
+
+type NegotiableQuoteHistoryEntry {
+    is_seller: Boolean
+    creator: String
+    log_data: String
+    snapshot_data: String
+    status: String
+    is_draft: String
+}
+
+type NegotiableQuoteShippingAddressExport {
+    firstname: String @doc(description: "The first name of the company user.")
+    lastname: String @doc(description: "The last name of the company user.")
+    city: String @doc(description: "The company's city or town.")
+    postcode: String @doc(description: "The company's ZIP or postal code.")
+    telephone: String @doc(description: "The customer's telephone number.")
+    country: NegotiableQuoteAddressCountry @doc(description: "The company's country.")
+    region: NegotiableQuoteAddressRegion @doc(description: "An object containing the region name, region code, and region ID.")
+    company: String @doc(description: "The company name associated with the shipping/billing address.")
+    street: [String] @doc(description: "An array of strings that define the street number and name.")
+    shipping_method: String @doc(description: "Get shipping method")
+    shipping_amount: Money @doc(description: "Get shipping amount")
+}
+
+interface NegotiableQuoteAddressInterface {
+    telephone: String @doc(description: "get telephone of address")
 }
