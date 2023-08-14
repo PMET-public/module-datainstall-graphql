@@ -247,6 +247,7 @@ type CatalogRule {
     dynamic_blocks: String
     is_active: Int
     rule_id: Int
+    requires: [RequiredData] @doc(description: "A list of required data for the page") @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Marketing\\CatalogRuleRequiredData")
 }
 
 type CustomerGroups @doc(description: "Retrieves all requested Customer Groups") {
