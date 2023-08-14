@@ -99,7 +99,6 @@ class CustomerGroup
                         $requiredGroup['name'] = $group->getCode();
                         $requiredGroup['id'] = $group->getId();
                         $requiredGroup['type'] = $type;
-                        $requiredGroup['identifier'] = '';
                         $requiredData[] = $requiredGroup;
                     }
                 }

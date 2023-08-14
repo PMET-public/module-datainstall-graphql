@@ -209,7 +209,7 @@ type CartRule {
     rule_id: Int
     sort_order: Int
     is_active: Int
-    requires: [RequiredData] @doc(description: "A list of required data for the page") @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Marketing\\CartRuleRequiredData")
+    requires: [RequiredData] @doc(description: "A list of required data for the rule") @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Marketing\\CartRuleRequiredData")
 }
 
 type ApprovalRules @doc(description: "Retrieves all requested B2B Approval Rules") {
@@ -247,7 +247,7 @@ type CatalogRule {
     dynamic_blocks: String
     is_active: Int
     rule_id: Int
-    requires: [RequiredData] @doc(description: "A list of required data for the page") @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Marketing\\CatalogRuleRequiredData")
+    requires: [RequiredData] @doc(description: "A list of required data for the rule") @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Marketing\\CatalogRuleRequiredData")
 }
 
 type CustomerGroups @doc(description: "Retrieves all requested Customer Groups") {
@@ -271,7 +271,7 @@ type CustomerSegment {
     conditions_serialized: String
     apply_to: String @doc(description: "2= Apply to Visitors, 1= Apply to Registered Users, 0= Both Visitors and Registered")
     is_active: Int
-    requires: [RequiredData] @doc(description: "A list of required data for the page") @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Customer\\CustomerSegmentRequiredData")
+    requires: [RequiredData] @doc(description: "A list of required data for the segment") @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Customer\\CustomerSegmentRequiredData")
 }
 
 type PageBuilderTemplate {
@@ -280,6 +280,7 @@ type PageBuilderTemplate {
     preview_image: String
     content: String
     template_id: Int
+    requires: [RequiredData] @doc(description: "A list of required data for the template") @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Cms\\TemplateRequiredData")
 }
 
 type PageBuilderTemplates @doc(description: "Retrieves all requested Page Builder templates") {
@@ -497,7 +498,7 @@ type DynamicBlock {
     banner_id: Int
     is_enabled: Int
     ui_type: String
-    requires: [RequiredData] @doc(description: "A list of required data for the page") @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Cms\\DynamicBlockRequiredData")
+    requires: [RequiredData] @doc(description: "A list of required data for the block") @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Cms\\DynamicBlockRequiredData")
 }
 
 type Companies @doc(description: "List of Companies") {

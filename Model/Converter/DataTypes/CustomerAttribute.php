@@ -97,7 +97,7 @@ class CustomerAttribute
     }
 
     public function getRequiredAttributeOptions($content,$type){
-        $requiredOptions = [];
+        $requiredData = [];
         foreach ($this->regexToSearch as $search) {
             preg_match_all($search['regex'], $content, $matchesOptions, PREG_SET_ORDER);
             foreach ($matchesOptions as $match) {
