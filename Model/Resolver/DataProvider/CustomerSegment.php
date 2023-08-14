@@ -98,7 +98,9 @@ class CustomerSegment
             'site_code' => $this->getWebsiteCodes($segment->getWebsiteIds()),
             'description' => $segment->getDescription(),
             'apply_to' => $segment->getApplyTo(),
-            'conditions_serialized' => $this->converter->convertContent($segment->getConditionsSerialized())
+            'conditions_serialized' => $this->converter->convertContent($segment->getConditionsSerialized()),
+            'segment_id' => $segment->getSegmentId(),
+            'is_active' => $segment->getIsActive()
         ];
     }
     /**

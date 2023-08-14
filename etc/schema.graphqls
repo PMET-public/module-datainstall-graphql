@@ -264,11 +264,14 @@ type CustomerSegments @doc(description: "Retrieves all requested Customer Segmen
 }
 
 type CustomerSegment {
+    segment_id: Int
     site_code: String
     name: String
     description: String
     conditions_serialized: String
     apply_to: String @doc(description: "2= Apply to Visitors, 1= Apply to Registered Users, 0= Both Visitors and Registered")
+    is_active: Int
+    requires: [RequiredData] @doc(description: "A list of required data for the page") @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Customer\\CustomerSegmentRequiredData")
 }
 
 type PageBuilderTemplate {

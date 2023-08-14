@@ -158,7 +158,10 @@ class RequiredData implements RequiredDataInterface
             $this->productAttribute->getRequiredAttributeOptions($content, self::PRODUCT_ATTRIBUTES)
         );
 
-        // $requiredData = $this->customerAttribute->replaceAttributeOptionIds($content);
+        $requiredData = array_merge(
+            $requiredData,
+            $this->customerAttribute->getRequiredAttributeOptions($content, self::CUSTOMER_ATTRIBUTES)
+        );
         return $requiredData;
     }
 }

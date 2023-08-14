@@ -95,6 +95,38 @@ class CustomerAttribute
         }
         return $content;
     }
+
+    public function getRequiredAttributeOptions($content,$type){
+        $requiredOptions = [];
+        foreach ($this->regexToSearch as $search) {
+            preg_match_all($search['regex'], $content, $matchesOptions, PREG_SET_ORDER);
+            foreach ($matchesOptions as $match) {
+                $attributeCode = $match[1];
+                $idToReplace = $match[2];
+                $attributeOptions = $this->attributeOptionManagement->getItems(1, $attributeCode);
+                if ($idToReplace) {
+                    //may be list of ids
+                    $optionIds = explode(",", str_replace('"', '', $idToReplace));
+                    foreach ($optionIds as $optionId) {
+                        foreach ($attributeOptions as $attributeOption) {
+                            if ($attributeOption->getvalue()==$optionId) {
+                                if ($attributeOption->getvalue()==$optionId) {
+                                    $requiredOption['name'] = 'Attribute Code='.$attributeCode.'/Attribute Value='.$attributeOption->getLabel();
+                                    //$requiredOption['id'] = $attributeOption->getValue();
+                                    $requiredOption['type'] = $type;
+                                    $requiredOption['identifier'] = $attributeOption->getLabel();
+                                    $requiredData[] = $requiredOption;
+                                    break;
+                                }
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return $requiredData;
+    }
      /**
       * Strl function
       *
