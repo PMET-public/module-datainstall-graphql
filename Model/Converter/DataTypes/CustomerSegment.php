@@ -27,7 +27,9 @@ class CustomerSegment
         ['regex'=>'/{"type":"Magento\\\\\\\\CustomerSegment\\\\\\\\Model\\\\\\\\Segment\\\\\\\\Condition\\\\\\\\Segment","attribute":false,"operator":"\(\)","value":"([0-9,]+)"/',
         'substring'=> 'Segment","attribute":false,"operator":"","value":"'],
         ['regex'=>'/{"type":"Magento\\\\\\\\CustomerSegment\\\\\\\\Model\\\\\\\\Segment\\\\\\\\Condition\\\\\\\\Segment","attribute":false,"operator":"!\(\)","value":"([0-9,]+)"/',
-        'substring'=> 'Segment","attribute":false,"operator":"","value":"']
+        'substring'=> 'Segment","attribute":false,"operator":"","value":"'],
+        ['regex'=>'/"segment_id=([0-9,]+)"/',
+        'substring'=> '"segment_id=']
     ];
     /** @var SegmentCollection */
     protected $segmentCollection;

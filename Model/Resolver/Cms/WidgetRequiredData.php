@@ -109,7 +109,6 @@ class WidgetRequiredData implements ResolverInterface
       *
       * @param string $categoryIds
       * @return string
-      * @throws NoSuchEntityException
       */
     private function getCategoryIdTags($categoryIds)
     {
@@ -126,7 +125,6 @@ class WidgetRequiredData implements ResolverInterface
      *
      * @param string $productIds
      * @return string
-     * @throws NoSuchEntityException
      */
     private function getProductIdTags($productIds)
     {
@@ -143,7 +141,6 @@ class WidgetRequiredData implements ResolverInterface
      *
      * @param string $pageIds
      * @return string
-     * @throws NoSuchEntityException
      */
     private function getPageIdTags($pageIds)
     {
