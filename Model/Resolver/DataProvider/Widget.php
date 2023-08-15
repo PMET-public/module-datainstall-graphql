@@ -141,11 +141,12 @@ class Widget
         $widgetId = $widget->getId();
         //loading to get plugin to fire to populate page_groups data
         $widget = $this->widgetInstance->load($widgetId);
+        //Only supporting single layout type per widget
         $pageGroups = $widget->getDataByKey('page_groups')[0];
 
         if (empty($widget)) {
             throw new NoSuchEntityException(
-                __('The realated product rule with "%2" "%1" doesn\'t exist.', $identifier, $field)
+                __('The widget with "%2" "%1" doesn\'t exist.', $identifier, $field)
             );
         }
 

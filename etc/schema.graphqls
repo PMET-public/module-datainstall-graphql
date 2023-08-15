@@ -436,7 +436,6 @@ type Upsell {
     is_active: Int
     rule_id: Int
     requires: [RequiredData] @doc(description: "A list of required data for the upsell") @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Marketing\\UpsellRequiredData")
-
 }
 
 type Widgets @doc(description: "Retrieves all requested Widgets") {
@@ -458,6 +457,8 @@ type Widget {
     page_template: String
     ui_type: String
     widget_id: Int
+    requires: [RequiredData] @doc(description: "A list of required data for the widget") @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Cms\\WidgetRequiredData")
+
 }
 
 type AdminRoles @doc(description: "Retrieves all requested Roles and settings") {
