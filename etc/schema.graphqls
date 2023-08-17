@@ -147,9 +147,11 @@ interface CategoryInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model
     store_view_code: String @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Store\\StoreViewCode")
     name_path: String @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Category\\NamePath") @doc(description:"path by name excluding root, parent and self")
     category_name: String @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Category\\CategoryName") @doc(description:"name with path delimiter escaped")
+    description_import_content: String @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Category\\DescriptionImportContent") @doc(description:"description content tokenized for import by Data Installer")
     page_layout: String
     custom_design: String
     is_active: Boolean
+    requires: [RequiredData] @doc(description: "A list of content in the description and block assigned to the category") @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Category\\CategoryRequiredData")
 }
 
 type CmsBlock {

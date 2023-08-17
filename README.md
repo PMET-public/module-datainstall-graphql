@@ -98,7 +98,25 @@ Details on query arguments and types are available in the online GraphQL docs.
 ## Exporting Data
 
 These queries are written to return data in a format that can be saved as a file to be used by the Data Installer. There is a combination of extensions to native queries along with some that are custom. 
-Magento GraphQL uses the store scope, so the queries are limited to the store scope as defined in the request header. Another limitation is the query will only return Active items.  You will not be able to export any Pages, Blocks, etc. that are set as Inactive
+Magento GraphQL uses the store scope, so the queries are limited to the store scope as defined in the request header. Another limitation is that some queries will only return Active items.  You will not be able to export any Pages, Blocks, Categories, etc. that are set as Inactive
+
+Some queries will have a `requires` node. This is to provide information about what other data elements may be needed by the data you are retrieving.  It will return the type (block,customer_segment,product, etc.) along with name, id and indetifier if appropriate. For example, if you are retrieving a page that contains one or more blocks, the query will return those details so you can include them in your blocks query.
+Example:
+
+	"requires": [
+	{
+		"id": 2,
+		"identifier": test-block-2,
+		"name": "test2",
+		"type": "block"
+	},
+	{
+		"id": 3,
+		"identifier": "product-block",
+		"name": "Product Block",
+		"type": "block"
+	}
+	]
 
 **storeConfig**: Use to create the `stores.json` file. The value of `fallback_theme` will be the same as `theme`, so it will have to be changed if needed.
 
@@ -181,7 +199,8 @@ It is important to note that at this time only the Store View scope is used. The
     		position
     		landing_page_id:landing_page
     		landing_page:landing_page_identifier
-    		description
+    		description_org:description
+			description:description_import_content
     		display_mode
     		meta_description
     		meta_keywords
@@ -189,11 +208,17 @@ It is important to note that at this time only the Store View scope is used. The
     		page_layout
     		custom_design_id:custom_design
     		custom_design:custom_design_theme
+			requires{
+				id
+				identifier
+				name
+				type
+				}
     		}
     	}
     }
 
-**cmsBlocks**: Use to create the `blocks.json` file. Include the block identifiers or Ids you want to include in the export. `content` will include the raw content, so any Page builder id substitutions will need to be done manually as outlined in the Data Installer documentation https://github.com/PMET-public/module-data-install#content-substitution
+**cmsBlocks**: Use to create the `blocks.json` file. Include the block identifiers or Ids you want to include in the export.
 
     query{
     	cmsBlocks(identifiers: ["ac_locations","ac_offers"]) {
@@ -202,6 +227,12 @@ It is important to note that at this time only the Store View scope is used. The
     			title
     			identifier
     			content:block_content
+				requires{
+					id
+					identifier
+					name
+					type
+				}
     		}
     	}
     }
@@ -233,6 +264,12 @@ It is important to note that at this time only the Store View scope is used. The
       				meta_description
       				meta_keywords
       				meta_title
+					requires{
+						id
+						identifier
+						name
+						type
+					}
     			}
   		}
 	}
@@ -274,6 +311,12 @@ It is important to note that at this time only the Store View scope is used. The
       				conditions_serialized
       				description
       				site_code
+					requires{
+						id
+						identifier
+						name
+						type
+					}
     			}
   		}
 	}
@@ -308,6 +351,12 @@ It is important to note that at this time only the Store View scope is used. The
 				uses_per_customer
 				sort_by
 				is_active
+				requires{
+					id
+					identifier
+					name
+					type
+				}
 			}
 		}
 	}
@@ -497,6 +546,12 @@ It is important to note that at this time only the Store View scope is used. The
 				sort_order
 				positions_limit
 				is_active
+				requires{
+					id
+					identifier
+					name
+					type
+				}
 			}
 		}
 	}
@@ -518,6 +573,12 @@ It is important to note that at this time only the Store View scope is used. The
 				theme
 				title
 				widget_parameters
+				requires{
+					id
+					identifier
+					name
+					type
+				}
 			}
 		}
 	}
@@ -540,6 +601,12 @@ It is important to note that at this time only the Store View scope is used. The
 				sort_order
 				stop_rules_processing
 				is_active
+				requires{
+					id
+					identifier
+					name
+					type
+				}
 			}
 		}
 	}
@@ -618,6 +685,12 @@ It is important to note that at this time only the Store View scope is used. The
 				store_view_code
 				type
 				is_enabled
+				requires{
+					id
+					identifier
+					name
+					type
+				}
 			}
 		}
 	}
@@ -680,6 +753,12 @@ It is important to note that at this time only the Store View scope is used. The
 				created_for
 				name
 				preview_image
+				requires{
+					id
+					identifier
+					name
+					type
+				}
 			}
 		}
 	}
@@ -741,7 +820,6 @@ Include the company names or Ids you want to include in the export.
 					}
 				}
 				shared_catalog{
-					store_code
 					name
 					description
 					type
