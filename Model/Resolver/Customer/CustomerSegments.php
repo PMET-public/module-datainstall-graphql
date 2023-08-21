@@ -77,6 +77,9 @@ class CustomerSegments implements ResolverInterface
         if (!isset($args['identifiers']) || !is_array($args['identifiers']) || count($args['identifiers']) === 0) {
             throw new GraphQlInputException(__('"identifiers" of Customer Segments should be specified'));
         }
+        if ($args['identifiers'][0] == '') {
+            $args['identifiers'] = $this->customerSegmentDataProvider->getAllSegmentIds();
+        }
 
         return $args['identifiers'];
     }

@@ -301,7 +301,7 @@ It is important to note that at this time only the Store View scope is used. The
   		}
 	}
 
-**customerSegments**: Use to create the `customer_segments.json` file. Include the segment names or Ids you want to include in the export. 
+**customerSegments**: Use to create the `customer_segments.json` file. Include the segment names or Ids you want to include in the export. If you need a list of all segments, set the input to an empty string `identifiers: [""]`. `segment_id` is also available, but not necessary for a data pack
 
 	query{
   		customerSegments(identifiers: ["1","2","3","4"]){

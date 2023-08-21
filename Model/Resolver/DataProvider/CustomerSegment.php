@@ -100,8 +100,25 @@ class CustomerSegment
             'apply_to' => $segment->getApplyTo(),
             'conditions_serialized' => $this->converter->convertContent($segment->getConditionsSerialized()),
             'segment_id' => $segment->getSegmentId(),
-            'is_active' => $segment->getIsActive()
+            'is_active' => $segment->getIsActive(),
+            'segment_id' => $segment->getSegmentId()
         ];
+    }
+
+    /**
+     * Get all rule ids
+     *
+     * @return array
+     */
+    public function getAllSegmentIds(): array
+    {
+        $segmentQuery = $this->segmentCollection->create();
+        $segmenteResults = $segmentQuery->getItems();
+        $segmentIds = [];
+        foreach ($segmenteResults as $segment) {
+             $segmentIds[] = $segment->getSegmentId();
+        }
+        return $segmentIds;
     }
     /**
      * Get website codes by ids

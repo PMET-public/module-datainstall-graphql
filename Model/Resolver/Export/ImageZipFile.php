@@ -480,16 +480,16 @@ class ImageZipFile implements ResolverInterface
     private function copyFiles(array $files, string $sourcePath, string $destinationPath) : void
     {
         foreach ($files as $file) {
-            if($file == null) {
+            if ($file == null) {
                 continue;
             }
             $fileInfo = $this->fileIo->getPathInfo($file);
             $path = $fileInfo["dirname"];
             $fileName = $fileInfo["basename"];
             $this->makeDirectory($this->baseDir.$destinationPath);
-            if($path == "."){
+            if ($path == ".") {
                 $source = $this->directoryList->getPath('media').$sourcePath.$fileName;
-            }else{
+            } else {
                 $source = $this->directoryList->getPath('media').$sourcePath.$path.'/'.$fileName;
             }
             $destination = $this->directoryList->getPath('tmp').$this->baseDir.$destinationPath.'/'.$fileName;
