@@ -266,7 +266,7 @@ class ImageZipFile implements ResolverInterface
         
         $this->zipDatapackImages();
         $this->moveZipFile();
-        //$this->deleteTempDirectory();
+        $this->deleteTempDirectory();
         $downloadUrl = $this->getDownloadUrl($storeCode);
             
         return [
@@ -480,7 +480,7 @@ class ImageZipFile implements ResolverInterface
     private function copyFiles(array $files, string $sourcePath, string $destinationPath) : void
     {
         foreach ($files as $file) {
-            if ($file == null) {
+            if($file == null) {
                 continue;
             }
             $fileInfo = $this->fileIo->getPathInfo($file);

@@ -29,8 +29,7 @@ class DescriptionImportContent implements ResolverInterface
     ) {
         $this->converter = $converter;
     }
-    
-    
+        
     /**
      * @inheritdoc
      */

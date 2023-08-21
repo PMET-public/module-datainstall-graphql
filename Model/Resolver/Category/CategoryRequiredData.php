@@ -26,6 +26,7 @@ class CategoryRequiredData implements ResolverInterface
     /**
      *
      * @param Converter $converter
+     * @param RequiredDataInterfaceFactory $requiredDataFactory
      * @return void
      */
     public function __construct(
@@ -35,7 +36,6 @@ class CategoryRequiredData implements ResolverInterface
         $this->converter = $converter;
         $this->requiredDataFactory = $requiredDataFactory;
     }
-    
     
     /**
      * @inheritdoc
@@ -51,7 +51,6 @@ class CategoryRequiredData implements ResolverInterface
             $contentToParse .= $this->getBlockIdTags($value['landing_page']);
         }
 
-
         $requiredData = $this->requiredDataFactory->create();
         
         return $requiredData->getRequiredData($contentToParse);
@@ -60,7 +59,7 @@ class CategoryRequiredData implements ResolverInterface
     /**
      * Get tags to replace block ids
      *
-     * @param string $pageIds
+     * @param string $blockId
      * @return string
      */
     private function getBlockIdTags($blockId)
