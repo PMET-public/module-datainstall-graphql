@@ -64,6 +64,7 @@ class Pages implements ResolverInterface
         }
 
         return [
+            'retain_store_scope'=>'foobar',
             'items' => $pagesData,
         ];
     }

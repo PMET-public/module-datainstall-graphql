@@ -23,6 +23,7 @@ type Query {
     ): CatalogRules @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Marketing\\CatalogRules") @doc(description:"Array of catalog rules")
     cmsPages(
         identifiers: [String] @doc(description: "Identifiers or IDS of the CMS pages")
+        retainStoreScope: [Boolean] @doc(description: "Optional: If true, will return store_view_code as set for the page. If false, it will set to the store_view_code of the request. Default is false.")
     ): CmsPages @resolver(class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Cms\\Pages") @doc(description: "Get CMS Pages from store.")
     cmsBlocksList: CmsBlocks @resolver(class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Cms\\BlocksList") @doc(description: "Get CMS Pages from store.")
     msiSource(
@@ -159,16 +160,15 @@ type CmsBlock {
 }
 
 type CmsPages @doc(description: "CMS pages information") {
+    retain_store_scope: String  @doc(description: "If true, will return store_view_code as set for the page. If false, it will set to the store_view_code of the request. Default is false.")
     items: [CmsPage] @doc(description: "An array of CMS pages")
 }
 
 type CmsPage {
-    store_view_code: String @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Store\\StoreViewCode")
+    store_view_code: String @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Store\\StoreViewCode") @doc(description:"Deprecated. Will be used only if page_in_websites is not defined. Or could be used if you want to override page_in_website")
     page_content: String @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Cms\\PageContent") @doc(description:"raw page content")
     page_id: Int @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Cms\\PageId") @doc(description:"Returns given id")
 }
-
-
 
 type CartRules @doc(description: "Retrieves all requested Cart Rules") {
     items: [CartRule] @doc(description: "An array containing the cart rules")
