@@ -24,9 +24,9 @@ class CategoryRequiredData implements ResolverInterface
     protected $requiredDataFactory;
     
     /**
-     * 
-     * @param Converter $converter 
-     * @return void 
+     *
+     * @param Converter $converter
+     * @return void
      */
     public function __construct(
         Converter $converter,
@@ -55,7 +55,6 @@ class CategoryRequiredData implements ResolverInterface
         $requiredData = $this->requiredDataFactory->create();
         
         return $requiredData->getRequiredData($contentToParse);
-
     }
 
     /**
@@ -67,6 +66,5 @@ class CategoryRequiredData implements ResolverInterface
     private function getBlockIdTags($blockId)
     {
         return 'block_id="'.$blockId.'"';
-
     }
 }

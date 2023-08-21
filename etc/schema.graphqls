@@ -259,6 +259,7 @@ type CustomerGroups @doc(description: "Retrieves all requested Customer Groups")
 type CustomerGroup {
     name: String
     tax_class: String
+    group_id: Int
 }
 
 type CustomerSegments @doc(description: "Retrieves all requested Customer Segments") {

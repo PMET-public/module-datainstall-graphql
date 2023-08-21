@@ -20,9 +20,9 @@ class DescriptionImportContent implements ResolverInterface
     protected $converter;
     
     /**
-     * 
-     * @param Converter $converter 
-     * @return void 
+     *
+     * @param Converter $converter
+     * @return void
      */
     public function __construct(
         Converter $converter

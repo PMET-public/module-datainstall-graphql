@@ -77,9 +77,9 @@ class DynamicBlockRequiredData implements ResolverInterface
             $bannerSegmentIds = $this->bannerSegmentLink->loadBannerSegments($value['banner_id']);
             $returnData = $requiredData->
                 getRequiredData($this->getSegmentIdTags($bannerSegmentIds).$this->getStoreContent(
-                $value['banner_id'],
-                $context->getExtensionAttributes()->getStore()->getId()
-            ));
+                    $value['banner_id'],
+                    $context->getExtensionAttributes()->getStore()->getId()
+                ));
             return $returnData;
         } else {
             return null;

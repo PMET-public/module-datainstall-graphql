@@ -250,7 +250,7 @@ It is important to note that at this time only the Store View scope is used. The
     	}
     }
 
-**cmsPages**: Use to create the `pages.json` file. Include the page identifiers or Ids you want to include in the export. `content` will include the raw content, so any Page builder id substitutions will need to be done manually as outlined in the Data Installer documentation https://github.com/PMET-public/module-data-install#content-substitution. If you need a list of all pages, set the input to an empty string `identifiers: [""]`. `page_id` is also available, but not necessary for a data pack
+**cmsPages**: Use to create the `pages.json` file. Include the page identifiers or Ids you want to include in the export.If you need a list of all pages, set the input to an empty string `identifiers: [""]`. `page_id` is also available, but not necessary for a data pack
 
 	query{
   		cmsPages(identifiers: ["anais-clement-quiz-p4","anais-clement-quiz-p3"]){
@@ -290,7 +290,7 @@ It is important to note that at this time only the Store View scope is used. The
 		}
 	}
 
-**customerGroups**: Use to create the `customer_groups.json` file. Include the group names or Ids you want to include in the export. 
+**customerGroups**: Use to create the `customer_groups.json` file. Include the group names or Ids you want to include in the export. If you need a list of all customer groups other than the ones installed by default, set the input to an empty string `identifiers: [""]`. `group_id` is also available, but not necessary for a data pack
 
 	query{
   		customerGroups(identifiers: ["VIP"]){
@@ -301,7 +301,7 @@ It is important to note that at this time only the Store View scope is used. The
   		}
 	}
 
-**customerSegments**: Use to create the `customer_segments.json` file. Include the segment names or Ids you want to include in the export. `conditions_serialized` will include the raw content, so any id substitutions will need to be done manually as outlined in the Data Installer documentation https://github.com/PMET-public/module-data-install#content-substitution
+**customerSegments**: Use to create the `customer_segments.json` file. Include the segment names or Ids you want to include in the export. 
 
 	query{
   		customerSegments(identifiers: ["1","2","3","4"]){
@@ -321,7 +321,7 @@ It is important to note that at this time only the Store View scope is used. The
   		}
 	}
 
-**cartRules**: Use to create the `cart_rules.json` file. Include the cart rule names or Ids you want to include in the export. `conditions_serialized` and `actions_serialized` will include the raw content, so any id substitutions will need to be done manually as outlined in the Data Installer documentation https://github.com/PMET-public/module-data-install#content-substitution. If you need a list of all cart rules, set the input to an empty string `identifiers: [""]`. `rule_id` is also available, but not necessary for a data pack
+**cartRules**: Use to create the `cart_rules.json` file. Include the cart rule names or Ids you want to include in the export. If you need a list of all cart rules, set the input to an empty string `identifiers: [""]`. `rule_id` is also available, but not necessary for a data pack
 
 	query{
 		cartRules(identifiers: ["1","2","3","4","5"]) {
@@ -533,7 +533,7 @@ It is important to note that at this time only the Store View scope is used. The
 		}
 	}
 
-**upsells**: Use to create the `upsells.json` file to populate Related Products Cross Sells and Upsells. Include the Ids or names you want to include in the export. `conditions_serialized` and `actions_serialized` will include the raw content, so any id substitutions will need to be done manually as outlined in the Data Installer documentation https://github.com/PMET-public/module-data-install#content-substitution. If you need a list of all related product rules, set the input to an empty string `identifiers: [""]`. `rule_id` is also available, but not necessary for a data pack
+**upsells**: Use to create the `upsells.json` file to populate Related Products Cross Sells and Upsells. Include the Ids or names you want to include in the export.  If you need a list of all related product rules, set the input to an empty string `identifiers: [""]`. `rule_id` is also available, but not necessary for a data pack
 
 	query{
 		upsells(identifiers: ["4","3"]) {
@@ -584,7 +584,7 @@ It is important to note that at this time only the Store View scope is used. The
 	}
 
 
-**catalogRules**: Use to create the `catalog_rules.json` file. Include the catalog rule names or Ids you want to include in the export. `conditions_serialized` and `actions_serialized` will include the raw content, so any id substitutions will need to be done manually as outlined in the Data Installer documentation https://github.com/PMET-public/module-data-install#content-substitution. If you need a list of all catalog rules, set the input to an empty string `identifiers: [""]`. `rule_id` is also available, but not necessary for a data pack
+**catalogRules**: Use to create the `catalog_rules.json` file. Include the catalog rule names or Ids you want to include in the export.  If you need a list of all catalog rules, set the input to an empty string `identifiers: [""]`. `rule_id` is also available, but not necessary for a data pack
 
 	query{
 		catalogRules(identifiers: ["Test Rule"]) {
