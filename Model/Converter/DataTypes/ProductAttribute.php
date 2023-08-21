@@ -7,9 +7,12 @@
 namespace MagentoEse\DataInstallGraphQl\Model\Converter\DataTypes;
 
 use Magento\Eav\Api\AttributeOptionManagementInterface;
+use Magento\Framework\Exception\StateException;
+use Magento\Framework\Exception\InputException;
 
 class ProductAttribute
 {
+   
     /** @var string */
     protected $tokenStart = '{{productattribute code="';
     
@@ -48,7 +51,7 @@ class ProductAttribute
         'substringend'=>'","operator":"!{}","value":["',
         'delimiter'=>'","'],
 
-        // //this may be redundant
+        //this may be redundant
         ['regex'=> '/Product\\\\\\\\Attributes","attribute":"([a-zA-Z0-9_]+)","operator":"==","value":\["([0-9,"]+)"\]/',
         'substringstart'=> 'Product\\\\Attributes","attribute":"',
         'substringend'=>'","operator":"==","value":["',
@@ -106,6 +109,66 @@ class ProductAttribute
         'substringstart'=> 'Condition\\Product","attribute":"',
         'substringend'=>'","operator":"!{}","value":["',
         'delimiter'=>'","'],
+
+        ['regex'=> '/Condition\\\\\\\\Product","attribute":"([a-zA-Z0-9_]+)","operator":"==","value":"([0-9]+)"/',
+        'substringstart'=> 'Condition\\\\Product","attribute":"',
+        'substringend'=>'","operator":"==","value":"',
+        'delimiter'=>'","'],
+        ['regex'=> '/Condition\\\\Product","attribute":"([a-zA-Z0-9_]+)","operator":"!=","value":"([0-9]+)"/',
+        'substringstart'=> 'Condition\\\\Product","attribute":"',
+        'substringend'=>'","operator":"!=","value":"',
+        'delimiter'=>'","'],
+        ['regex'=> '/Condition\\\\Product","attribute":"([a-zA-Z0-9_]+)","operator":"","value":"([0-9]+)"/',
+        'substringstart'=> 'Condition\\\\Product","attribute":"',
+        'substringend'=>'","operator":"","value":"',
+        'delimiter'=>'","'],
+        ['regex'=> '/Condition\\\\Product","attribute":"([a-zA-Z0-9_]+)","operator":"\!\(\)","value":"([0-9]+)"]/',
+        'substringstart'=> 'Condition\\\\Product","attribute":"',
+        'substringend'=>'","operator":"!()","value":"',
+        'delimiter'=>'","'],
+        ['regex'=> '/Condition\\\\Product","attribute":"([a-zA-Z0-9_]+)","operator":"\(\)","value":"([0-9]+)"/',
+        'substringstart'=> 'Condition\\\\Product","attribute":"',
+        'substringend'=>'","operator":"()","value"["',
+        'delimiter'=>'","'],
+        ['regex'=> '/Condition\\\\Product","attribute":"([a-zA-Z0-9_]+)","operator":"{}","value":"([0-9]+)"/',
+        'substringstart'=> 'Condition\\\\Product","attribute":"',
+        'substringend'=>'","operator":"{}","value":"',
+        'delimiter'=>'","'],
+        ['regex'=> '/Condition\\\\Product","attribute":"([a-zA-Z0-9_]+)","operator":"!{}","value":"([0-9]+)"/',
+        'substringstart'=> 'Condition\\\\Product","attribute":"',
+        'substringend'=>'","operator":"!{}","value":"',
+        'delimiter'=>'","'],
+
+         ['regex'=> '/Condition\\\\Product","attribute":"([a-zA-Z0-9_]+)","operator":"==","value":\["([0-9,"]+)"\]/',
+        'substringstart'=> 'Condition\\Product","attribute":"',
+        'substringend'=>'","operator":"==","value":["',
+        'delimiter'=>'","'],
+        ['regex'=> '/Condition\\\\Product","attribute":"([a-zA-Z0-9_]+)","operator":"!=","value":\["([0-9,"]+)"\]/',
+        'substringstart'=> 'Condition\\Product","attribute":"',
+        'substringend'=>'","operator":"!=","value":["',
+        'delimiter'=>'","'],
+        ['regex'=> '/Condition\\\\Product","attribute":"([a-zA-Z0-9_]+)","operator":"","value":\["([0-9,"]+)"\]/',
+        'substringstart'=> 'Condition\\Product","attribute":"',
+        'substringend'=>'","operator":"","value":["',
+        'delimiter'=>'","'],
+        ['regex'=> '/Condition\\\\Product","attribute":"([a-zA-Z0-9_]+)","operator":"\!\(\)","value":\["([0-9,"]+)"\]/',
+        'substringstart'=> 'Condition\\Product","attribute":"',
+        'substringend'=>'","operator":"!()","value":["',
+        'delimiter'=>'","'],
+        ['regex'=> '/Condition\\\\Product","attribute":"([a-zA-Z0-9_]+)","operator":"\(\)","value":\["([0-9,"]+)"\]/',
+        'substringstart'=> 'Condition\\Product","attribute":"',
+        'substringend'=>'","operator":"()","value":["',
+        'delimiter'=>'","'],
+        ['regex'=> '/Condition\\\\Product","attribute":"([a-zA-Z0-9_]+)","operator":"{}","value":\["([0-9,"]+)"\]/',
+        'substringstart'=> 'Condition\\Product","attribute":"',
+        'substringend'=>'","operator":"{}","value":["',
+        'delimiter'=>'","'],
+        ['regex'=> '/Condition\\\\Product","attribute":"([a-zA-Z0-9_]+)","operator":"!{}","value":\["([0-9,"]+)"\]/',
+        'substringstart'=> 'Condition\\Product","attribute":"',
+        'substringend'=>'","operator":"!{}","value":["',
+        'delimiter'=>'","'],
+
+
         //Block
         ['regex'=> '/Condition\|\|Product`,`attribute`:`([a-zA-Z0-9_]+)`,`operator`:`==`,`value`:`([0-9,`]+)`/',
         'substringstart'=> 'Condition||Product`,`attribute`:`',
@@ -189,6 +252,46 @@ class ProductAttribute
         }
         return $content;
     }
+
+    /**
+     * Get required product attribute options
+     * 
+     * @param string $content
+     * @param string $type
+     * @return array
+     */
+    public function getRequiredAttributeOptions($content,$type){
+        $requiredData = [];
+        foreach ($this->regexToSearch as $search) {
+            preg_match_all($search['regex'], $content, $matchesOptions, PREG_SET_ORDER);
+            foreach ($matchesOptions as $match) {
+                $requiredOption = [];
+                $attributeCode = $match[1];
+                $idRequired = $match[2];
+                if ($attributeCode!='attribute_set_id'){
+                    $attributeOptions = $this->attributeOptionManagement->getItems(4, $attributeCode);
+                    if ($idRequired) {
+                        //may be list of ids
+                        $optionIds = explode(",", str_replace('"', '', str_replace('`', '', $idRequired)));
+                        foreach ($optionIds as $optionId) {
+                            foreach ($attributeOptions as $attributeOption) {
+                                if ($attributeOption->getvalue()==$optionId) {
+                                    $requiredOption['name'] = 'Attribute Code='.$attributeCode.'/Attribute Value='.$attributeOption->getLabel();
+                                    //$requiredOption['id'] = $attributeOption->getValue();
+                                    $requiredOption['type'] = $type;
+                                    $requiredOption['identifier'] = $attributeOption->getLabel();
+                                    $requiredData[] = $requiredOption;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return $requiredData;
+    }
+
      /**
       * @param string $search
       * @param string $replace

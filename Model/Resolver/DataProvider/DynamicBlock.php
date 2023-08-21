@@ -112,14 +112,12 @@ class DynamicBlock
      */
     private function fetchBannerData($identifier, string $field, int $storeId): array
     {
-        $bannerTypes = $this->bannerConfig->getTypes();
         $bannerResults = $this->bannerCollection->create()->addFieldToFilter($field, [$identifier])->getItems();
         $banner = current($bannerResults);
         $bannerId = $banner->getBannerId();
         //get content and segments
         $bannerContent = $this->getStoreContent($bannerId, $storeId);
         $bannerSegmentIds = $this->bannerSegmentLink->loadBannerSegments($bannerId);
-        $r = $banner->getTypes();
         if (empty($bannerSegmentIds)) {
             $segmentNames = 'all';
         } else {

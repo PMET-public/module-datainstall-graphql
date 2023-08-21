@@ -7,6 +7,7 @@
 namespace MagentoEse\DataInstallGraphQl\Model\Converter\DataTypes;
 
 use Magento\Cms\Api\BlockRepositoryInterface;
+use Magento\Framework\Exception\LocalizedException;
 
 class Block
 {
@@ -67,5 +68,37 @@ class Block
             }
         }
         return $content;
+    }
+    /**
+     * Get required blocks
+     *
+     * @param mixed $content
+     * @param mixed $type
+     * @return array
+     * @throws LocalizedException
+     */
+    public function getRequiredBlocks($content, $type)
+    {
+        $requiredData = [];
+        foreach ($this->regexToSearch as $search) {
+            preg_match_all($search['regex'], $content, $matchesBlockId, PREG_SET_ORDER);
+            foreach ($matchesBlockId as $match) {
+                $requiredBlock = [];
+                $idRequired = $match[1];
+                if ($idRequired) {
+                    //ids may be a list
+                    $blockIds = explode(",", $idRequired);
+                    foreach ($blockIds as $blockId) {
+                        $block = $this->blockRepository->getById($blockId);
+                        $requiredBlock['name'] = $block->getTitle();
+                        $requiredBlock['id'] = $block->getId();
+                        $requiredBlock['type'] = $type;
+                        $requiredBlock['identifier'] = $block->getIdentifier();
+                        $requiredData[] = $requiredBlock;
+                    }
+                }
+            }
+        }
+        return $requiredData;
     }
 }

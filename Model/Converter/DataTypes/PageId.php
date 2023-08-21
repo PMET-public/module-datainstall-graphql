@@ -19,7 +19,9 @@ class PageId
     /** @var array */
     protected $regexToSearch = [
         ['regex'=> "/page_id='([0-9]+)'/",
-        'substring'=> "page_id='"]
+        'substring'=> "page_id='"],
+        ['regex'=> '/page_id="([0-9]+)"/',
+        'substring'=> 'page_id="']
     ];
     
     /** @var PageRepositoryInterface */
@@ -64,6 +66,38 @@ class PageId
             }
         }
         return $content;
+    }
+
+    /**
+     * Get required pages
+     *
+     * @param string $content
+     * @param string $type
+     * @return array
+     */
+    public function getRequiredPageIds($content, $type)
+    {
+        $requiredData = [];
+        foreach ($this->regexToSearch as $search) {
+            preg_match_all($search['regex'], $content, $matchesPageId, PREG_SET_ORDER);
+            foreach ($matchesPageId as $match) {
+                $requiredPage = [];
+                $idRequired = $match[1];
+                if ($idRequired) {
+                    //ids may be a list
+                    $pageIds = explode(",", $idRequired);
+                    foreach ($pageIds as $pageId) {
+                        $page = $this->pageRepository->getById($pageId);
+                        $requiredPage['name'] = $page->getTitle();
+                        $requiredPage['id'] = $page->getId();
+                        $requiredPage['type'] = $type;
+                        $requiredPage['identifier'] = $page->getIdentifier();
+                        $requiredData[] = $requiredPage;
+                    }
+                }
+            }
+        }
+        return $requiredData;
     }
 
     /**

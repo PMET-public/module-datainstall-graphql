@@ -7,6 +7,7 @@ use Magento\TestFramework\TestCase\GraphQl\ResponseContainsErrorsException;
 
 class ContentConversionTest extends GraphQlAbstract
 {
+    // phpcs:disable
     /** @var $query */
     protected $query
     = <<<QUERY
@@ -21,7 +22,7 @@ class ContentConversionTest extends GraphQlAbstract
 		}
 	}
     QUERY;
-
+    // phpcs:enable
     /**
      * @magentoDataFixture MagentoEse_DataInstallGraphQl::Test/_files/categories.php
      */

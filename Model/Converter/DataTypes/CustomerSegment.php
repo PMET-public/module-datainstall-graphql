@@ -18,16 +18,18 @@ class CustomerSegment
     
     // phpcs:ignoreFile Generic.Files.LineLength.TooLong
     protected $regexToSearch = [
-        ['regex'=>'/{"type":"Magento\\\\CustomerSegment\\\\Model\\\\Segment\\\\Condition\\\\Segment","attribute":false,"operator":"==","value":"([0-9,]+)"/',
+        ['regex'=>'/{"type":"Magento\\\\\\\\CustomerSegment\\\\\\\\Model\\\\\\\\Segment\\\\\\\\Condition\\\\\\\\Segment","attribute":false,"operator":"==","value":"([0-9,]+)"/',
         'substring'=> 'Segment","attribute":false,"operator":"==","value":"'],
-        ['regex'=>'/{"type":"Magento\\\\CustomerSegment\\\\Model\\\\Segment\\\\Condition\\\\Segment","attribute":false,"operator":"!=","value":"([0-9,]+)"/',
+        ['regex'=>'/{"type":"Magento\\\\\\\\CustomerSegment\\\\\\\\Model\\\\\\\\Segment\\\\\\\\Condition\\\\\\\\Segment","attribute":false,"operator":"!=","value":"([0-9,]+)"/',
         'substring'=> 'Segment","attribute":false,"operator":"!=","value":"'],
-        ['regex'=>'/{"type":"Magento\\\\CustomerSegment\\\\Model\\\\Segment\\\\Condition\\\\Segment","attribute":false,"operator":"","value":"([0-9,]+)"/',
+        ['regex'=>'/{"type":"Magento\\\\\\\\CustomerSegment\\\\\\\\Model\\\\\\\\Segment\\\\\\\\Condition\\\\\\\\Segment","attribute":false,"operator":"","value":"([0-9,]+)"/',
         'substring'=> 'Segment","attribute":false,"operator":"","value":"'],
-        ['regex'=>'/{"type":"Magento\\\\CustomerSegment\\\\Model\\\\Segment\\\\Condition\\\\Segment","attribute":false,"operator":"\(\)","value":"([0-9,]+)"/',
+        ['regex'=>'/{"type":"Magento\\\\\\\\CustomerSegment\\\\\\\\Model\\\\\\\\Segment\\\\\\\\Condition\\\\\\\\Segment","attribute":false,"operator":"\(\)","value":"([0-9,]+)"/',
         'substring'=> 'Segment","attribute":false,"operator":"","value":"'],
-        ['regex'=>'/{"type":"Magento\\\\CustomerSegment\\\\Model\\\\Segment\\\\Condition\\\\Segment","attribute":false,"operator":"!\(\)","value":"([0-9,]+)"/',
-        'substring'=> 'Segment","attribute":false,"operator":"","value":"']
+        ['regex'=>'/{"type":"Magento\\\\\\\\CustomerSegment\\\\\\\\Model\\\\\\\\Segment\\\\\\\\Condition\\\\\\\\Segment","attribute":false,"operator":"!\(\)","value":"([0-9,]+)"/',
+        'substring'=> 'Segment","attribute":false,"operator":"","value":"'],
+        ['regex'=>'/"segment_id=([0-9,]+)"/',
+        'substring'=> '"segment_id=']
     ];
     /** @var SegmentCollection */
     protected $segmentCollection;
@@ -71,5 +73,31 @@ class CustomerSegment
             }
         }
         return $content;
+    }
+
+    public function getRequiredSegments($content,$type)
+    {
+        $requiredData = [];
+        foreach ($this->regexToSearch as $search) {
+            preg_match_all($search['regex'], $content, $matchesSegmentId, PREG_SET_ORDER);
+            foreach ($matchesSegmentId as $match) {
+                $requiredSegment = [];
+                $idRequired = $match[1];
+                if ($idRequired) {
+                    //ids may be a list
+                    $segmentIds = explode(",", $idRequired);
+                    foreach ($segmentIds as $segmentId) {
+                        $segmentResults = $this->segmentCollection->create()
+                        ->addFieldToFilter('segment_id', [$segmentId])->getItems();
+                        $segment = current($segmentResults);
+                        $requiredSegment['name'] = $segment->getName();
+                        $requiredSegment['id'] = $segment->getId();
+                        $requiredSegment['type'] = $type;
+                        $requiredData[] = $requiredSegment;
+                    }
+                }
+            }    
+        }
+        return $requiredData;
     }
 }

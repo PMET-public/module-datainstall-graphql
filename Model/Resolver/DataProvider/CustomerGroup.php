@@ -14,6 +14,9 @@ use Magento\Framework\Exception\NoSuchEntityException;
 
 class CustomerGroup
 {
+    
+    private const DEFAULT_GROUPS = ["NOT LOGGED IN","General","Wholesale","Retailer","Default (General)"];
+    
     /**
      * @var GroupRepositoryInterface
      */
@@ -91,7 +94,26 @@ class CustomerGroup
 
         return [
             'name' => $group->getCode(),
-            'tax_class' => $group->getTaxClassName()
+            'tax_class' => $group->getTaxClassName(),
+            'group_id' => $group->getId()
         ];
+    }
+
+     /**
+      * Get all rule ids
+      *
+      * @return array
+      */
+    public function getAllGroupIds(): array
+    {
+        $search = $this->searchCriteria->create();
+        $groupList = $this->groupRepository->getList($search)->getItems();
+        $groupIds = [];
+        foreach ($groupList as $group) {
+            if (!in_array($group->getCode(), self::DEFAULT_GROUPS)) {
+                 $groupIds[] = $group->getId();
+            }
+        }
+        return $groupIds;
     }
 }

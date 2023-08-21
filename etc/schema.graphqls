@@ -147,15 +147,18 @@ interface CategoryInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model
     store_view_code: String @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Store\\StoreViewCode")
     name_path: String @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Category\\NamePath") @doc(description:"path by name excluding root, parent and self")
     category_name: String @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Category\\CategoryName") @doc(description:"name with path delimiter escaped")
+    description_import_content: String @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Category\\DescriptionImportContent") @doc(description:"description content tokenized for import by Data Installer")
     page_layout: String
     custom_design: String
     is_active: Boolean
+    requires: [RequiredData] @doc(description: "A list of content in the description and block assigned to the category") @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Category\\CategoryRequiredData")
 }
 
 type CmsBlock {
     store_view_code: String @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Store\\StoreViewCode")
     block_content: String @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Cms\\BlockContent") @doc(description:"raw block content")
     block_id: String @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Cms\\BlockId") @doc(description:"Returns given id")
+    requires: [RequiredData] @doc(description: "A list of required data for the page") @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Cms\\BlockRequiredData")
 }
 
 type CmsPages @doc(description: "CMS pages information") {
@@ -163,12 +166,19 @@ type CmsPages @doc(description: "CMS pages information") {
 }
 
 type CmsPage {
-    store_view_code: String @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Store\\StoreViewCode")
+    store_view_code: String @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Store\\StoreViewCode") @doc(description:"Deprecated. Will be used only if page_in_websites is not defined. Or could be used if you want to override page_in_website")
+    page_in_website: String @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Cms\\PageInWebsite") @doc(description:"Returns a comma delimited list of stores the page is assigned to")
     page_content: String @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Cms\\PageContent") @doc(description:"raw page content")
     page_id: Int @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Cms\\PageId") @doc(description:"Returns given id")
+    requires: [RequiredData] @doc(description: "A list of required data for the page") @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Cms\\PageRequiredData")
 }
 
-
+type RequiredData {
+    type: String @doc(description: "Type of data required")
+    id: Int @doc(description: "Id of data required")
+    name: String @doc(description: "Name of data required")
+    identifier: String @doc(description: "Identifier of data required")
+}
 
 type CartRules @doc(description: "Retrieves all requested Cart Rules") {
     items: [CartRule] @doc(description: "An array containing the cart rules")
@@ -201,6 +211,7 @@ type CartRule {
     rule_id: Int
     sort_order: Int
     is_active: Int
+    requires: [RequiredData] @doc(description: "A list of required data for the rule") @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Marketing\\CartRuleRequiredData")
 }
 
 type ApprovalRules @doc(description: "Retrieves all requested B2B Approval Rules") {
@@ -238,6 +249,7 @@ type CatalogRule {
     dynamic_blocks: String
     is_active: Int
     rule_id: Int
+    requires: [RequiredData] @doc(description: "A list of required data for the rule") @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Marketing\\CatalogRuleRequiredData")
 }
 
 type CustomerGroups @doc(description: "Retrieves all requested Customer Groups") {
@@ -247,6 +259,7 @@ type CustomerGroups @doc(description: "Retrieves all requested Customer Groups")
 type CustomerGroup {
     name: String
     tax_class: String
+    group_id: Int
 }
 
 type CustomerSegments @doc(description: "Retrieves all requested Customer Segments") {
@@ -254,11 +267,14 @@ type CustomerSegments @doc(description: "Retrieves all requested Customer Segmen
 }
 
 type CustomerSegment {
+    segment_id: Int
     site_code: String
     name: String
     description: String
     conditions_serialized: String
     apply_to: String @doc(description: "2= Apply to Visitors, 1= Apply to Registered Users, 0= Both Visitors and Registered")
+    is_active: Int
+    requires: [RequiredData] @doc(description: "A list of required data for the segment") @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Customer\\CustomerSegmentRequiredData")
 }
 
 type PageBuilderTemplate {
@@ -267,6 +283,7 @@ type PageBuilderTemplate {
     preview_image: String
     content: String
     template_id: Int
+    requires: [RequiredData] @doc(description: "A list of required data for the template") @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Cms\\TemplateRequiredData")
 }
 
 type PageBuilderTemplates @doc(description: "Retrieves all requested Page Builder templates") {
@@ -421,6 +438,7 @@ type Upsell {
     customer_segments: String
     is_active: Int
     rule_id: Int
+    requires: [RequiredData] @doc(description: "A list of required data for the upsell") @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Marketing\\UpsellRequiredData")
 }
 
 type Widgets @doc(description: "Retrieves all requested Widgets") {
@@ -442,6 +460,8 @@ type Widget {
     page_template: String
     ui_type: String
     widget_id: Int
+    requires: [RequiredData] @doc(description: "A list of required data for the widget") @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Cms\\WidgetRequiredData")
+
 }
 
 type AdminRoles @doc(description: "Retrieves all requested Roles and settings") {
@@ -484,6 +504,7 @@ type DynamicBlock {
     banner_id: Int
     is_enabled: Int
     ui_type: String
+    requires: [RequiredData] @doc(description: "A list of required data for the block") @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Cms\\DynamicBlockRequiredData")
 }
 
 type Companies @doc(description: "List of Companies") {

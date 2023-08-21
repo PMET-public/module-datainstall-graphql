@@ -21,25 +21,41 @@ class CategoryId
     protected $regexToSearch = [
         ['regex'=>"/id_path='category\/([0-9]+)'/",
         'substring'=> "id_path='category/"],
-        ['regex'=>'/"attribute":"category_ids","operator":"==","value":"([0-9,]+)",/',
+        ['regex'=>'/"attribute":"category_ids","operator":"==","value":"([0-9,\s]+)",/',
         'substring'=>'"attribute":"category_ids","operator":"==","value":"'],
-        ['regex'=>'/"attribute":"category_ids","operator":"!=","value":"([0-9,]+)",/',
+        ['regex'=>'/"attribute":"category_ids","operator":"!=","value":"([0-9,\s]+)",/',
         'substring'=>'"attribute":"category_ids","operator":"!=","value":"'],
-        ['regex'=>'/"attribute":"category_ids","operator":"","value":"([0-9,]+)",/',
+        ['regex'=>'/"attribute":"category_ids","operator":"","value":"([0-9,\s]+)",/',
         'substring'=>'"attribute":"category_ids","operator":"","value":"'],
-        ['regex'=>'/"attribute":"category_ids","operator":"\(\)","value":"([0-9,]+)",/',
+        ['regex'=>'/"attribute":"category_ids","operator":"\(\)","value":"([0-9,\s]+)",/',
         'substring'=>'"attribute":"category_ids","operator":"()","value":"'],
-        ['regex'=>'/"attribute":"category_ids","operator":"!\(\)","value":"([0-9,]+)",/',
+        ['regex'=>'/"attribute":"category_ids","operator":"!\(\)","value":"([0-9,\s]+)",/',
         'substring'=>'"attribute":"category_ids","operator":"!()","value":"'],
-        ['regex'=>'/"attribute":"category_ids","operator":"{}}","value":"([0-9,]+)",/',
+        ['regex'=>'/"attribute":"category_ids","operator":"{}}","value":"([0-9,\s]+)",/',
         'substring'=>'"attribute":"category_ids","operator":"{}","value":"'],
-        ['regex'=>'/"attribute":"category_ids","operator":"!{}","value":"([0-9,]+)",/',
+        ['regex'=>'/"attribute":"category_ids","operator":"!{}","value":"([0-9,\s]+)",/',
         'substring'=>'"attribute":"category_ids","operator":"!{}","value":"'],
-        ['regex'=>'/condition_option="category_ids" condition_option_value="([0-9,]+)"/',
+        ['regex'=>'/condition_option="category_ids" condition_option_value="([0-9,\s]+)"/',
         'substring'=>'condition_option="category_ids" condition_option_value="'],
-        ['regex'=>'/\?cat=([0-9,]+)"/',
+
+        ['regex'=>'/"attribute":"category_ids","operator":"==","value":"([0-9,\s]+)"}}/',
+        'substring'=>'"attribute":"category_ids","operator":"==","value":"'],
+        ['regex'=>'/"attribute":"category_ids","operator":"!=","value":"([0-9,\s]+)"}}/',
+        'substring'=>'"attribute":"category_ids","operator":"!=","value":"'],
+        ['regex'=>'/"attribute":"category_ids","operator":"","value":"([0-9,\s]+)"}}/',
+        'substring'=>'"attribute":"category_ids","operator":"","value":"'],
+        ['regex'=>'/"attribute":"category_ids","operator":"\(\)","value":"([0-9,\s]+)"}}/',
+        'substring'=>'"attribute":"category_ids","operator":"()","value":"'],
+        ['regex'=>'/"attribute":"category_ids","operator":"!\(\)","value":"([0-9,\s]+)"}}/',
+        'substring'=>'"attribute":"category_ids","operator":"!()","value":"'],
+        ['regex'=>'/"attribute":"category_ids","operator":"{}}","value":"([0-9,\s]+)"}}/',
+        'substring'=>'"attribute":"category_ids","operator":"{}","value":"'],
+        ['regex'=>'/"attribute":"category_ids","operator":"!{}","value":"([0-9,\s]+)"}}/',
+        'substring'=>'"attribute":"category_ids","operator":"!{}","value":"'],
+
+        ['regex'=>'/\?cat=([0-9,\s]+)"/',
         'substring'=>'?cat='],
-        ['regex'=>'/Condition\|\|Product`,`attribute`:`category_ids`,`value`:`([0-9,`]+)`/',
+        ['regex'=>'/Condition\|\|Product`,`attribute`:`category_ids`,`value`:`([0-9,\s`]+)`/',
         'substring'=>'`category_ids`,`value`:`']
     ];
     /** @var CategoryRepositoryInterface */
@@ -84,6 +100,37 @@ class CategoryId
             }
         }
         return $content;
+    }
+
+    /**
+     * Replace category ids with tokens
+     *
+     * @param string $content
+     * @param string $type
+     * @return array
+     */
+    public function getRequiredCategoryIds($content, $type)
+    {
+        $requiredData = [];
+        foreach ($this->regexToSearch as $search) {
+            preg_match_all($search['regex'], $content, $matchesCategoryId, PREG_SET_ORDER);
+            foreach ($matchesCategoryId as $match) {
+                $requiredCategory = [];
+                $idRequired = $match[1];
+                if ($idRequired) {
+                    //ids may be a list
+                    $categoryIds = explode(",", $idRequired);
+                    foreach ($categoryIds as $categoryId) {
+                        $category = $this->categoryRepository->get($categoryId);
+                        $requiredCategory['name'] = $category->getName();
+                        $requiredCategory['id'] = $category->getId();
+                        $requiredCategory['type'] = $type;
+                        $requiredData[] = $requiredCategory;
+                    }
+                }
+            }
+        }
+        return $requiredData;
     }
 
     /**

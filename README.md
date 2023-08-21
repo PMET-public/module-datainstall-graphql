@@ -98,7 +98,25 @@ Details on query arguments and types are available in the online GraphQL docs.
 ## Exporting Data
 
 These queries are written to return data in a format that can be saved as a file to be used by the Data Installer. There is a combination of extensions to native queries along with some that are custom. 
-Magento GraphQL uses the store scope, so the queries are limited to the store scope as defined in the request header. Another limitation is the query will only return Active items.  You will not be able to export any Pages, Blocks, etc. that are set as Inactive
+Magento GraphQL uses the store scope, so the queries are limited to the store scope as defined in the request header. Another limitation is that some queries will only return Active items.  You will not be able to export any Pages, Blocks, Categories, etc. that are set as Inactive
+
+Some queries will have a `requires` node. This is to provide information about what other data elements may be needed by the data you are retrieving.  It will return the type (block,customer_segment,product, etc.) along with name, id and indetifier if appropriate. For example, if you are retrieving a page that contains one or more blocks, the query will return those details so you can include them in your blocks query.
+Example:
+
+	"requires": [
+	{
+		"id": 2,
+		"identifier": test-block-2,
+		"name": "test2",
+		"type": "block"
+	},
+	{
+		"id": 3,
+		"identifier": "product-block",
+		"name": "Product Block",
+		"type": "block"
+	}
+	]
 
 **storeConfig**: Use to create the `stores.json` file. The value of `fallback_theme` will be the same as `theme`, so it will have to be changed if needed.
 
@@ -181,7 +199,8 @@ It is important to note that at this time only the Store View scope is used. The
     		position
     		landing_page_id:landing_page
     		landing_page:landing_page_identifier
-    		description
+    		description_org:description
+			description:description_import_content
     		display_mode
     		meta_description
     		meta_keywords
@@ -189,11 +208,17 @@ It is important to note that at this time only the Store View scope is used. The
     		page_layout
     		custom_design_id:custom_design
     		custom_design:custom_design_theme
+			requires{
+				id
+				identifier
+				name
+				type
+				}
     		}
     	}
     }
 
-**cmsBlocks**: Use to create the `blocks.json` file. Include the block identifiers or Ids you want to include in the export. `content` will include the raw content, so any Page builder id substitutions will need to be done manually as outlined in the Data Installer documentation https://github.com/PMET-public/module-data-install#content-substitution
+**cmsBlocks**: Use to create the `blocks.json` file. Include the block identifiers or Ids you want to include in the export.
 
     query{
     	cmsBlocks(identifiers: ["ac_locations","ac_offers"]) {
@@ -202,6 +227,12 @@ It is important to note that at this time only the Store View scope is used. The
     			title
     			identifier
     			content:block_content
+				requires{
+					id
+					identifier
+					name
+					type
+				}
     		}
     	}
     }
@@ -219,7 +250,7 @@ It is important to note that at this time only the Store View scope is used. The
     	}
     }
 
-**cmsPages**: Use to create the `pages.json` file. Include the page identifiers or Ids you want to include in the export. `content` will include the raw content, so any Page builder id substitutions will need to be done manually as outlined in the Data Installer documentation https://github.com/PMET-public/module-data-install#content-substitution. If you need a list of all pages, set the input to an empty string `identifiers: [""]`. `page_id` is also available, but not necessary for a data pack
+**cmsPages**: Use to create the `pages.json` file. Include the page identifiers or Ids you want to include in the export.If you need a list of all pages, set the input to an empty string `identifiers: [""]`. `page_id` is also available, but not necessary for a data pack
 
 	query{
   		cmsPages(identifiers: ["anais-clement-quiz-p4","anais-clement-quiz-p3"]){
@@ -233,6 +264,12 @@ It is important to note that at this time only the Store View scope is used. The
       				meta_description
       				meta_keywords
       				meta_title
+					requires{
+						id
+						identifier
+						name
+						type
+					}
     			}
   		}
 	}
@@ -253,7 +290,7 @@ It is important to note that at this time only the Store View scope is used. The
 		}
 	}
 
-**customerGroups**: Use to create the `customer_groups.json` file. Include the group names or Ids you want to include in the export. 
+**customerGroups**: Use to create the `customer_groups.json` file. Include the group names or Ids you want to include in the export. If you need a list of all customer groups other than the ones installed by default, set the input to an empty string `identifiers: [""]`. `group_id` is also available, but not necessary for a data pack
 
 	query{
   		customerGroups(identifiers: ["VIP"]){
@@ -264,7 +301,7 @@ It is important to note that at this time only the Store View scope is used. The
   		}
 	}
 
-**customerSegments**: Use to create the `customer_segments.json` file. Include the segment names or Ids you want to include in the export. `conditions_serialized` will include the raw content, so any id substitutions will need to be done manually as outlined in the Data Installer documentation https://github.com/PMET-public/module-data-install#content-substitution
+**customerSegments**: Use to create the `customer_segments.json` file. Include the segment names or Ids you want to include in the export. 
 
 	query{
   		customerSegments(identifiers: ["1","2","3","4"]){
@@ -274,11 +311,17 @@ It is important to note that at this time only the Store View scope is used. The
       				conditions_serialized
       				description
       				site_code
+					requires{
+						id
+						identifier
+						name
+						type
+					}
     			}
   		}
 	}
 
-**cartRules**: Use to create the `cart_rules.json` file. Include the cart rule names or Ids you want to include in the export. `conditions_serialized` and `actions_serialized` will include the raw content, so any id substitutions will need to be done manually as outlined in the Data Installer documentation https://github.com/PMET-public/module-data-install#content-substitution. If you need a list of all cart rules, set the input to an empty string `identifiers: [""]`. `rule_id` is also available, but not necessary for a data pack
+**cartRules**: Use to create the `cart_rules.json` file. Include the cart rule names or Ids you want to include in the export. If you need a list of all cart rules, set the input to an empty string `identifiers: [""]`. `rule_id` is also available, but not necessary for a data pack
 
 	query{
 		cartRules(identifiers: ["1","2","3","4","5"]) {
@@ -308,6 +351,12 @@ It is important to note that at this time only the Store View scope is used. The
 				uses_per_customer
 				sort_by
 				is_active
+				requires{
+					id
+					identifier
+					name
+					type
+				}
 			}
 		}
 	}
@@ -484,7 +533,7 @@ It is important to note that at this time only the Store View scope is used. The
 		}
 	}
 
-**upsells**: Use to create the `upsells.json` file to populate Related Products Cross Sells and Upsells. Include the Ids or names you want to include in the export. `conditions_serialized` and `actions_serialized` will include the raw content, so any id substitutions will need to be done manually as outlined in the Data Installer documentation https://github.com/PMET-public/module-data-install#content-substitution. If you need a list of all related product rules, set the input to an empty string `identifiers: [""]`. `rule_id` is also available, but not necessary for a data pack
+**upsells**: Use to create the `upsells.json` file to populate Related Products Cross Sells and Upsells. Include the Ids or names you want to include in the export.  If you need a list of all related product rules, set the input to an empty string `identifiers: [""]`. `rule_id` is also available, but not necessary for a data pack
 
 	query{
 		upsells(identifiers: ["4","3"]) {
@@ -497,11 +546,17 @@ It is important to note that at this time only the Store View scope is used. The
 				sort_order
 				positions_limit
 				is_active
+				requires{
+					id
+					identifier
+					name
+					type
+				}
 			}
 		}
 	}
 
-**widgets**: Use to create the `widgets.json` file to populate Widgets. Include the Ids or names you want to include in the export. If you need a list of all widgets, set the input to an empty string `identifiers: [""]`. `widget_id` is also available but not necessary for a data pack. `ui_type` is also available if a UI friendly version of type needs to be displayed
+**widgets**: Use to create the `widgets.json` file to populate Widgets. Include the Ids or names you want to include in the export. If you need a list of all widgets, set the input to an empty string `identifiers: [""]`. `widget_id` is also available but not necessary for a data pack. `ui_type` is also available if a UI friendly version of type needs to be displayed. Note, only single layout update is supported. If multiple layout updates are defined, only the first is exported.
 
 	query{
 		widgets(identifiers: ["1","2","3"]) {
@@ -518,12 +573,18 @@ It is important to note that at this time only the Store View scope is used. The
 				theme
 				title
 				widget_parameters
+				requires{
+					id
+					identifier
+					name
+					type
+				}
 			}
 		}
 	}
 
 
-**catalogRules**: Use to create the `catalog_rules.json` file. Include the catalog rule names or Ids you want to include in the export. `conditions_serialized` and `actions_serialized` will include the raw content, so any id substitutions will need to be done manually as outlined in the Data Installer documentation https://github.com/PMET-public/module-data-install#content-substitution. If you need a list of all catalog rules, set the input to an empty string `identifiers: [""]`. `rule_id` is also available, but not necessary for a data pack
+**catalogRules**: Use to create the `catalog_rules.json` file. Include the catalog rule names or Ids you want to include in the export.  If you need a list of all catalog rules, set the input to an empty string `identifiers: [""]`. `rule_id` is also available, but not necessary for a data pack
 
 	query{
 		catalogRules(identifiers: ["Test Rule"]) {
@@ -540,6 +601,12 @@ It is important to note that at this time only the Store View scope is used. The
 				sort_order
 				stop_rules_processing
 				is_active
+				requires{
+					id
+					identifier
+					name
+					type
+				}
 			}
 		}
 	}
@@ -617,7 +684,13 @@ It is important to note that at this time only the Store View scope is used. The
 				segments
 				store_view_code
 				type
-				is_active
+				is_enabled
+				requires{
+					id
+					identifier
+					name
+					type
+				}
 			}
 		}
 	}
@@ -680,11 +753,17 @@ It is important to note that at this time only the Store View scope is used. The
 				created_for
 				name
 				preview_image
+				requires{
+					id
+					identifier
+					name
+					type
+				}
 			}
 		}
 	}
 
-**imagesExtract**: creates a downloadabe, Data Installer compatible .zip archive of all images contained in the given elements. `categoryIds` is the list of categories containing the products to retrieve media from (likely the identical list from the  `productExport` query). `cmsDir`` is optional: Value is single directory under media\\wysiwyg to extract images from. Only include if you need to extract additional images not included in the existing blocks, pages, etc. If left empty all wysiwyg images will be extracted.
+**imagesExtract**: creates a downloadable, Data Installer compatible .zip archive of all images contained in the given elements. `categoryIds` is the list of categories containing the products to retrieve media from (likely the identical list from the  `productExport` query). `cmsDir`` is optional: Value is single directory under media\\wysiwyg to extract images from. Only include if you need to extract additional images not included in the existing blocks, pages, etc. If left empty all wysiwyg images will be extracted.
 
 	query{
 		imagesExtract(
@@ -741,7 +820,6 @@ Include the company names or Ids you want to include in the export.
 					}
 				}
 				shared_catalog{
-					store_code
 					name
 					description
 					type
