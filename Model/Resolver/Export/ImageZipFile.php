@@ -44,7 +44,7 @@ class ImageZipFile implements ResolverInterface
     
     # source directories for images from media directory
     protected const PRODUCT_PATH_ON_SERVER = '/catalog/product';
-    protected const CMS_PATH_ON_SERVER = '/wysiwyg/';
+    protected const CMS_PATH_ON_SERVER = '/';
     protected const TEMPLATE_PATH_ON_SERVER = '/';
     protected const LOGO_PATH_ON_SERVER = '/logo/';
     protected const FAVICON_PATH_ON_SERVER=  '/favicon/';
@@ -53,7 +53,7 @@ class ImageZipFile implements ResolverInterface
 
     # directories to save images for data pack
     protected const PRODUCT_PATH_DATAPACK = '/media/catalog/product';
-    protected const CMS_PATH_DATAPACK = '/media/wysiwyg/';
+    protected const CMS_PATH_DATAPACK = '/media/';
     protected const TEMPLATE_PATH_DATAPACK = '/media/.template-manager';
     protected const LOGO_PATH_DATAPACK = '/media/logo';
     protected const FAVICON_PATH_DATAPACK = '/media/favicon';
@@ -448,6 +448,7 @@ class ImageZipFile implements ResolverInterface
      */
     private function makeDirectory(string $path) : void
     {
+        $f=$this->directoryList->getPath('tmp').$path;
         $this->fileIo->mkdir($this->directoryList->getPath('tmp').$path);
     }
 
