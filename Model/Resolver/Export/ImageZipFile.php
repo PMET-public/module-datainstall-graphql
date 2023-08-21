@@ -266,7 +266,7 @@ class ImageZipFile implements ResolverInterface
         
         $this->zipDatapackImages();
         $this->moveZipFile();
-        $this->deleteTempDirectory();
+        //$this->deleteTempDirectory();
         $downloadUrl = $this->getDownloadUrl($storeCode);
             
         return [
@@ -487,7 +487,11 @@ class ImageZipFile implements ResolverInterface
             $path = $fileInfo["dirname"];
             $fileName = $fileInfo["basename"];
             $this->makeDirectory($this->baseDir.$destinationPath);
-            $source = $this->directoryList->getPath('media').$sourcePath.$path.'/'.$fileName;
+            if($path == "."){
+                $source = $this->directoryList->getPath('media').$sourcePath.$fileName;
+            }else{
+                $source = $this->directoryList->getPath('media').$sourcePath.$path.'/'.$fileName;
+            }
             $destination = $this->directoryList->getPath('tmp').$this->baseDir.$destinationPath.'/'.$fileName;
             
             $this->fileIo->cp($source, $destination);
