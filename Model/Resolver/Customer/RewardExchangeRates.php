@@ -79,6 +79,10 @@ class RewardExchangeRates implements ResolverInterface
             throw new GraphQlInputException(__('"identifiers" of Exchange Rates should be specified'));
         }
 
+        if ($args['identifiers'][0] == '') {
+            $args['identifiers'] = $this->exchangeRateProvider->getAllExchangeRateIds();
+        }
+
         return $args['identifiers'];
     }
 

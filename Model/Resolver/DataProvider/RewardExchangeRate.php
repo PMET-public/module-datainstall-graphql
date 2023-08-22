@@ -60,6 +60,22 @@ class RewardExchangeRate
     }
 
     /**
+     * Get all rate ids
+     *
+     * @return array
+     */
+    public function getAllExchangeRateIds(): array
+    {
+        $rateQuery = $this->rateCollection->create();
+        $rateResults = $rateQuery->getItems();
+        $rateIds = [];
+        foreach ($rateResults as $rate) {
+             $rateIds[] = $rate->getRateId();
+        }
+        return $rateIds;
+    }
+
+    /**
      * Fetch group data by either id or field
      *
      * @param mixed $identifier
@@ -83,7 +99,8 @@ class RewardExchangeRate
             ->getGroupDataById((int)$rate->getCustomerGroupId())['name'],
             'direction' => $this->getExchangeDirection($rate->getDirection()),
             'points' => $rate->getPoints(),
-            'currency_amount' => $rate->getCurrencyAmount()
+            'currency_amount' => $rate->getCurrencyAmount(),
+            'rate_id' => $rate->getRateId()
         ];
     }
 
