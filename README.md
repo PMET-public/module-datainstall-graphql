@@ -282,6 +282,19 @@ It is important to note that at this time only the Store View scope is used. The
 		}
 	}
 
+**customerList**: Returns a list of all Customers. Not needed for a data pack, but used to drive a UI selection list. No filtering is currently supported
+
+	query{
+		customerList {
+			items {
+			customer_id
+			email
+			firstname
+			lastname
+			}
+		}
+	}
+
 **customerAddressExport**: Use to create the `customer_addresses.json` file. Creates the same data set as a native customer address export. At this time no filters are supported.
 
 	query{

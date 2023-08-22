@@ -90,7 +90,11 @@ type Query {
         entityType: [String] @doc(description: "catalog_product or customer")
     ): AttributeList @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Attribute\\AttributeList") @doc(description:"List of attributes")
     storeList: StoreList @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Store\\StoreList") @doc(description:"List of stores and their group and website")
+    
+    customerList: CustomerList @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Customer\\CustomerList") @doc(description:"List of customers")
+ 
  }
+
 
 type Mutation {
   createDataInstallerJob(input: DataInstallerJobInput!): DataInstallerJobOutput
@@ -580,6 +584,17 @@ type RequisitionListsExport @doc(description: "Defines customer requisition list
 
 type Export {
     data: String
+}
+
+type CustomerList @doc(description: "List of Customers")  {
+    items: [CustomerListItem] @doc(description: "An array of customers")
+}
+
+type CustomerListItem {
+    email: String
+    firstname: String
+    lastname: String
+    customer_id: Int
 }
 
 interface ProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\ProductInterfaceTypeResolverComposite"){
