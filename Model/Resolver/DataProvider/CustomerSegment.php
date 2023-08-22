@@ -106,7 +106,7 @@ class CustomerSegment
     }
 
     /**
-     * Get all rule ids
+     * Get all segment ids
      *
      * @return array
      */

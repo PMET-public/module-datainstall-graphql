@@ -62,8 +62,12 @@ class AdminRoles implements ResolverInterface
         $this->authentication->authorize();
 
         $roleIdentifiers = $this->getRoleIdentifiers($args);
-        $roleData = $this->getRolesData($roleIdentifiers);
-
+        if ($args['identifiers'][0] == '') {
+            $roleData = $this->adminRoleDataProvider->getAllAdminRolesList();
+        } else {
+            $roleData = $this->getRolesData($roleIdentifiers);
+        }
+        
         return [
             'items' => $roleData,
         ];
@@ -81,7 +85,6 @@ class AdminRoles implements ResolverInterface
         if (!isset($args['identifiers']) || !is_array($args['identifiers']) || count($args['identifiers']) === 0) {
             throw new GraphQlInputException(__('"identifiers" of Admin Roles should be specified'));
         }
-
         return $args['identifiers'];
     }
 

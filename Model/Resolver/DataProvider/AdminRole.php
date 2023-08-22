@@ -14,6 +14,8 @@ use Magento\Framework\Exception\NoSuchEntityException;
 
 class AdminRole
 {
+    private const DEFAULT_ROLES = ["Administrators","admin"];
+
     /**
      * @var RoleCollection
      */
@@ -64,6 +66,27 @@ class AdminRole
         return $roleData;
     }
 
+     /**
+      * Get all role ids
+      *
+      * @return array
+      */
+    public function getAllAdminRolesList(): array
+    {
+        $roleQuery = $this->roleCollection->create();
+        $roleResults = $roleQuery->getItems();
+        $roles = [];
+        foreach ($roleResults as $role) {
+            if (!in_array($role->getRoleName(), self::DEFAULT_ROLES)) {
+                $roles[] = [
+                    'role' => $role->getRoleName(),
+                    'role_id' => $role->getRoleId()
+                ];
+            }
+        }
+        return $roles;
+    }
+
     /**
      * Fetch role data by field
      *
@@ -90,7 +113,8 @@ class AdminRole
             if ($rule->getPermission()=='allow') {
                 $roles[] = [
                 'role' => $roleName,
-                'resource_id' => $rule->getResourceId()
+                'resource_id' => $rule->getResourceId(),
+                'role_id' => $roleId,
                 ];
             }
         }

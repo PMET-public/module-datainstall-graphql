@@ -611,7 +611,7 @@ It is important to note that at this time only the Store View scope is used. The
 		}
 	}
 
-**adminRoles**: Use to create the `admin_roles.json` file. Include the role names or Ids you want to include in the export. 
+**adminRoles**: Use to create the `admin_roles.json` file. Include the role names or Ids you want to include in the export. If you need a list of all roles, set the input to an empty string `identifiers: [""]`.  This will also only return a list of distinct roles and not resources. `role_id` can also be included, but it not necessary for a Data pack.
 
 	query{
 		adminRoles(identifiers: ["Sales Admin"]) {
