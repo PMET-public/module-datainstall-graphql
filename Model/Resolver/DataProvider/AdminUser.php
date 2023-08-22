@@ -13,6 +13,8 @@ use Magento\Framework\Exception\NoSuchEntityException;
 
 class AdminUser
 {
+    private const DEFAULT_USERS = ["admin"];
+    
     /**
      * @var RoleCollection
      */
@@ -77,6 +79,24 @@ class AdminUser
         return $roleData;
     }
 
+     /**
+      * Get all admin user ids
+      *
+      * @return array
+      */
+    public function getAllAdminUserIds(): array
+    {
+        $userQuery = $this->userCollection->create();
+        $userResults = $userQuery->getItems();
+        $userIds = [];
+        foreach ($userResults as $user) {
+            if (!in_array($user->getUsername(), self::DEFAULT_USERS)) {
+                $userIds[] = $user->getUserId();
+            }
+        }
+        return $userIds;
+    }
+
     /**
      * Fetch admin user by field
      *
@@ -109,7 +129,8 @@ class AdminUser
             'firstname' => $user->getFirstname(),
             'lastname' => $user->getLastname(),
             'password' => 'Password1',
-            'role'  => $role->getRoleName()
+            'role'  => $role->getRoleName(),
+            'user_id' => $userId
         ];
     }
 }

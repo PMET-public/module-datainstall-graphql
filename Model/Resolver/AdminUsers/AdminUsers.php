@@ -82,6 +82,10 @@ class AdminUsers implements ResolverInterface
             throw new GraphQlInputException(__('"identifiers" of Admin Users should be specified'));
         }
 
+        if ($args['identifiers'][0] == '') {
+            $args['identifiers'] = $this->adminUserDataProvider->getAllAdminUserIds();
+        }
+
         return $args['identifiers'];
     }
 

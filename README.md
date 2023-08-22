@@ -611,7 +611,7 @@ It is important to note that at this time only the Store View scope is used. The
 		}
 	}
 
-**adminRoles**: Use to create the `admin_roles.json` file. Include the role names or Ids you want to include in the export. If you need a list of all roles, set the input to an empty string `identifiers: [""]`.  This will also only return a list of distinct roles and not resources. `role_id` can also be included, but it not necessary for a Data pack.
+**adminRoles**: Use to create the `admin_roles.json` file. Include the role names or Ids you want to include in the export. If you need a list of all roles, set the input to an empty string `identifiers: [""]`.  This will also only return a list of distinct roles and not resources. Default roles of `admin` and `Administrator` are not included. `role_id` can also be included in the items node, but it not necessary for a Data pack.
 
 	query{
 		adminRoles(identifiers: ["Sales Admin"]) {
@@ -622,7 +622,7 @@ It is important to note that at this time only the Store View scope is used. The
 		}
 	}
 
-**adminUsers**: Use to create the `admin_users.json` file. Include the admin user names or Ids you want to include in the export. As passwords cannot be decoded, `password` will return a static value of `Password1`
+**adminUsers**: Use to create the `admin_users.json` file. Include the admin user names or Ids you want to include in the export. As passwords cannot be decoded, `password` will return a static value of `Password1`.  If you need a list of all users, set the input to an empty string `identifiers: [""]`. Default `admin` user is not included. `user_id` can also be included in the items node, but it not necessary for a Data pack.
 
 	query{
 		adminUsers(identifiers: ["2"]) {

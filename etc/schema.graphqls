@@ -485,6 +485,7 @@ type AdminUser {
     firstname: String
     lastname: String
     role: String
+    user_id: Int
 }
 
 type DataInstallerStoreSettings {
