@@ -80,7 +80,9 @@ class MsiSource implements ResolverInterface
         if (!isset($args['identifiers']) || !is_array($args['identifiers']) || count($args['identifiers']) === 0) {
             throw new GraphQlInputException(__('Source codes of MSI source should be specified'));
         }
-
+        if ($args['identifiers'][0] == '') {
+            $args['identifiers'] = $this->msiSourceProvider->getAllSourceCodes();
+        }
         return $args['identifiers'];
     }
 

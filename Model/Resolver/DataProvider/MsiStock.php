@@ -17,6 +17,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 
 class MsiStock
 {
+    
     /**
      * @var StockRepositoryInterface
      */
@@ -106,8 +107,25 @@ class MsiStock
         return [
             'stock_name' => $stock->getName(),
             'site_code' => $this->getWebsiteCodes($extensionAttributes->getSalesChannels()),
-            'source_code' => $this->getStockSource($stock->getStockId())
+            'source_code' => $this->getStockSource($stock->getStockId()),
+            'stock_id' => $stock->getStockId()
         ];
+    }
+
+     /**
+      * Get all stock ids
+      *
+      * @return array
+      */
+    public function getAllStockIds(): array
+    {
+        $search = $this->searchCriteria->create();
+        $stockList = $this->stockRepository->getList($search)->getItems();
+        $stockIds = [];
+        foreach ($stockList as $stock) {
+            $stockIds[] = $stock->getStockId();
+        }
+        return $stockIds;
     }
 
      /**

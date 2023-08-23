@@ -80,7 +80,9 @@ class MsiStock implements ResolverInterface
         if (!isset($args['identifiers']) || !is_array($args['identifiers']) || count($args['identifiers']) === 0) {
             throw new GraphQlInputException(__('Stock codes of MSI stock should be specified'));
         }
-
+        if ($args['identifiers'][0] == '') {
+            $args['identifiers'] = $this->msiStockProvider->getAllStockIds();
+        }
         return $args['identifiers'];
     }
 

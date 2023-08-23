@@ -329,6 +329,7 @@ type MsiStock {
     stock_name: String @doc(description: "Name as shown in admin")
     site_code: String  @doc(description: "List of site codes")
     source_code: String  @doc(description: "List of source codes to assign to the stock")
+    stock_id: Int @doc(description: "Id of stock")
 }
 
 

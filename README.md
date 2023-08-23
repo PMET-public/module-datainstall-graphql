@@ -374,7 +374,7 @@ It is important to note that at this time only the Store View scope is used. The
 		}
 	}
 
-**msiSource**: Use to create the `msi_source.json` file. Include the source codes you want to include in the export. 
+**msiSource**: Use to create the `msi_source.json` file. Include the source codes you want to include in the export. If you need a list of all sources, set the input to an empty string `identifiers: [""]`. `default` source will not be included with this method
 
 	query{
 		msiSource(identifiers: ["ac_warehouse"]){
@@ -402,7 +402,7 @@ It is important to note that at this time only the Store View scope is used. The
 		}
 	}
 
-**msiStock**: Use to create the `msi_stock.json` file. Include the stock names or Ids you want to include in the export. 
+**msiStock**: Use to create the `msi_stock.json` file. Include the stock names or Ids you want to include in the export. If you need a list of all stocks, set the input to an empty string `identifiers: [""]`.  `stock_id` is also available but not needed for a Data Pack
 
 	query{
 		msiStock(identifiers: ["2"]){

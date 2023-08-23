@@ -8,23 +8,35 @@ declare(strict_types=1);
 namespace MagentoEse\DataInstallGraphQl\Model\Resolver\DataProvider;
 
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 class MsiSource
 {
+    
+    private const DEFAULT_SOURCES = ['default'];
+    
     /**
      * @var SourceRepositoryInterface
      */
     private $sourceRepository;
 
     /**
+     * @var SearchCriteriaBuilder
+     */
+    private $searchCriteria;
+
+    /**
      * @param SourceRepositoryInterface $sourceRepository
+     * @param SearchCriteriaBuilder $searchCriteria
      */
     public function __construct(
-        SourceRepositoryInterface $sourceRepository
+        SourceRepositoryInterface $sourceRepository,
+        SearchCriteriaBuilder $searchCriteria
     ) {
         $this->sourceRepository = $sourceRepository;
+        $this->searchCriteria = $searchCriteria;
     }
 
     /**
@@ -41,6 +53,24 @@ class MsiSource
         return $sourceData;
     }
 
+    /**
+     * Get all source codes
+     *
+     * @return array
+     */
+    public function getAllSourceCodes(): array
+    {
+        $search = $this->searchCriteria->create();
+        $sourceList = $this->sourceRepository->getList($search)->getItems();
+        $sourceId = [];
+        foreach ($sourceList as $source) {
+            if (!in_array($source->getSourceCode(), self::DEFAULT_SOURCES)) {
+                 $sourceId[] = $source->getSourceCode();
+            }
+        }
+        return $sourceId;
+    }
+          
     /**
      * Fetch group data by either id or field
      *
