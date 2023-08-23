@@ -530,6 +530,7 @@ type Company {
         pageSize: Int = 20 @doc(description: "Specifies the maximum number of results to return at once. Defaults to 20"),
         currentPage: Int = 1 @doc(description: "Specifies which page of results to return. The default value is 1"),
     ): CompanyUsers @resolver(class: "MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Company\\Users") @doc(description: "Returns a list of company users based on activity status")
+    company_id: Int @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Company\\CompanyId")  @doc(description: "Company Id") 
     site_code: String @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Store\\SiteCode")
     shared_catalog: SharedCatalog! @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Company\\SharedCatalog") @doc(description: "Shared catalog assigned to the company")
     approval_rules: ApprovalRules @resolver(class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Company\\ApprovalRules") @doc(description: "Get List of B2B Approval Rules.")

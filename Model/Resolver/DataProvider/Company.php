@@ -63,6 +63,22 @@ class Company
     }
 
     /**
+     * Get all company ids
+     *
+     * @return array
+     */
+    public function getAllCompanyIds(): array
+    {
+        $search = $this->searchCriteriaBuilder->create();
+        $companyList = $this->companyRepository->getList($search)->getItems();
+        $companyIds = [];
+        foreach ($companyList as $company) {
+            $companyIds[] = $company->getEntityId();
+        }
+        return $companyIds;
+    }
+
+    /**
      * Fetch company data by field
      *
      * @param mixed $identifier

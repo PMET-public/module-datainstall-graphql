@@ -82,6 +82,9 @@ class Company implements ResolverInterface
             throw new GraphQlInputException(__('Name or ID of companies should be specified'));
         }
 
+        if ($args['identifiers'][0] == '') {
+            $args['identifiers'] = $this->companyDataProvider->getAllCompanyIds();
+        }
         return $args['identifiers'];
     }
 

@@ -100,7 +100,7 @@ class CustomerGroup
     }
 
      /**
-      * Get all rule ids
+      * Get all group ids
       *
       * @return array
       */

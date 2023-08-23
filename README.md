@@ -793,12 +793,13 @@ It is important to note that at this time only the Store View scope is used. The
 	}
 
 **companies**: Use to create the `b2b_companies.json` file.
-Include the company names or Ids you want to include in the export.
+Include the company names or Ids you want to include in the export. If you need a list of all companies, set the input to an empty string `identifiers: [""]`.
 
 	query{
 		companies(identifiers: ["1"]) {
 			items {
 				site_code
+				company_id
 				legal_name
 				company_name:name
 				company_email:email
