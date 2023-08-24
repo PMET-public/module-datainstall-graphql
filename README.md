@@ -791,6 +791,13 @@ It is important to note that at this time only the Store View scope is used. The
 		zip_file_server_path
 		}
 	}
+An optional `all_iamges` node can be included if you want details on all of the contained images. This could be used for retrieving the images remotely rather than downloading the .zip file. `source` is the absolute path of the image on the server. `in_datapack` is the path to save the image in a Data pack. `image_url` is the url to the image. This does not include any images that were extracted under the `cmsDir` argument.	
+	
+	all_images{
+		source
+		in_datapack
+		image_url
+    }
 
 **companies**: Use to create the `b2b_companies.json` file.
 Include the company names or Ids you want to include in the export. If you need a list of all companies, set the input to an empty string `identifiers: [""]`.

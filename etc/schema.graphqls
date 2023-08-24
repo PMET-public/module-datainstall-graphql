@@ -353,6 +353,13 @@ type DataIntstallerJobStatus @doc(description: "Retrieves status information Dat
 type ImageZipFile @doc(description: "Retrieves a zip file containing all images for a product") {
     zip_file_download: String @doc(description: "Zip file with images in Data Pack directory structure")
     zip_file_server_path: String @doc(description: "Server path to zip file")
+    all_images: [ExportedImages] @doc(description: "Individual information about each image that could be used for direct download")
+}
+
+type ExportedImages @doc(description: "Information about each image that could be used for direct download") {
+    source: String @doc(description: "Path to image on server")
+    in_datapack: String @doc(description: "Path to save in Data Pack")
+    image_url: String @doc(description: "Url to image")
 }
 
 type DataInstallerLogRecord {

@@ -194,7 +194,7 @@ class ImageZipFile implements ResolverInterface
 
         $storeId = $context->getExtensionAttributes()->getStore()->getId();
         $storeCode = $context->getExtensionAttributes()->getStore()->getCode();
-        
+        $allImages = [];
         //create a unique directory to store the images
         $this->baseDir = '/'. uniqid("data-install-");
 
@@ -225,39 +225,80 @@ class ImageZipFile implements ResolverInterface
         }
         //copy template thumbnail images
         $templateImages = $this->getTemplateImagesList($templateIds);
-        $this->copyFiles($templateImages, self::TEMPLATE_PATH_ON_SERVER, self::TEMPLATE_PATH_DATAPACK);
+        $allImages= array_merge($allImages, $this->copyFiles(
+            $templateImages,
+            self::TEMPLATE_PATH_ON_SERVER,
+            self::TEMPLATE_PATH_DATAPACK,
+            $storeCode
+        ));
         
         //copy product images
         $productImages = $this->getProductImagesList($categoryIds);
-        $this->copyFilesWithPath($productImages, self::PRODUCT_PATH_ON_SERVER, self::PRODUCT_PATH_DATAPACK);
+        $allImages= array_merge($allImages, $this->copyFilesWithPath(
+            $productImages,
+            self::PRODUCT_PATH_ON_SERVER,
+            self::PRODUCT_PATH_DATAPACK,
+            $storeCode
+        ));
+        
         //TODO: copy images in the description of categories
         
         //copy files for downloadable products
         $downloadableFiles = $this->getDownloadableFileList($categoryIds);
-        $this->copyFilesWithPath(
+        $allImages= array_merge($this->copyFilesWithPath(
             $downloadableFiles,
             self::DOWNLOADABLE_PATH_ON_SERVER,
-            self::DOWNLOADABLE_PATH_DATAPACK
-        );
-        $this->copyFilesWithPath(
+            self::DOWNLOADABLE_PATH_DATAPACK,
+            $storeCode
+        ));
+        $allImages= array_merge($this->copyFilesWithPath(
             $downloadableFiles,
             self::DOWNLOADABLE_SAMPLE_PATH_ON_SERVER,
-            self::DOWNLOADABLE_PATH_DATAPACK
-        );
+            self::DOWNLOADABLE_PATH_DATAPACK,
+            $storeCode
+        ));
         
         //copy defined logo and favicon images
         $logoImages = $this->getLogoImagesList($storeId);
-        $this->copyFiles($logoImages, self::LOGO_PATH_ON_SERVER, self::LOGO_PATH_DATAPACK);
+        $allImages= array_merge($this->copyFiles(
+            $logoImages,
+            self::LOGO_PATH_ON_SERVER,
+            self::LOGO_PATH_DATAPACK,
+            $storeCode
+        ));
+
         $faviconImages = $this->getFaviconImagesList($storeId);
-        $this->copyFiles($faviconImages, self::FAVICON_PATH_ON_SERVER, self::FAVICON_PATH_DATAPACK);
+        $allImages= array_merge($this->copyFiles(
+            $faviconImages,
+            self::FAVICON_PATH_ON_SERVER,
+            self::FAVICON_PATH_DATAPACK,
+            $storeCode
+        ));
         
         //copy block, dynamic block and page images
         $blockImages = $this->getBlocksImagesList($blockIds);
-        $this->copyFilesWithPath($blockImages, self::CMS_PATH_ON_SERVER, self::CMS_PATH_DATAPACK);
+        $allImages= array_merge($this->copyFilesWithPath(
+            $blockImages,
+            self::CMS_PATH_ON_SERVER,
+            self::CMS_PATH_DATAPACK,
+            $storeCode
+        ));
+
         $pageImages = $this->getPageImagesList($pageIds);
-        $this->copyFilesWithPath($pageImages, self::CMS_PATH_ON_SERVER, self::CMS_PATH_DATAPACK);
+        $allImages= array_merge($this->copyFilesWithPath(
+            $pageImages,
+            self::CMS_PATH_ON_SERVER,
+            self::CMS_PATH_DATAPACK,
+            $storeCode
+        ));
+
         $dynamicBlockImages = $this->getDynamicBlockImagesList($dynamicBlockIds, $storeId);
-        $this->copyFilesWithPath($dynamicBlockImages, self::CMS_PATH_ON_SERVER, self::CMS_PATH_DATAPACK);
+        $allImages= array_merge($this->copyFilesWithPath(
+            $dynamicBlockImages,
+            self::CMS_PATH_ON_SERVER,
+            self::CMS_PATH_DATAPACK,
+            $storeCode
+        ));
         
         //copy cms files by path
         if (array_key_exists('cmsDir', $args)) {
@@ -272,6 +313,7 @@ class ImageZipFile implements ResolverInterface
         return [
              'zip_file_download' => $downloadUrl,
              'zip_file_server_path' => $this->directoryList->getPath('media').'/tmp'.$this->baseDir.'.zip',
+             'all_images' => $allImages,
         ];
     }
 
@@ -474,11 +516,13 @@ class ImageZipFile implements ResolverInterface
      * @param array $files
      * @param string $sourcePath
      * @param string $destinationPath
-     * @return void
+     * @param string $storeCode
+     * @return array
      * @throws FileSystemException
      */
-    private function copyFiles(array $files, string $sourcePath, string $destinationPath) : void
+    private function copyFiles(array $files, string $sourcePath, string $destinationPath, string $storeCode) : array
     {
+        $returnFiles = [];
         foreach ($files as $file) {
             if ($file == null) {
                 continue;
@@ -495,7 +539,13 @@ class ImageZipFile implements ResolverInterface
             $destination = $this->directoryList->getPath('tmp').$this->baseDir.$destinationPath.'/'.$fileName;
             
             $this->fileIo->cp($source, $destination);
+            $returnFiles[] = [
+                'source' => $source,
+                'in_datapack' => $destinationPath.'/'.$file,
+                'image_url' => $this->getImageUrl($storeCode).ltrim($sourcePath, '/').$file
+            ];
         }
+        return $returnFiles;
     }
     
     /**
@@ -504,11 +554,17 @@ class ImageZipFile implements ResolverInterface
      * @param array $files
      * @param string $sourcePath
      * @param string $destinationPath
-     * @return void
+     * @param string $storeCode
+     * @return array
      * @throws FileSystemException
      */
-    private function copyFilesWithPath(array $files, string $sourcePath, string $destinationPath) : void
-    {
+    private function copyFilesWithPath(
+        array $files,
+        string $sourcePath,
+        string $destinationPath,
+        string $storeCode
+    ) : array {
+        $returnFiles = [];
         foreach ($files as $file) {
             $fileInfo = $this->fileIo->getPathInfo($file);
             $path = $fileInfo["dirname"];
@@ -517,7 +573,13 @@ class ImageZipFile implements ResolverInterface
             $source = $this->directoryList->getPath('media').$sourcePath.$path.'/'.$fileName;
             $destination = $this->directoryList->getPath('tmp').$this->baseDir.$destinationPath . $path.'/'.$fileName;
             $this->fileIo->cp($source, $destination);
+            $returnFiles[] = [
+                'source' => $source,
+                'in_datapack' => $destinationPath.$file,
+                'image_url' => $this->getImageUrl($storeCode).ltrim($sourcePath, '/').$file
+            ];
         }
+        return $returnFiles;
     }
 
     /**
@@ -574,6 +636,20 @@ class ImageZipFile implements ResolverInterface
         $currentStore = $this->storeRepository->get($storeCode);
         $mediaUrl = $currentStore->getBaseUrl(UrlInterface::URL_TYPE_MEDIA);
         return $mediaUrl.'tmp'.$this->baseDir.'.zip';
+    }
+
+    /**
+     * Get the download url
+     *
+     * @param string $storeCode
+     * @return string
+     * @throws NoSuchEntityException
+     */
+    private function getImageUrl(string $storeCode) : string
+    {
+        $currentStore = $this->storeRepository->get($storeCode);
+        $mediaUrl = $currentStore->getBaseUrl(UrlInterface::URL_TYPE_MEDIA);
+        return $mediaUrl;
     }
 
     /**
