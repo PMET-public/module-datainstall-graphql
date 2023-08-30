@@ -73,7 +73,7 @@ class AdminRole
       */
     public function getAllAdminRolesList(): array
     {
-        $roleQuery = $this->roleCollection->create();
+        $roleQuery = $this->roleCollection->create()->addFieldToFilter('role_type', 'G');
         $roleResults = $roleQuery->getItems();
         $roles = [];
         foreach ($roleResults as $role) {

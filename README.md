@@ -143,21 +143,6 @@ Example:
 Configurations are retrieved from the store view scope and uses the same inheritance as the configuration. For example, if you do not have `Welcome Text` set at your Store View scope, it will return the value set for Website or Default. If a setting has no value set that path will not be included in the query results.
 It is important to note that at this time only the Store View scope is used. There are many options that are set at the Website scope. Those would be retrieved, but then interpreted as Store View scope, so therefore would be imported but not used.  If you need to use other scopes, or a mixture of scopes, you should supplement this file with the manual .csv configuration files available
 
-**storeList**: Retrieves a list of stores. Not needed for a data pack, but could be used to drive UI selection. Group equates to Store in the UI, Store equates to View
-
-	query{
-		storeList {
-			items {
-				store_code
-				store_name
-				group_code
-				group_name
-				website_code
-				website_name
-			}
-		}
-	}
-
 **Default Settings Included**
 | Setting  | Path  |
 | ------------ | ------------ |
@@ -179,6 +164,22 @@ It is important to note that at this time only the Store View scope is used. The
 		}
 		}
 	}
+
+**storeList**: Retrieves a list of stores. Not needed for a data pack, but could be used to drive UI selection. Group equates to Store in the UI, Store equates to View
+
+	query{
+		storeList {
+			items {
+				store_code
+				store_name
+				group_code
+				group_name
+				website_code
+				website_name
+			}
+		}
+	}
+
 
 **categories**: Use to create the `categories.json` file. For the complete list of filtering options, see the GraphQL DevDocs.
 
