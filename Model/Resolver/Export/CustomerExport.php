@@ -6,7 +6,6 @@
 
 namespace MagentoEse\DataInstallGraphQl\Model\Resolver\Export;
 
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
@@ -18,6 +17,7 @@ use MagentoEse\DataInstallGraphQl\Model\Authentication;
 use Magento\ImportExport\Model\Export\Entity\ExportInfoFactory;
 use Magento\ImportExport\Api\ExportManagementInterface;
 use Magento\Framework\Locale\ResolverInterface as LocaleResolver;
+use MagentoEse\DataInstallGraphQl\Model\Resolver\Customer\AddToAutofill;
 
 class CustomerExport implements ResolverInterface
 {
@@ -26,6 +26,9 @@ class CustomerExport implements ResolverInterface
 
     /** @var ExportManagementInterface */
     private $exportManager;
+
+    /** @var AddToAutofill */
+    private $addToAutofill;
 
      /** @var LocaleResolver */
      private $localeResolver;
@@ -37,6 +40,7 @@ class CustomerExport implements ResolverInterface
     *
     * @param ExportInfoFactory $exportInfoFactory
     * @param ExportManagementInterface $exportManager
+    * @param AddToAutofill $addToAutofill
     * @param LocaleResolver $localeResolver
     * @param Authentication $authentication
     * @return void
@@ -44,11 +48,13 @@ class CustomerExport implements ResolverInterface
     public function __construct(
         ExportInfoFactory $exportInfoFactory,
         ExportManagementInterface $exportManager,
+        AddToAutofill $addToAutofill,
         LocaleResolver $localeResolver,
         Authentication $authentication
     ) {
         $this->exportInfoFactory = $exportInfoFactory;
         $this->exportManager = $exportManager;
+        $this->addToAutofill = $addToAutofill;
         $this->localeResolver = $localeResolver;
         $this->authentication = $authentication;
     }
@@ -85,14 +91,24 @@ class CustomerExport implements ResolverInterface
         //export filter only takes a single email address. Multiple exports are needed for mulitple addresses
  
         if ($filterValues ==1) {
-            $exportData = $this->singleExport('customer', $filter);
+            $exportData = $this->singleExport('customer_composite', $filter);
         } else {
-            $exportData = $this->multipleExport('customer', $filter);
+            $exportData = $this->multipleExport('customer_composite', $filter);
         }
         
         if (count($exportData) < 2) {
             throw new GraphQlNoSuchEntityException(__('No Customers Found'));
         }
+        //add autofill setting
+        $emailKey = array_search('email',$exportData[0]);
+        foreach($exportData as $rowKey => $row){
+            if($rowKey>0){
+                $exportData[$rowKey][] = $this->addToAutofill->getAutofillSetting($row[$emailKey]);
+            } else {
+                $exportData[0][] = 'add_to_autofill';
+            }
+        }
+
         $json = json_encode($exportData);
        
         return [

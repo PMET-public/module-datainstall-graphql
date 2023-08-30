@@ -54,7 +54,7 @@ class AddToAutofill implements ResolverInterface
       * @param string $email
       * @return string
       */
-    private function getAutofillSetting($email)
+    public function getAutofillSetting($email)
     {
         $autofill = 'N';
         for ($x = 0; $x <= 17; $x++) {
