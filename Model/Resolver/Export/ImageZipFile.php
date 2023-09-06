@@ -316,7 +316,7 @@ class ImageZipFile implements ResolverInterface
              'all_images' => $allImages,
         ];
     }
-
+   
     /**
      * Get Product Images List
      *

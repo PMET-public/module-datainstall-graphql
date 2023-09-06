@@ -100,9 +100,9 @@ class CustomerExport implements ResolverInterface
             throw new GraphQlNoSuchEntityException(__('No Customers Found'));
         }
         //add autofill setting
-        $emailKey = array_search('email',$exportData[0]);
-        foreach($exportData as $rowKey => $row){
-            if($rowKey>0){
+        $emailKey = array_search('email', $exportData[0]);
+        foreach ($exportData as $rowKey => $row) {
+            if ($rowKey>0) {
                 $exportData[$rowKey][] = $this->addToAutofill->getAutofillSetting($row[$emailKey]);
             } else {
                 $exportData[0][] = 'add_to_autofill';

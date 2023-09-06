@@ -11,6 +11,7 @@ use Magento\Reward\Model\ResourceModel\Reward\Rate\CollectionFactory as RateColl
 use Magento\Reward\Model\Reward\Rate;
 use MagentoEse\DataInstallGraphQl\Model\Resolver\DataProvider\CustomerGroup as CustomerGroupDataProvider;
 use Magento\Store\Api\WebsiteRepositoryInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 class RewardExchangeRate
@@ -31,18 +32,26 @@ class RewardExchangeRate
     private $websiteRepository;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * @param RateCollection $rateCollection
      * @param CustomerGroupDataProvider $customerGroupDataProvider
      * @param WebsiteRepositoryInterface $websiteRepository
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         RateCollection $rateCollection,
         CustomerGroupDataProvider $customerGroupDataProvider,
-        WebsiteRepositoryInterface $websiteRepository
+        WebsiteRepositoryInterface $websiteRepository,
+        StoreManagerInterface $storeManager
     ) {
         $this->rateCollection = $rateCollection;
         $this->customerGroupDataProvider = $customerGroupDataProvider;
         $this->websiteRepository = $websiteRepository;
+        $this->storeManager = $storeManager;
     }
 
      /**
@@ -92,7 +101,13 @@ class RewardExchangeRate
                 __('The Reward Exchange Rate with ID "%1" doesn\'t exist.', $identifier)
             );
         }
- 
+
+        $rateText = $rate->getRateText(
+            $rate->getDirection(),
+            $rate->getPoints(),
+            $rate->getCurrencyAmount(),
+            $this->storeManager->getWebsite($rate->getWebsiteId())->getBaseCurrencyCode()
+        );
         return [
             'site_code' => $this->getWebsiteCode($rate->getWebsiteId()),
             'customer_group' => $this->customerGroupDataProvider
@@ -100,7 +115,8 @@ class RewardExchangeRate
             'direction' => $this->getExchangeDirection($rate->getDirection()),
             'points' => $rate->getPoints(),
             'currency_amount' => $rate->getCurrencyAmount(),
-            'rate_id' => $rate->getRateId()
+            'rate_id' => $rate->getRateId(),
+            'rate_text' => $rateText
         ];
     }
 

@@ -533,7 +533,7 @@ It is important to note that at this time only the Store View scope is used. The
 		}
 	}
 
-**rewardsPointsExchangeRate**: Use to create the `reward_exchange_rate.json` file. Include the Ids you want to include in the export. If you need a list of all exchange rates, set the input to an empty string `identifiers: [""]`. `rate_id` is also available, but not necessary for a data pack
+**rewardsPointsExchangeRate**: Use to create the `reward_exchange_rate.json` file. Include the Ids you want to include in the export. If you need a list of all exchange rates, set the input to an empty string `identifiers: [""]`. `rate_id` and `rate_text` are also available, but not necessary for a data pack
 
 	query{
 		rewardsPointsExchangeRate(identifiers: ["1"]) {

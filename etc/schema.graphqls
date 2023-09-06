@@ -435,6 +435,7 @@ type RewardPointsRate {
     customer_group: String @doc(description:"Single group name or comma delimited list")
     direction: String @doc(description:"points_to_currency or currency_to_points")
     rate_id: Int @doc(description:"Id of rate")
+    rate_text: String @doc(description:"Text description of rate")
 }
 
 type Upsells @doc(description: "Retrieves all requested Related Product Rules") {
