@@ -55,9 +55,8 @@ class PageId implements ResolverInterface
     {
         $this->authentication->authorize();
 
-        if (!empty($value['identifier'])) {
-            $page = $this->pageRepository->getById($value['identifier']);
-            return $page->getId();
+        if (!empty($value['page_id'])) {
+            return $value['page_id'];
         } else {
             return null;
         }

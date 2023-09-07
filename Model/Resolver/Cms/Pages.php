@@ -6,6 +6,7 @@
 
 namespace MagentoEse\DataInstallGraphQl\Model\Resolver\Cms;
 
+use Magento\Cms\Api\Data\PageInterface;
 use Magento\CmsGraphQl\Model\Resolver\DataProvider\Page as PageDataProvider;
 use Magento\Cms\Api\PageRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
@@ -121,13 +122,13 @@ class Pages implements ResolverInterface
     {
         $pagesData = [];
         $search = $this->searchCriteriaBuilder
-            //->addFilter(BlockInterface::BLOCK_ID, [0], 'in')
+            ->addFilter('store_id', [0,$storeId], 'in')
             ->create();
         $pageList = $this->pageRepository->getList($search)->getItems();
         
         foreach ($pageList as $page) {
             $pagesData[$page->getId()] = $this->pageDataProvider
-            ->getDataByPageId((int)$page->getId(), $storeId);
+            ->getDataByPageId((int)$page->getId());
         }
         return $pagesData;
     }
