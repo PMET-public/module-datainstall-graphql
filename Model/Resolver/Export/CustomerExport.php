@@ -91,9 +91,9 @@ class CustomerExport implements ResolverInterface
         //export filter only takes a single email address. Multiple exports are needed for mulitple addresses
  
         if ($filterValues ==1) {
-            $exportData = $this->singleExport('customer_composite', $filter);
+            $exportData = $this->singleExport('customer', $filter);
         } else {
-            $exportData = $this->multipleExport('customer_composite', $filter);
+            $exportData = $this->multipleExport('customer', $filter);
         }
         
         if (count($exportData) < 2) {
