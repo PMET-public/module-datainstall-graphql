@@ -7,6 +7,7 @@
 namespace MagentoEse\DataInstallGraphQl\Model\Resolver\Cms;
 
 use Magento\Cms\Api\BlockRepositoryInterface;
+use Magento\Cms\Api\Data\BlockInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
@@ -84,7 +85,7 @@ class BlocksList implements ResolverInterface
     {
         $blocksData = [];
         $search = $this->searchCriteriaBuilder
-            //->addFilter(BlockInterface::BLOCK_ID, [0], 'in')
+            ->addFilter('store_id', [0,$storeId], 'in')
             ->create();
         $blockList = $this->blockRepository->getList($search)->getItems();
         
