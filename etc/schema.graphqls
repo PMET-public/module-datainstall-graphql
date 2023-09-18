@@ -75,6 +75,7 @@ type Query {
         categoryIds: [String] @doc(description: "List of Category Ids to export product pricing from")
     ): Export @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Export\\AdvancedPricingExport") @doc(description:"csv encoded to json array of pricing data")
     storeConfigurations(
+        suppressB2BSettings: Boolean @doc(description: "Optional: Set to true to suppress B2B settings from being returned")
         additionalSettings: [String] @doc(description: "Optional: Additional store configurations to return expressed as path value from core_config_data table. Example: web/secure/base_url")
     ): StoreConfigurations @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Store\\Configurations") @doc(description:"Store Admin Configuration Settings")
     imagesExtract(

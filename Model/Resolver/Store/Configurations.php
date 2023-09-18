@@ -27,6 +27,21 @@ class Configurations implements ResolverInterface
         'design/header/welcome',
         'general/store_information/name',
         'web/default/cms_home_page'];
+    
+    /** @var array */
+    private array $b2bPaths=[
+        'btob/website_configuration/company_active',
+        'btob/website_configuration/negotiablequote_active',
+        'btob/website_configuration/quickorder_active',
+        'btob/website_configuration/requisitionlist_active',
+        'btob/website_configuration/sharedcatalog_active',
+        'btob/website_configuration/purchaseorder_enabled',
+        'btob/website_configuration/direct_products_price_assigning',
+        'btob/default_b2b_payment_methods/applicable_payment_methods',
+        'btob/default_b2b_payment_methods/available_payment_methods',
+        'btob/default_b2b_payment_methods/applicable_payment_methods',
+        'btob/default_b2b_shipping_methods/available_shipping_methods'
+    ];
 
     /** @var Authentication */
     private $authentication;
@@ -77,6 +92,14 @@ class Configurations implements ResolverInterface
             $paths = array_merge($args['additionalSettings'], $this->defaultPaths);
         } else {
             $paths = $this->defaultPaths;
+        }
+
+        if (empty($args['suppressB2BSettings'])) {
+            $paths = array_merge($paths, $this->b2bPaths);
+        } else {
+            if (!$args['suppressB2BSettings']) {
+                $paths = array_merge($paths, $this->b2bPaths);
+            }
         }
 
         //this->scopeConfig->getValue($path, $scopeType, $scopeCode);
