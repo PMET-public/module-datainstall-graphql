@@ -1,4 +1,8 @@
 <?php
+/**
+ * Copyright 2023 Adobe, Inc. All rights reserved.
+ * See LICENSE for license details.
+ */
 
 namespace MagentoEse\DataInstallGraphQl\Model\Resolver\Sales;
 

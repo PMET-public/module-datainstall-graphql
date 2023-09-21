@@ -1,4 +1,8 @@
 <?php
+/**
+ * Copyright 2023 Adobe, Inc. All rights reserved.
+ * See LICENSE for license details.
+ */
 
 namespace MagentoEse\DataInstallGraphQl\Model\Resolver\DataProvider;
 
@@ -13,8 +17,7 @@ use Magento\Framework\Api\SearchResultsFactory;
 use Magento\Framework\Api\SortOrderBuilder;
 use Magento\NegotiableQuote\Api\NegotiableQuoteRepositoryInterface;
 use Magento\Quote\Model\ResourceModel\Quote\CollectionFactory;
-use Magento\Store\Api\Data\WebsiteInterface;
-use MagentoEse\DataInstall\Model\NegotiableQuote\ExportQuotes;
+use MagentoEse\DataInstallGraphQl\Model\Resolver\Export\NegotiableQuoteExport;
 
 class NegotiableQuotes
 {
@@ -23,7 +26,7 @@ class NegotiableQuotes
     private SearchCriteriaBuilder $searchCriteriaBuilder;
     private FilterGroupBuilder $filterGroupBuilder;
     private SortOrderBuilder $sortOrderBuilder;
-    private ExportQuotes $exportQuotes;
+    private NegotiableQuoteExport $exportQuotes;
     private JoinProcessorInterface $extensionAttributesJoinProcessor;
     private SearchResultsFactory $searchResultsFactory;
     private CollectionFactory $collectionFactory;
@@ -34,7 +37,7 @@ class NegotiableQuotes
         JoinProcessorInterface $extensionAttributesJoinProcessor,
         SearchResultsFactory $searchResultsFactory,
         CollectionFactory $collectionFactory,
-        ExportQuotes $exportQuotes,
+        NegotiableQuoteExport $exportQuotes,
         NegotiableQuoteRepositoryInterface $negotiableQuoteRepository,
         FilterBuilder $filterBuilder,
         SearchCriteriaBuilder $searchCriteriaBuilder,
