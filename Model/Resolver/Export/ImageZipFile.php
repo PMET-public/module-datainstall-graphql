@@ -50,6 +50,7 @@ class ImageZipFile implements ResolverInterface
     protected const FAVICON_PATH_ON_SERVER=  '/favicon/';
     protected const DOWNLOADABLE_PATH_ON_SERVER = '/downloadable/files/links';
     protected const DOWNLOADABLE_SAMPLE_PATH_ON_SERVER = '/downloadable/files/samples';
+    protected const EMAIL_LOGO_PATH_ON_SERVER = '/email/logo/';
 
     # directories to save images for data pack
     protected const PRODUCT_PATH_DATAPACK = '/media/catalog/product';
@@ -58,6 +59,7 @@ class ImageZipFile implements ResolverInterface
     protected const LOGO_PATH_DATAPACK = '/media/logo';
     protected const FAVICON_PATH_DATAPACK = '/media/favicon';
     protected const DOWNLOADABLE_PATH_DATAPACK = '/media/downloadable';
+    protected const EMAIL_LOGO_PATH_DATAPACK = '/media/email/';
 
     protected const IMAGE_PATTERN="/{{media url=([^}]+)}}/";
         
@@ -274,6 +276,14 @@ class ImageZipFile implements ResolverInterface
             self::FAVICON_PATH_DATAPACK,
             $storeCode
         ));
+
+        $emailLogoImages = $this->getEmailLogoImagesList($storeId);
+        $allImages= array_merge($this->copyFiles(
+            $emailLogoImages,
+            self::EMAIL_LOGO_PATH_ON_SERVER,
+            self::EMAIL_LOGO_PATH_DATAPACK,
+            $storeCode
+        ));
         
         //copy block, dynamic block and page images
         $blockImages = $this->getBlocksImagesList($blockIds);
@@ -475,6 +485,23 @@ class ImageZipFile implements ResolverInterface
         $logoImages = [];
         $logoImages[] = $this->scopeConfig->getValue(
             'design/head/shortcut_icon',
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
+        return array_unique($logoImages);
+    }
+
+     /**
+      * Get list of email logo images
+      *
+      * @param string $storeId
+      * @return array
+      */
+    private function getEmailLogoImagesList(string $storeId) : array
+    {
+        $logoImages = [];
+        $logoImages[] = $this->scopeConfig->getValue(
+            'design/email/logo',
             ScopeInterface::SCOPE_STORE,
             $storeId
         );

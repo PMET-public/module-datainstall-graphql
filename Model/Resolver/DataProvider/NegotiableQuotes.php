@@ -63,8 +63,7 @@ class NegotiableQuotes
         int $currentPage = 1,
         int $pageSize = 1,
         array $sortArgs = []
-    ): array
-    {
+    ): array {
         /*if (!empty($filterArgs)) {
             $filterGroups = $this->createFilterGroups($filterArgs);
             $this->searchCriteriaBuilder->setFilterGroups($filterGroups);

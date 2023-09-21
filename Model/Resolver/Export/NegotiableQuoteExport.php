@@ -6,7 +6,6 @@
 
 namespace MagentoEse\DataInstallGraphQl\Model\Resolver\Export;
 
-
 use Magento\Catalog\Model\ProductRepository;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Framework\Api\ExtensibleDataObjectConverter;
@@ -174,7 +173,9 @@ class NegotiableQuoteExport
                 //'creator_type' => $negotiableQuote->getCreatorType(),
                 //'creator_id' => $negotiableQuote->getCreatorId(),
                 'creator' => $this->creatorModel->retrieveCreatorById(
-                    $negotiableQuote->getCreatorType(), $negotiableQuote->getCreatorId(), $quote->getId()
+                    $negotiableQuote->getCreatorType(),
+                    $negotiableQuote->getCreatorId(),
+                    $quote->getId()
                 ),
                 'base_negotiated_total_price' => $negotiableQuote->getBaseNegotiatedTotalPrice(),
                 'proposed_shipping_amount' => $negotiableQuote->getShippingPrice(),
@@ -332,7 +333,9 @@ class NegotiableQuoteExport
                 'creator_type_id' => $item->getCreatorType(),
                 'creator_id' => $item->getCreatorId(),
                 'creator' => $this->creatorModel->retrieveCreatorById(
-                    $item->getCreatorType(), $item->getCreatorId(), $quoteItem->getQuoteId()
+                    $item->getCreatorType(),
+                    $item->getCreatorId(),
+                    $quoteItem->getQuoteId()
                 ),
                 'note' => $item->getNote(),
                 'note_uid' => $item->getNoteId(),
@@ -379,7 +382,9 @@ class NegotiableQuoteExport
                 'creator_type_id' => $comment->getCreatorType(),
                 //'creator_id' => $comment->getCreatorId(),
                 'creator' => $this->creatorModel->retrieveCreatorById(
-                    $comment->getCreatorType(), $comment->getCreatorId(), $quoteId
+                    $comment->getCreatorType(),
+                    $comment->getCreatorId(),
+                    $quoteId
                 ),
                 'text' => $comment->getComment() ?? '',
                 'is_decline' => $comment->getIsDecline(),
@@ -442,7 +447,8 @@ class NegotiableQuoteExport
         return $data;
     }
 
-    private function convertOptionsAttributesLog($logData) {
+    private function convertOptionsAttributesLog($logData)
+    {
         if (!empty($logData)) {
             $log = $this->serializer->unserialize($logData);
 
@@ -488,7 +494,8 @@ class NegotiableQuoteExport
         return $logData;
     }
 
-    private function convertOptionsAttributesSnap($logData) {
+    private function convertOptionsAttributesSnap($logData)
+    {
         if (!empty($logData)) {
             $log = $this->serializer->unserialize($logData);
 
@@ -516,7 +523,8 @@ class NegotiableQuoteExport
                             }
                             $itemData['product_sku'] = $productModel->getSku();
                         } catch (NoSuchEntityException $e) {
-                            print_r($e->getMessage());die();
+                            print_r($e->getMessage());
+                            die();
                         }
                     }
                 }

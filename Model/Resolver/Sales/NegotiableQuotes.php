@@ -21,8 +21,7 @@ class NegotiableQuotes implements ResolverInterface
     public function __construct(
         Authentication $authentication,
         \MagentoEse\DataInstallGraphQl\Model\Resolver\DataProvider\NegotiableQuotes $negotiableQuotes
-    )
-    {
+    ) {
         $this->authentication = $authentication;
         $this->negotiableQuotes = $negotiableQuotes;
     }
