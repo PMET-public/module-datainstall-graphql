@@ -25,6 +25,10 @@ class Configurations implements ResolverInterface
         'design/head/shortcut_icon',
         'design/header/logo_src',
         'design/header/welcome',
+        'design/email/logo',
+        'design/email/logo_height',
+        'design/email/logo_width',
+        'design/email/logo_alt',
         'general/store_information/name',
         'web/default/cms_home_page'];
     
@@ -40,7 +44,9 @@ class Configurations implements ResolverInterface
         'btob/default_b2b_payment_methods/applicable_payment_methods',
         'btob/default_b2b_payment_methods/available_payment_methods',
         'btob/default_b2b_payment_methods/applicable_payment_methods',
-        'btob/default_b2b_shipping_methods/available_shipping_methods'
+        'btob/default_b2b_shipping_methods/available_shipping_methods',
+        'catalog/magento_catalogpermissions/enabled'
+
     ];
 
     /** @var Authentication */

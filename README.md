@@ -151,6 +151,10 @@ It is important to note that at this time only the Store View scope is used. The
 | Content->Configuration->HTML Head->Favicon  | design/head/shortcut_icon  |
 | Content->Configuration->Header->Logo Image  | design/header/logo_src |
 | Content->Configuration->Header->Welcome Text  | design/header/welcome  |
+| Content->Configuration->Transactional Emails->Logo Image | design/email/logo  |
+| Content->Configuration->Transactional Emails->Logo Image Alt  | design/email/logo_alt  |
+| Content->Configuration->Transactional Emails->Logo Width  | design/email/logo_width  |
+| Content->Configuration->Transactional Emails->Logo Height  | design/email/logo_Height  |
 | Stores->Configuration->General->General->Store Information->Store Name  | general/store_information/name |
 | Stores->Configuration->General->Web->Default Pages->CMS Home Page  | web/default/cms_home_page |
 
@@ -168,6 +172,7 @@ It is important to note that at this time only the Store View scope is used. The
 | Stores->Configuration->General->B2B Features->Default B2B Payment Methods->Avilable Payment Methods  | btob/default_b2b_payment_methods/available_payment_methods  |
 | Stores->Configuration->General->B2B Features->Default B2B Shipping Methods->Applicable Shipping Methods   | btob/default_b2b_shipping_methods/applicable_shipping_methods  |
 | Stores->Configuration->General->B2B Features->Default B2B Shipping Methods->Available Shipping Methods  | btob/default_b2b_payment_methods/available_shipping_methods  |
+| Stores->Configuration->Catalog->Catalog->Category Permissions->Enable  | catalog/magento_catalogpermissions/enabled  |
 
 
     query {
