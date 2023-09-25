@@ -798,15 +798,16 @@ It is important to note that at this time only the Store View scope is used. The
 		}
 	}
 
-**imagesExtract**: creates a downloadable, Data Installer compatible .zip archive of all images contained in the given elements. `categoryIds` is the list of categories containing the products to retrieve media from (likely the identical list from the  `productExport` query). `cmsDir`` is optional: Value is single directory under media\\wysiwyg to extract images from. Only include if you need to extract additional images not included in the existing blocks, pages, etc. If left empty all wysiwyg images will be extracted. Logo, favicon and email logo are extracetd by default
+**imagesExtract**: creates a downloadable, Data Installer compatible .zip archive of all images contained in the given elements. All inputs are optional. Included the ones that apply to your installation. Logos, and favicon are exported by default. `negotiableQuoteIds` will export any documents attached to negotiable quotes comments. `categoryIds` is the list of categories containing the products to retrieve media from (likely the identical list from the  `productExport` query). `cmsDir`` is optional: Value is single directory under media\\wysiwyg to extract images from. Only include if you need to extract additional images not included in the existing blocks, pages, etc. If left empty all wysiwyg images will be extracted. Logo, favicon and email logo are extracetd by default
 
 	query{
 		imagesExtract(
-			blockIds: "83, 84, 85"
+			blockIds: "83,84,85"
 			categoryIds: "214"
-			dynamicBlockIds:"58, 91"
+			dynamicBlockIds:"58,91"
 			pageIds:"1"
-			templateIds:"25, 26, 27"
+			templateIds:"25,26,27"
+			negotiableQuoteIds: "34,36"
 			cmsDir:"template"
 			){
 		zip_file_download

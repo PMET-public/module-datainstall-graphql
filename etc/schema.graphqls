@@ -84,6 +84,7 @@ type Query {
         dynamicBlockIds: String @doc(description: "Comma separated list of dynamic block ids to extract images from. Example: 1,2,3")
         pageIds: String @doc(description: "Comma separated list of page ids to extract images from. Example: 1,2,3")
         templateIds: String @doc(description: "Comma separated list of template ids to retrieve thumbnail images for admin UI. Example: 1,2,3")
+        negotiableQuoteIds: String @doc(description: "Comma separated list of ids of negotiable quotes that have attachments. Example: 1,2,3")
         cmsDir: String @doc(description: "Optional: Only include if you need to extract additional images not included in the existing blocks, pages, etc. Directory under media\\wysiwyg to extract images from. If left empty all wystwyg images will be extracted.")
     ): ImageZipFile @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Export\\ImageZipFile") @doc(description:"Get a zip file of images to include in a Data Pack")
     
