@@ -18,12 +18,34 @@ use Magento\User\Model\ResourceModel\User;
 
 class Creator
 {
+    /**
+     * @var User
+     */
     private User $userResource;
+    /**
+     * @var UserInterfaceFactory
+     */
     private UserInterfaceFactory $userFactory;
+    /**
+     * @var IntegrationServiceInterface
+     */
     private IntegrationServiceInterface $integration;
+    /**
+     * @var CustomerRepositoryInterface
+     */
     private CustomerRepositoryInterface $customerRepository;
+    /**
+     * @var Provider
+     */
     private Provider $provider;
 
+    /**
+     * @param User $userResource
+     * @param UserInterfaceFactory $userFactory
+     * @param IntegrationServiceInterface $integration
+     * @param CustomerRepositoryInterface $customerRepository
+     * @param Provider $provider
+     */
     public function __construct(
         User $userResource,
         UserInterfaceFactory $userFactory,
@@ -39,12 +61,14 @@ class Creator
     }
 
     /**
-     * @param $type
-     * @param $id
-     * @param $quoteId
+     * Get Creator details by ID
+     *
+     * @param int $type
+     * @param mixed $id
+     * @param int $quoteId
      * @return string
      */
-    public function retrieveCreatorById($type, $id, $quoteId = null): string
+    public function retrieveCreatorById(int $type, $id, int $quoteId = null): string
     {
         if ($type == UserContextInterface::USER_TYPE_ADMIN) {
             try {

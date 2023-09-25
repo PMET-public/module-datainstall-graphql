@@ -21,17 +21,59 @@ use MagentoEse\DataInstallGraphQl\Model\Resolver\Export\NegotiableQuoteExport;
 
 class NegotiableQuotes
 {
+    /**
+     * @var NegotiableQuoteRepositoryInterface
+     */
     private NegotiableQuoteRepositoryInterface $negotiableQuoteRepository;
+    /**
+     * @var FilterBuilder
+     */
     private FilterBuilder $filterBuilder;
+    /**
+     * @var SearchCriteriaBuilder
+     */
     private SearchCriteriaBuilder $searchCriteriaBuilder;
+    /**
+     * @var FilterGroupBuilder
+     */
     private FilterGroupBuilder $filterGroupBuilder;
+    /**
+     * @var SortOrderBuilder
+     */
     private SortOrderBuilder $sortOrderBuilder;
+    /**
+     * @var NegotiableQuoteExport
+     */
     private NegotiableQuoteExport $exportQuotes;
+    /**
+     * @var JoinProcessorInterface
+     */
     private JoinProcessorInterface $extensionAttributesJoinProcessor;
+    /**
+     * @var SearchResultsFactory
+     */
     private SearchResultsFactory $searchResultsFactory;
+    /**
+     * @var CollectionFactory
+     */
     private CollectionFactory $collectionFactory;
+    /**
+     * @var CollectionProcessorInterface
+     */
     private CollectionProcessorInterface $collectionProcessor;
 
+    /**
+     * @param CollectionProcessorInterface $collectionProcessor
+     * @param JoinProcessorInterface $extensionAttributesJoinProcessor
+     * @param SearchResultsFactory $searchResultsFactory
+     * @param CollectionFactory $collectionFactory
+     * @param NegotiableQuoteExport $exportQuotes
+     * @param NegotiableQuoteRepositoryInterface $negotiableQuoteRepository
+     * @param FilterBuilder $filterBuilder
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param FilterGroupBuilder $filterGroupBuilder
+     * @param SortOrderBuilder $sortOrderBuilder
+     */
     public function __construct(
         CollectionProcessorInterface $collectionProcessor,
         JoinProcessorInterface $extensionAttributesJoinProcessor,
@@ -44,7 +86,6 @@ class NegotiableQuotes
         FilterGroupBuilder $filterGroupBuilder,
         SortOrderBuilder $sortOrderBuilder
     ) {
-
         $this->negotiableQuoteRepository = $negotiableQuoteRepository;
         $this->filterBuilder = $filterBuilder;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
@@ -57,6 +98,17 @@ class NegotiableQuotes
         $this->collectionProcessor = $collectionProcessor;
     }
 
+    /**
+     * Get all negotiable quotes based on filters
+     *
+     * @param array $identifiers
+     * @param array $filterArgs
+     * @param int $currentPage
+     * @param int $pageSize
+     * @param array $sortArgs
+     * @return array
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
     public function getNegotiableQuotes(
         array $identifiers,
         array $filterArgs = [],
@@ -64,14 +116,6 @@ class NegotiableQuotes
         int $pageSize = 1,
         array $sortArgs = []
     ): array {
-        /*if (!empty($filterArgs)) {
-            $filterGroups = $this->createFilterGroups($filterArgs);
-            $this->searchCriteriaBuilder->setFilterGroups($filterGroups);
-        }
-
-        if (!empty($sortArgs)) {
-
-        }*/
         $this->searchCriteriaBuilder->addFilter('quote_id', $identifiers, 'in');
         $this->searchCriteriaBuilder->setCurrentPage($currentPage);
         $this->searchCriteriaBuilder->setPageSize($pageSize);
@@ -82,6 +126,8 @@ class NegotiableQuotes
     }
 
     /**
+     * Get Negotiable Quotes List
+     *
      * @param SearchCriteriaInterface $searchCriteria
      * @return SearchResults
      */

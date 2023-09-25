@@ -31,6 +31,7 @@ use Magento\Quote\Model\Quote\Item;
 use Magento\Quote\Model\ResourceModel\Quote\CollectionFactory;
 use Magento\Ui\Component\MassAction\Filter;
 use MagentoEse\DataInstallGraphQl\Model\Resolver\Sales\Creator;
+use Psr\Log\LoggerInterface;
 
 class NegotiableQuoteExport
 {
@@ -55,39 +56,71 @@ class NegotiableQuoteExport
      */
     protected DirectoryList $directoryList;
 
+    /**
+     * @var string
+     */
     protected string $fileName = 'b2b_negotiated_quotes.json';
-    protected array $creators = [];
 
+    /**
+     * @var ItemNoteCriteriaBuilder
+     */
     private ItemNoteCriteriaBuilder $itemNoteCriteriaBuilder;
+    /**
+     * @var ItemNoteRepository
+     */
     private ItemNoteRepository $itemNoteRepository;
+    /**
+     * @var CommentManagementInterface
+     */
     private CommentManagementInterface $commentManagement;
+    /**
+     * @var HistoryManagementInterface
+     */
     private HistoryManagementInterface $historyManagement;
     /**
      * @var Creator
      */
     private Creator $creatorModel;
+    /**
+     * @var ExtensibleDataObjectConverter
+     */
     private ExtensibleDataObjectConverter $dataObjectConverter;
+    /**
+     * @var ProductRepository
+     */
     private ProductRepository $productRepository;
+    /**
+     * @var SerializerInterface
+     */
     private SerializerInterface $serializer;
+    /**
+     * @var LoggerInterface
+     */
+    private LoggerInterface $logger;
 
     /**
      * Page constructor
      *
+     * @param LoggerInterface $logger
+     * @param SerializerInterface $serializer
+     * @param ProductRepository $productRepository
      * @param Creator $creatorModel
+     * @param ExtensibleDataObjectConverter $dataObjectConverter
      * @param HistoryManagementInterface $historyManagement
      * @param CommentManagementInterface $commentManagement
      * @param ItemNoteRepository $itemNoteRepository
      * @param ItemNoteCriteriaBuilder $itemNoteCriteriaBuilder
      */
     public function __construct(
-        SerializerInterface                   $serializer,
-        ProductRepository                     $productRepository,
-        Creator                               $creatorModel,
-        ExtensibleDataObjectConverter         $dataObjectConverter,
-        HistoryManagementInterface            $historyManagement,
-        CommentManagementInterface            $commentManagement,
-        ItemNoteRepository                    $itemNoteRepository,
-        ItemNoteCriteriaBuilder               $itemNoteCriteriaBuilder
+        LoggerInterface               $logger,
+        SerializerInterface           $serializer,
+        ProductRepository             $productRepository,
+        Creator                       $creatorModel,
+        ExtensibleDataObjectConverter $dataObjectConverter,
+        HistoryManagementInterface    $historyManagement,
+        CommentManagementInterface    $commentManagement,
+        ItemNoteRepository            $itemNoteRepository,
+        ItemNoteCriteriaBuilder       $itemNoteCriteriaBuilder
     ) {
         $this->itemNoteCriteriaBuilder = $itemNoteCriteriaBuilder;
         $this->itemNoteRepository = $itemNoteRepository;
@@ -97,64 +130,19 @@ class NegotiableQuoteExport
         $this->dataObjectConverter = $dataObjectConverter;
         $this->productRepository = $productRepository;
         $this->serializer = $serializer;
+        $this->logger = $logger;
     }
 
     /**
      * Generate Data
      *
      * @param AbstractDb|array $collection
+     * @param bool $withModel
      * @return array
      * @throws NoSuchEntityException
      */
     public function generateData($collection, $withModel = false): array
     {
-        $header = [
-            'store',
-            'customer_email',
-            'currency',
-            'product' => [
-                "sku",
-                "qty",
-                "configurable_options",
-                'negotiated_price_type',
-                'negotiated_price_value',
-                "note" => [
-                    'creator_type',
-                    'creator_id',
-                    'note',
-                    'created_at'
-                ]
-            ],
-            'status',
-            'quote_name',
-            'negotiated_price_type',
-            'negotiated_price_value',
-            'expiration_period',
-            'creator_type',
-            'creator_id',
-            'base_negotiated_total_price',
-            'comment' => [
-                'creator_type',
-                'creator_id',
-                'comment',
-                'is_decline',
-                'is_draft',
-                'created_at'
-            ],
-            'history' => [
-                'is_seller',
-                'author_id',
-                'log_data',
-                'snapshot_data',
-                'status',
-                'is_draft',
-                'created_at'
-            ],
-            'shipping_method',
-            'refund',
-            'payment'
-        ];
-
         $result = [];
         foreach ($collection as $quote) {
             /** @var Quote $quote */
@@ -265,6 +253,8 @@ class NegotiableQuoteExport
     }
 
     /**
+     * Get shipping details of quote
+     *
      * @param Quote $quote
      * @return array
      */
@@ -290,6 +280,8 @@ class NegotiableQuoteExport
     }
 
     /**
+     * Set the address details
+     *
      * @param Address $address
      * @return array
      */
@@ -322,6 +314,12 @@ class NegotiableQuoteExport
         );
     }
 
+    /**
+     * Get Item Notes
+     *
+     * @param Item $quoteItem
+     * @return array
+     */
     private function getNotesFromDb(Item $quoteItem): array
     {
         $noteCriteria = $this->itemNoteCriteriaBuilder->getNotesByItemIdCriteria((int)$quoteItem->getItemId());
@@ -366,9 +364,10 @@ class NegotiableQuoteExport
     /**
      * Get quote comments.
      *
+     * @param int $quoteId
      * @return array
      */
-    public function getQuoteComments($quoteId): array
+    public function getQuoteComments(int $quoteId): array
     {
         $comments = $this->commentManagement->getQuoteComments($quoteId);
         $data = [];
@@ -398,6 +397,12 @@ class NegotiableQuoteExport
         return $data;
     }
 
+    /**
+     * Get Comment Attachments
+     *
+     * @param int $commentId
+     * @return array
+     */
     protected function getCommentAttachments($commentId): array
     {
         $files = [];
@@ -415,6 +420,12 @@ class NegotiableQuoteExport
         return $files;
     }
 
+    /**
+     * Get History of Negotiable Quote
+     *
+     * @param int $quoteId
+     * @return array
+     */
     public function getQuoteHistory($quoteId): array
     {
         $data = [];
@@ -447,44 +458,61 @@ class NegotiableQuoteExport
         return $data;
     }
 
+    /**
+     * Get Attribute Options code
+     *
+     * @param array $attrOptions
+     * @param array $optionVals
+     * @return array
+     */
+    private function getAttrOptionsCode($attrOptions, $optionVals): array
+    {
+        foreach ($attrOptions as $attrOption) {
+            if ($attrOption['value'] === $optionVals['old_value']) {
+                $optionVals['old_value'] = $attrOption['label'];
+            }
+            if ($attrOption['value'] === $optionVals['new_value']) {
+                $optionVals['new_value'] = $attrOption['label'];
+            }
+        }
+
+        return $optionVals;
+    }
+
+    /**
+     * Convert the Options ID to code
+     *
+     * @param string $logData
+     * @return bool|mixed|string
+     */
     private function convertOptionsAttributesLog($logData)
     {
-        if (!empty($logData)) {
-            $log = $this->serializer->unserialize($logData);
+        $log = !empty($logData) ? $this->serializer->unserialize($logData) : [];
 
-            //added to cart has bug in current b2b1.4
+        //added to cart has bug in current b2b1.4
 
-            if (isset($log['updated_in_cart'])) {
-                foreach ($log['updated_in_cart'] as $sku => &$itemData) {
-                    try {
-                        $productModel = $this->productRepository->getById($itemData['product_id']);
-                        if (isset($itemData['options_changed'])) {
-                            $optionChanged = $itemData['options_changed'];
-                            // Get the selected options for this child product
-                            $productAttributes = $productModel->getTypeInstance()
-                                ->getConfigurableAttributesAsArray($productModel);
-                            foreach ($optionChanged as $optionId => $optionVals) {
-                                if (array_key_exists($optionId, $productAttributes)) {
-                                    $attribute = $productAttributes[$optionId];
-                                    $attrCode = $attribute['attribute_code'];
-                                    $attrOptions = $attribute['options'];
-                                    foreach ($attrOptions as $attrOption) {
-                                        if ($attrOption['value'] === $optionVals['old_value']) {
-                                            $optionVals['old_value'] = $attrOption['label'];
-                                        }
-                                        if ($attrOption['value'] === $optionVals['new_value']) {
-                                            $optionVals['new_value'] = $attrOption['label'];
-                                        }
-                                    }
+        if (isset($log['updated_in_cart'])) {
+            foreach ($log['updated_in_cart'] as $sku => &$itemData) {
+                try {
+                    $productModel = $this->productRepository->getById($itemData['product_id']);
+                    $optionChanged = $itemData['options_changed'] ?? [];
+                    // Get the selected options for this child product
+                    $productAttributes = $productModel->getTypeInstance()
+                        ->getConfigurableAttributesAsArray($productModel);
+                    foreach ($optionChanged as $optionId => $optionVals) {
+                        if (array_key_exists($optionId, $productAttributes)) {
+                            $attribute = $productAttributes[$optionId];
+                            $attrCode = $attribute['attribute_code'];
+                            $attrOptions = $attribute['options'];
+                            $optionVals = $this->getAttrOptionsCode($attrOptions, $optionVals);
 
-                                    unset($itemData['options_changed'][$optionId]);
-                                    $itemData['options_changed'][$attrCode] = $optionVals;
-                                }
-                            }
+                            unset($itemData['options_changed'][$optionId]);
+                            $itemData['options_changed'][$attrCode] = $optionVals;
                         }
-                        $itemData['product_sku'] = $productModel->getSku();
-                    } catch (NoSuchEntityException $e) {
                     }
+                    $itemData['product_sku'] = $productModel->getSku();
+                } catch (NoSuchEntityException $e) {
+                    $this->logger->error("Error while exporting Negotiable Quote : " . $e->getMessage());
                 }
             }
 
@@ -494,42 +522,49 @@ class NegotiableQuoteExport
         return $logData;
     }
 
-    private function convertOptionsAttributesSnap($logData)
+    /**
+     * Convert Options ID to code in snapshot data
+     *
+     * @param string $logData
+     * @return bool|mixed|string
+     */
+    private function convertOptionsAttributesSnap($logData): mixed
     {
-        if (!empty($logData)) {
-            $log = $this->serializer->unserialize($logData);
+        $log = !empty($logData) ? $this->serializer->unserialize($logData) : [];
 
-            //added to cart has bug in current b2b1.4
+        //added to cart has bug in current b2b1.4
 
-            if (isset($log['cart'])) {
-                foreach ($log['cart'] as $itemId => &$itemData) {
-                    if (!empty($itemData['options']) && isset($itemData['product_id'])) {
-                        try {
-                            $productModel = $this->productRepository->getById($itemData['product_id']);
+        $cartLog = $log['cart'] ?? [];
+        foreach ($cartLog as $itemId => &$itemData) {
+            if (!empty($itemData['options']) && isset($itemData['product_id'])) {
+                try {
+                    $productModel = $this->productRepository->getById($itemData['product_id']);
 
-                            // Get the selected options for this child product
-                            $productAttributes = $productModel->getTypeInstance()
-                                ->getConfigurableAttributesAsArray($productModel);
-                            foreach ($itemData['options'] as $key => $option) {
-                                if (array_key_exists($option['option'], $productAttributes)) {
-                                    $attOptionsIndexed = array_column($productAttributes[$option['option']]['options'], 'label', 'value');
-                                    if (array_key_exists($option['value'], $attOptionsIndexed)) {
-                                        $itemData['options'][$key] = [
-                                            'option' => $productAttributes[$option['option']]['attribute_code'],
-                                            'value' => $attOptionsIndexed[$option['value']]
-                                        ];
-                                    }
-                                }
-                            }
-                            $itemData['product_sku'] = $productModel->getSku();
-                        } catch (NoSuchEntityException $e) {
-                            print_r($e->getMessage());
-                            die();
+                    // Get the selected options for this child product
+                    $productAttributes = $productModel->getTypeInstance()
+                        ->getConfigurableAttributesAsArray($productModel);
+                    foreach ($itemData['options'] as $key => $option) {
+                        $attOptionsIndexed = array_key_exists($option['option'], $productAttributes) ? array_column(
+                            $productAttributes[$option['option']]['options'],
+                            'label',
+                            'value'
+                        ) : [];
+                        if (array_key_exists($option['value'], $attOptionsIndexed)) {
+                            $itemData['options'][$key] = [
+                                'option' => $productAttributes[$option['option']]['attribute_code'],
+                                'value' => $attOptionsIndexed[$option['value']]
+                            ];
                         }
                     }
+                    $itemData['product_sku'] = $productModel->getSku();
+                } catch (NoSuchEntityException $e) {
+                    $this->logger->error("Error while exporting Negotiable Quote : " . $e->getMessage());
                 }
             }
+        }
 
+        if (!empty($cartLog)) {
+            $log['cart'] = $cartLog;
             $logData = $this->serializer->serialize($log);
         }
 
