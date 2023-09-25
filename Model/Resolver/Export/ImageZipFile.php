@@ -38,6 +38,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Framework\UrlInterface;
 use MagentoEse\DataInstallGraphQl\Model\Authentication;
+use Magento\NegotiableQuote\Api\CommentLocatorInterface;
 
 class ImageZipFile implements ResolverInterface
 {
@@ -51,6 +52,7 @@ class ImageZipFile implements ResolverInterface
     protected const DOWNLOADABLE_PATH_ON_SERVER = '/downloadable/files/links';
     protected const DOWNLOADABLE_SAMPLE_PATH_ON_SERVER = '/downloadable/files/samples';
     protected const EMAIL_LOGO_PATH_ON_SERVER = '/email/logo/';
+    protected const NEGOTIABLE_QUOTE_ATTACHMENT_PATH_ON_SERVER = '/negotiable_quotes_attachment';
 
     # directories to save images for data pack
     protected const PRODUCT_PATH_DATAPACK = '/media/catalog/product';
@@ -60,6 +62,7 @@ class ImageZipFile implements ResolverInterface
     protected const FAVICON_PATH_DATAPACK = '/media/favicon';
     protected const DOWNLOADABLE_PATH_DATAPACK = '/media/downloadable';
     protected const EMAIL_LOGO_PATH_DATAPACK = '/media/email/';
+    protected const NEGOTIABLE_QUOTE_ATTACHMENT_PATH_DATAPACK = '/media/negotiable_quotes_attachment';
 
     protected const IMAGE_PATTERN="/{{media url=([^}]+)}}/";
         
@@ -116,6 +119,9 @@ class ImageZipFile implements ResolverInterface
 
     /** @var StoreRepositoryInterface */
     protected $storeRepository;
+
+    /** @var CommentLocatorInterface */
+    protected $commentLocatorInterface;
     
     /**
      *
@@ -135,6 +141,7 @@ class ImageZipFile implements ResolverInterface
      * @param FileDriver $fileDriver
      * @param DirectoryList $directoryList
      * @param StoreRepositoryInterface $storeRepository
+     * @param CommentLocatorInterface $commentLocatorInterface
      * @return void
      * @throws FileSystemException
      */
@@ -154,7 +161,8 @@ class ImageZipFile implements ResolverInterface
         FileIo $fileIo,
         FileDriver $fileDriver,
         DirectoryList $directoryList,
-        StoreRepositoryInterface $storeRepository
+        StoreRepositoryInterface $storeRepository,
+        CommentLocatorInterface $commentLocatorInterface
     ) {
         $this->authentication = $authentication;
         $this->dataPackDirectory = $filesystem->getDirectoryWrite(DirectoryList::TMP);
@@ -172,6 +180,7 @@ class ImageZipFile implements ResolverInterface
         $this->fileDriver = $fileDriver;
         $this->directoryList = $directoryList;
         $this->storeRepository = $storeRepository;
+        $this->commentLocatorInterface = $commentLocatorInterface;
     }
 
     /**
@@ -225,6 +234,12 @@ class ImageZipFile implements ResolverInterface
         } else {
             $pageIds = explode(',', $args['pageIds']);
         }
+
+        if (empty($args['negotiableQuoteIds'])) {
+            $negotiableQuoteIds = [39,38];
+        } else {
+            $pageIds = explode(',', $args['negotiableQuoteIds']);
+        }
         //copy template thumbnail images
         $templateImages = $this->getTemplateImagesList($templateIds);
         $allImages= array_merge($allImages, $this->copyFiles(
@@ -247,13 +262,13 @@ class ImageZipFile implements ResolverInterface
         
         //copy files for downloadable products
         $downloadableFiles = $this->getDownloadableFileList($categoryIds);
-        $allImages= array_merge($this->copyFilesWithPath(
+        $allImages= array_merge($allImages, $this->copyFilesWithPath(
             $downloadableFiles,
             self::DOWNLOADABLE_PATH_ON_SERVER,
             self::DOWNLOADABLE_PATH_DATAPACK,
             $storeCode
         ));
-        $allImages= array_merge($this->copyFilesWithPath(
+        $allImages= array_merge($allImages, $this->copyFilesWithPath(
             $downloadableFiles,
             self::DOWNLOADABLE_SAMPLE_PATH_ON_SERVER,
             self::DOWNLOADABLE_PATH_DATAPACK,
@@ -262,7 +277,7 @@ class ImageZipFile implements ResolverInterface
         
         //copy defined logo and favicon images
         $logoImages = $this->getLogoImagesList($storeId);
-        $allImages= array_merge($this->copyFiles(
+        $allImages= array_merge($allImages, $this->copyFiles(
             $logoImages,
             self::LOGO_PATH_ON_SERVER,
             self::LOGO_PATH_DATAPACK,
@@ -270,7 +285,7 @@ class ImageZipFile implements ResolverInterface
         ));
 
         $faviconImages = $this->getFaviconImagesList($storeId);
-        $allImages= array_merge($this->copyFiles(
+        $allImages= array_merge($allImages, $this->copyFiles(
             $faviconImages,
             self::FAVICON_PATH_ON_SERVER,
             self::FAVICON_PATH_DATAPACK,
@@ -278,7 +293,7 @@ class ImageZipFile implements ResolverInterface
         ));
 
         $emailLogoImages = $this->getEmailLogoImagesList($storeId);
-        $allImages= array_merge($this->copyFiles(
+        $allImages= array_merge($allImages, $this->copyFiles(
             $emailLogoImages,
             self::EMAIL_LOGO_PATH_ON_SERVER,
             self::EMAIL_LOGO_PATH_DATAPACK,
@@ -287,7 +302,7 @@ class ImageZipFile implements ResolverInterface
         
         //copy block, dynamic block and page images
         $blockImages = $this->getBlocksImagesList($blockIds);
-        $allImages= array_merge($this->copyFilesWithPath(
+        $allImages= array_merge($allImages, $this->copyFilesWithPath(
             $blockImages,
             self::CMS_PATH_ON_SERVER,
             self::CMS_PATH_DATAPACK,
@@ -295,7 +310,7 @@ class ImageZipFile implements ResolverInterface
         ));
 
         $pageImages = $this->getPageImagesList($pageIds);
-        $allImages= array_merge($this->copyFilesWithPath(
+        $allImages= array_merge($allImages, $this->copyFilesWithPath(
             $pageImages,
             self::CMS_PATH_ON_SERVER,
             self::CMS_PATH_DATAPACK,
@@ -303,10 +318,18 @@ class ImageZipFile implements ResolverInterface
         ));
 
         $dynamicBlockImages = $this->getDynamicBlockImagesList($dynamicBlockIds, $storeId);
-        $allImages= array_merge($this->copyFilesWithPath(
+        $allImages= array_merge($allImages, $this->copyFilesWithPath(
             $dynamicBlockImages,
             self::CMS_PATH_ON_SERVER,
             self::CMS_PATH_DATAPACK,
+            $storeCode
+        ));
+
+        $negotiableQuoteAttachements = $this->getNegotiableQuoteAttachmentList($negotiableQuoteIds);
+        $allImages= array_merge($allImages, $this->copyFilesWithPath(
+            $negotiableQuoteAttachements,
+            self::NEGOTIABLE_QUOTE_ATTACHMENT_PATH_ON_SERVER,
+            self::NEGOTIABLE_QUOTE_ATTACHMENT_PATH_DATAPACK,
             $storeCode
         ));
         
@@ -455,6 +478,27 @@ class ImageZipFile implements ResolverInterface
             }
         }
         return $dynamicBlocks;
+    }
+
+    /**
+     * Get list of negotiable quote attachements
+     *
+     * @param array $negotiableQuoteIds
+     * @return array
+     */
+    private function getNegotiableQuoteAttachmentList($negotiableQuoteIds) :array
+    {
+        $negotiableQuoteAttachements=[];
+        foreach ($negotiableQuoteIds as $negotiableQuoteId) {
+            $comments = $this->commentLocatorInterface->getListForQuote($negotiableQuoteId);
+            foreach ($comments as $comment) {
+                $attachments = $comment->getAttachments();
+                foreach ($attachments as $attachment) {
+                    $negotiableQuoteAttachements[] = $attachment->getFilePath();
+                }
+            }
+        }
+        return $negotiableQuoteAttachements;
     }
 
     /**
