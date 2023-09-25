@@ -491,15 +491,15 @@ class NegotiableQuoteExport
 
         //added to cart has bug in current b2b1.4
 
-        if (isset($log['updated_in_cart'])) {
-            foreach ($log['updated_in_cart'] as $sku => &$itemData) {
-                try {
-                    $productModel = $this->productRepository->getById($itemData['product_id']);
-                    $optionChanged = $itemData['options_changed'] ?? [];
+        $cartLog = $log['updated_in_cart'] ?? [];
+        foreach ($cartLog as $sku => &$itemData) {
+            try {
+                $productModel = $this->productRepository->getById($itemData['product_id']);
+                if (isset($itemData['options_changed'])) {
                     // Get the selected options for this child product
                     $productAttributes = $productModel->getTypeInstance()
                         ->getConfigurableAttributesAsArray($productModel);
-                    foreach ($optionChanged as $optionId => $optionVals) {
+                    foreach ($itemData['options_changed'] as $optionId => $optionVals) {
                         if (array_key_exists($optionId, $productAttributes)) {
                             $attribute = $productAttributes[$optionId];
                             $attrCode = $attribute['attribute_code'];
@@ -510,12 +510,15 @@ class NegotiableQuoteExport
                             $itemData['options_changed'][$attrCode] = $optionVals;
                         }
                     }
-                    $itemData['product_sku'] = $productModel->getSku();
-                } catch (NoSuchEntityException $e) {
-                    $this->logger->error("Error while exporting Negotiable Quote : " . $e->getMessage());
                 }
+                $itemData['product_sku'] = $productModel->getSku();
+            } catch (NoSuchEntityException $e) {
+                $this->logger->error("Error while exporting Negotiable Quote : " . $e->getMessage());
             }
+        }
 
+        if (!empty($cartLog)) {
+            $log['updated_in_cart'] = $cartLog;
             $logData = $this->serializer->serialize($log);
         }
 
