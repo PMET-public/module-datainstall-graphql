@@ -116,7 +116,9 @@ class NegotiableQuotes
         int $pageSize = 1,
         array $sortArgs = []
     ): array {
-        $this->searchCriteriaBuilder->addFilter('quote_id', $identifiers, 'in');
+        if (!empty($identifiers) && $identifiers[0] !== '') {
+            $this->searchCriteriaBuilder->addFilter('quote_id', $identifiers, 'in');
+        }
         $this->searchCriteriaBuilder->setCurrentPage($currentPage);
         $this->searchCriteriaBuilder->setPageSize($pageSize);
         $quotesCollection = $this->getList($this->searchCriteriaBuilder->create());
