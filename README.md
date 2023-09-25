@@ -7,12 +7,12 @@ This module provides GraphQL support for the Data Install Module. There are two 
 
 For most queries and mutations, a valid admin user is required.  In the reqeust headers, add a header of `Authorization` with a value of `username|password`. Or the value can be added in the Commerce UI under Stores->Configuration->Advanced->System->Data Installer Authorization. This will overide the value passed in the header
 
-Details on query arguments and types are available in the online GraphQL docs. 
+Details on query arguments and types are available in the online GraphQL docs.
 
 ## Data Installer Support
 
-**createDataInstallerJob**: Similiar to installing a data pack via CLI. This will schedule a data pack import, and return the `job_id` of the process. This also supports the retrieval of remote data packs from GitHub. If you are accessing a private repository, you will need to create a [Personal Access Token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token). This token can be used as an option in the mutation. Or it can be added to the Commerce instance under *Stores->Configuration->Advanced->System->Data Installer Authorization*. 
-  - When setting up the token, create a "classic" token, and check the box to give access to the `repo` scope
+**createDataInstallerJob**: Similiar to installing a data pack via CLI. This will schedule a data pack import, and return the `job_id` of the process. This also supports the retrieval of remote data packs from GitHub. If you are accessing a private repository, you will need to create a [Personal Access Token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token). This token can be used as an option in the mutation. Or it can be added to the Commerce instance under *Stores->Configuration->Advanced->System->Data Installer Authorization*.
+- When setting up the token, create a "classic" token, and check the box to give access to the `repo` scope
 
 *example: data pack on instance*
 
@@ -39,7 +39,7 @@ Details on query arguments and types are available in the online GraphQL docs.
   	}
 	}
 
-**dataInstallerJobStatus**: Retrieves the current status of the provided `job_id` . Status includes `NOT_STARTED`,`IN_PROGRESS`, `FINISHED_SUCCESSFULLY`,`FINISHED_WITH_FAILURE` and `UNKNOWN` 
+**dataInstallerJobStatus**: Retrieves the current status of the provided `job_id` . Status includes `NOT_STARTED`,`IN_PROGRESS`, `FINISHED_SUCCESSFULLY`,`FINISHED_WITH_FAILURE` and `UNKNOWN`
 
 *example:*
 
@@ -97,7 +97,7 @@ Details on query arguments and types are available in the online GraphQL docs.
 
 ## Exporting Data
 
-These queries are written to return data in a format that can be saved as a file to be used by the Data Installer. There is a combination of extensions to native queries along with some that are custom. 
+These queries are written to return data in a format that can be saved as a file to be used by the Data Installer. There is a combination of extensions to native queries along with some that are custom.
 Magento GraphQL uses the store scope, so the queries are limited to the store scope as defined in the request header. Another limitation is that some queries will only return Active items.  You will not be able to export any Pages, Blocks, Categories, etc. that are set as Inactive
 
 Some queries will have a `requires` node. This is to provide information about what other data elements may be needed by the data you are retrieving.  It will return the type (block,customer_segment,product, etc.) along with name, id and indetifier if appropriate. For example, if you are retrieving a page that contains one or more blocks, the query will return those details so you can include them in your blocks query.
@@ -436,7 +436,7 @@ It is important to note that at this time only the Store View scope is used. The
 		}
 	}
 
-**stockSourcesExport**: Use to create the `stock_sources.json` file that sets product inventory for each source. Include the source codes to include in the export. 
+**stockSourcesExport**: Use to create the `stock_sources.json` file that sets product inventory for each source. Include the source codes to include in the export.
 
 	query
 		{
@@ -813,8 +813,8 @@ It is important to note that at this time only the Store View scope is used. The
 		zip_file_server_path
 		}
 	}
-An optional `all_iamges` node can be included if you want details on all of the contained images. This could be used for retrieving the images remotely rather than downloading the .zip file. `source` is the absolute path of the image on the server. `in_datapack` is the path to save the image in a Data pack. `image_url` is the url to the image. This does not include any images that were extracted under the `cmsDir` argument.	
-	
+An optional `all_iamges` node can be included if you want details on all of the contained images. This could be used for retrieving the images remotely rather than downloading the .zip file. `source` is the absolute path of the image on the server. `in_datapack` is the path to save the image in a Data pack. `image_url` is the url to the image. This does not include any images that were extracted under the `cmsDir` argument.
+
 	all_images{
 		source
 		in_datapack
@@ -949,3 +949,117 @@ Include the company names or Ids you want to include in the export. If you need 
 		}
 	}
 
+**negotiableQuotesExport**: Use to create the `b2b_negotiated_quotes.json` file.
+Include the quote Ids you want to include in the export. If you need a list of all companies, set the input to an empty string `identifiers: [""]`.
+
+    query {
+        negotiableQuotesExport(identifiers: ["1"]) {
+            items {
+                store_view_code
+                site_code
+                email
+                currency
+                status
+                name
+                negotiated_price_type
+                negotiated_price_value
+                expiration_period
+                creator_type_id
+                creator
+                proposed_shipping_amount
+                snapshot
+                uid
+                shipping_addresses {
+                    firstname
+                    lastname
+                    city
+                    postcode
+                    telephone
+                    country {
+                        code
+                        label
+                    }
+                    region {
+                        code
+                        label
+                        region_id
+                    }
+                    street
+                    shipping_method
+                    shipping_amount {
+                        value
+                        currency
+                    }
+                }
+                billing_address {
+                    firstname
+                    lastname
+                    city
+                    postcode
+                    telephone
+                    country {
+                        code
+                        label
+                    }
+                    region {
+                        code
+                        label
+                        region_id
+                    }
+                    street
+                }
+                selected_payment_method {
+                    code
+                    po_number
+                    additional_data
+                }
+                product {
+                    sku
+                    qty
+                    type
+                    negotiated_price_type
+                    negotiated_price_value
+                    parent_sku
+                    super_attribute
+                    note {
+                        note_uid
+                        creator_type
+                        creator_type_id
+                        creator_id
+                        creator
+                        note
+                        created_at
+                    }
+                }
+                comments {
+                    creator_type
+                    creator_type_id
+                    creator
+                    text
+                    is_decline
+                    is_draft
+                    created_at
+                    files {
+                        file_name
+                        file_path
+                        file_type
+                    }
+                    uid
+                }
+                history {
+                    is_seller
+                    creator
+                    author {
+                        firstname
+                        lastname
+                    }
+                    log_data
+                    snapshot_data
+                    status
+                    is_draft
+                    created_at
+                    uid
+                }
+            }
+        }
+    }
