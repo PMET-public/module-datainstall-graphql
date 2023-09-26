@@ -951,7 +951,7 @@ Include the company names or Ids you want to include in the export. If you need 
 	}
 
 **negotiableQuotesExport**: Use to create the `b2b_negotiated_quotes.json` file.
-Include the quote Ids you want to include in the export. If you need a list of all companies, set the input to an empty string `identifiers: [""]`.
+Include the quote Ids you want to include in the export. If you need a list of all negotiable quotes, set the input to an empty string `identifiers: [""]`.
 
     query {
         negotiableQuotesExport(identifiers: ["1"]) {
