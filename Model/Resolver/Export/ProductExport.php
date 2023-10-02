@@ -14,6 +14,7 @@ use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use MagentoEse\DataInstallGraphQl\Model\Authentication;
+use MagentoEse\DataInstallGraphQl\Model\Resolver\Export\AllChildCategories;
 use Magento\ImportExport\Model\Export\Entity\ExportInfoFactory;
 use Magento\ImportExport\Api\ExportManagementInterface;
 use Magento\Framework\Locale\ResolverInterface as LocaleResolver;
@@ -32,24 +33,30 @@ class ProductExport implements ResolverInterface
     /** @var Authentication */
     private $authentication;
 
+    /** @var AllChildCategories */
+    private $allChildCategories;
+
    /**
     *
     * @param ExportInfoFactory $exportInfoFactory
     * @param ExportManagementInterface $exportManager
     * @param LocaleResolver $localeResolver
     * @param Authentication $authentication
+    * @param AllChildCategories $allChildCategories
     * @return void
     */
     public function __construct(
         ExportInfoFactory $exportInfoFactory,
         ExportManagementInterface $exportManager,
         LocaleResolver $localeResolver,
-        Authentication $authentication
+        Authentication $authentication,
+        AllChildCategories $allChildCategories
     ) {
         $this->exportInfoFactory = $exportInfoFactory;
         $this->exportManager = $exportManager;
         $this->localeResolver = $localeResolver;
         $this->authentication = $authentication;
+        $this->allChildCategories = $allChildCategories;
     }
 
     /**
@@ -72,11 +79,17 @@ class ProductExport implements ResolverInterface
         array $args = null
     ) {
         $this->authentication->authorize();
-
+        $storeId = $context->getExtensionAttributes()->getStore()->getId();
         if (empty($args['categoryIds'])) {
             $filter = [];
         } else {
-            $filter = ['category_ids'=>$args['categoryIds'][0]];
+            $filterIds = explode(',', $args['categoryIds'][0]);
+            //phpcs:ignore Magento2.Performance.ForeachArrayMerge.ForeachArrayMerge
+            $categoryIds = array_merge(
+                $filterIds,
+                $this->allChildCategories->getAllCategoryIds($filterIds, $storeId)
+            );
+            $filter = ['category_ids'=>implode(',', $categoryIds)];
         }
 
         $exportData = $this->singleExport('catalog_product', $filter);

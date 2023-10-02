@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace MagentoEse\DataInstallGraphQl\Model\Resolver\Export;
 
-use Illuminate\Support\Arr;
 use InvalidArgumentException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
@@ -38,6 +37,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Framework\UrlInterface;
 use MagentoEse\DataInstallGraphQl\Model\Authentication;
+use MagentoEse\DataInstallGraphQl\Model\Resolver\Export\AllChildCategories;
 use Magento\NegotiableQuote\Api\CommentLocatorInterface;
 
 class ImageZipFile implements ResolverInterface
@@ -122,6 +122,9 @@ class ImageZipFile implements ResolverInterface
 
     /** @var CommentLocatorInterface */
     protected $commentLocatorInterface;
+
+    /** @var AllChildCategories */
+    protected $allChildCategories;
     
     /**
      *
@@ -142,6 +145,7 @@ class ImageZipFile implements ResolverInterface
      * @param DirectoryList $directoryList
      * @param StoreRepositoryInterface $storeRepository
      * @param CommentLocatorInterface $commentLocatorInterface
+     * @param AllChildCategories $allChildCategories
      * @return void
      * @throws FileSystemException
      */
@@ -162,7 +166,8 @@ class ImageZipFile implements ResolverInterface
         FileDriver $fileDriver,
         DirectoryList $directoryList,
         StoreRepositoryInterface $storeRepository,
-        CommentLocatorInterface $commentLocatorInterface
+        CommentLocatorInterface $commentLocatorInterface,
+        AllChildCategories $allChildCategories
     ) {
         $this->authentication = $authentication;
         $this->dataPackDirectory = $filesystem->getDirectoryWrite(DirectoryList::TMP);
@@ -181,6 +186,7 @@ class ImageZipFile implements ResolverInterface
         $this->directoryList = $directoryList;
         $this->storeRepository = $storeRepository;
         $this->commentLocatorInterface = $commentLocatorInterface;
+        $this->allChildCategories = $allChildCategories;
     }
 
     /**
@@ -213,6 +219,12 @@ class ImageZipFile implements ResolverInterface
             $categoryIds = [];
         } else {
             $categoryIds = explode(',', $args['categoryIds']);
+            //phpcs:ignore Magento2.Performance.ForeachArrayMerge.ForeachArrayMerge
+            $categoryIds = array_merge(
+                $categoryIds,
+                $this->allChildCategories->getAllCategoryIds($categoryIds, $storeId)
+            );
+            //$filter = ['category_ids'=>implode(',',$categoryIds)];
         }
         if (empty($args['templateIds'])) {
             $templateIds = [];
@@ -236,7 +248,7 @@ class ImageZipFile implements ResolverInterface
         }
 
         if (empty($args['negotiableQuoteIds'])) {
-            $negotiableQuoteIds = [39,38];
+            $negotiableQuoteIds = [];
         } else {
             $pageIds = explode(',', $args['negotiableQuoteIds']);
         }
