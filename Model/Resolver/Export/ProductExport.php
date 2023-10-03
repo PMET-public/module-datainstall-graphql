@@ -91,8 +91,11 @@ class ProductExport implements ResolverInterface
             );
             $filter = ['category_ids'=>implode(',', $categoryIds)];
         }
-
-        $exportData = $this->singleExport('catalog_product', $filter);
+        try{
+            $exportData = $this->singleExport('catalog_product', $filter);
+        } catch (\Exception $e) {
+            throw new GraphQlNoSuchEntityException(__('No Products Found'));
+        }
 
         if (count($exportData) < 2) {
             throw new GraphQlNoSuchEntityException(__('No Products Found'));
