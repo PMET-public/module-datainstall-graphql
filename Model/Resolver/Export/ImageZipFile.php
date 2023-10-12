@@ -27,6 +27,8 @@ use Magento\Framework\Filesystem\Driver\File as FileDriver;
 use Magento\Store\Model\ScopeInterface;
 use Magento\PageBuilder\Model\ResourceModel\Template\CollectionFactory as TemplateCollection;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Downloadable\Api\LinkRepositoryInterface;
 use Magento\Downloadable\Api\SampleRepositoryInterface;
 use Magento\Cms\Api\BlockRepositoryInterface;
@@ -87,6 +89,9 @@ class ImageZipFile implements ResolverInterface
     /** @var ProductCollectionFactory */
     protected $productCollectionFactory;
 
+    /** @var ProductRepositoryInterface */
+    protected $productRepository;
+
     /** @var LinkRepositoryInterface */
     protected $downloadableLinkRepository;
 
@@ -134,6 +139,7 @@ class ImageZipFile implements ResolverInterface
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param TemplateCollection $templateCollection
      * @param ProductCollectionFactory $productCollectionFactory
+     * @param ProductRepositoryInterface $productRepository
      * @param LinkRepositoryInterface $downloadableLinkRepository
      * @param SampleRepositoryInterface $sampleLinkRepository
      * @param BlockRepositoryInterface $blockRepository
@@ -156,6 +162,7 @@ class ImageZipFile implements ResolverInterface
         SearchCriteriaBuilder $searchCriteriaBuilder,
         TemplateCollection $templateCollection,
         ProductCollectionFactory $productCollectionFactory,
+        ProductRepositoryInterface $productRepository,
         LinkRepositoryInterface $downloadableLinkRepository,
         SampleRepositoryInterface $sampleLinkRepository,
         BlockRepositoryInterface $blockRepository,
@@ -175,6 +182,7 @@ class ImageZipFile implements ResolverInterface
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->templateCollection = $templateCollection;
         $this->productCollectionFactory = $productCollectionFactory;
+        $this->productRepository = $productRepository;
         $this->downloadableLinkRepository = $downloadableLinkRepository;
         $this->sampleLinkRepository = $sampleLinkRepository;
         $this->blockRepository = $blockRepository;
@@ -375,10 +383,19 @@ class ImageZipFile implements ResolverInterface
         $collection->addAttributeToSelect('*');
         $collection->addCategoriesFilter(['in' => $categoryIds]);
         $products = $collection->getItems();
-        foreach ($products as $product) {
+        foreach ($products as $productCollectionItem) {
+            $product = $this->productRepository->getById($productCollectionItem->getId());
             $productImages[] = $product->getImage();
             $productImages[] = $product->getSmallImage();
             $productImages[] = $product->getThumbnail();
+            $productImages[] = $product->getSwatchImage();
+            $additionalImages = $product->getMediaGalleryEntries();
+            if($additionalImages){
+                foreach ($additionalImages as $additionalImage) {
+                    $productImages[] = $additionalImage->getFile();
+                }
+            }
+            
         }
         return array_unique($productImages);
     }
