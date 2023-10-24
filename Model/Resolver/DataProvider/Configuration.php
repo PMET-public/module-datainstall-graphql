@@ -31,23 +31,24 @@ class Configuration
      *
      * @param string $path
      * @param string $storeCode
+     * @param string $scope
      * @return array
      * @throws NoSuchEntityException
      */
-    public function getSettingsData(string $path, string $storeCode): array
+    public function getSettingsData(string $path, string $storeCode,string $scope): array
     {
         //check to see if value is set. If it's not, ignore it
         // left in for reference. Returning the "resolved" value is more useful, but may revisit in the future
         // if (!$this->scopeConfig->isSetFlag($path, 'stores', $storeCode)) {
         //     return [];
         // }
-        $value = $this->scopeConfig->getValue($path, 'stores', $storeCode);
-        if ($value==null) {
+        $value = $this->scopeConfig->getValue($path, $scope, $storeCode);
+        if ($value===null) {
             return [];
         } else {
             return [
                 'path'=>$path,
-                'scope'=>'stores',
+                'scope'=>$scope,
                 'scope_code'=>$storeCode,
                 'value'=>$value
             ];

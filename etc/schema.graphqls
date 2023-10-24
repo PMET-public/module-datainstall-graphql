@@ -65,7 +65,7 @@ type Query {
         categoryIds: [String] @doc(description: "List of Category Ids to export products from")
     ): Export @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Export\\ProductExport") @doc(description:"csv encoded to json array of exported product data")
     customerExport(
-        email: [String] @doc(description: "Email address to export. Can only take a single email.")
+        email: [String] @doc(description: "Commad delimited list of email address to export")
     ): Export @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Export\\CustomerExport") @doc(description:"csv encoded to json array of exported customer data")
     customerAddressExport: Export @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Export\\CustomerAddressExport") @doc(description:"csv encoded to json array of exported customer addresses")
     stockSourcesExport(

@@ -37,7 +37,7 @@ class Configurations implements ResolverInterface
         'btob/website_configuration/company_active',
         'btob/website_configuration/negotiablequote_active',
         'btob/website_configuration/quickorder_active',
-        'btob/website_configuration/requisitionlist_active',
+        'btob/website_configuration/requisition_list_active',
         'btob/website_configuration/sharedcatalog_active',
         'btob/website_configuration/purchaseorder_enabled',
         'btob/website_configuration/direct_products_price_assigning',
@@ -45,7 +45,11 @@ class Configurations implements ResolverInterface
         'btob/default_b2b_payment_methods/available_payment_methods',
         'btob/default_b2b_payment_methods/applicable_payment_methods',
         'btob/default_b2b_shipping_methods/available_shipping_methods',
-        'catalog/magento_catalogpermissions/enabled'
+        'catalog/magento_catalogpermissions/enabled',
+        'catalog/magento_catalogpermissions/grant_catalog_category_view',
+        'catalog/magento_catalogpermissions/grant_catalog_product_price',
+        'catalog/magento_catalogpermissions/grant_checkout_items',
+        'catalog/magento_catalogpermissions/restricted_landing_page'
 
     ];
 
@@ -93,7 +97,7 @@ class Configurations implements ResolverInterface
         array $args = null
     ) {
         $this->authentication->authorize();
-
+        $settingsData = [];
         if (!empty($args['additionalSettings'])) {
             $paths = array_merge($args['additionalSettings'], $this->defaultPaths);
         } else {
@@ -101,16 +105,18 @@ class Configurations implements ResolverInterface
         }
 
         if (empty($args['suppressB2BSettings'])) {
-            $paths = array_merge($paths, $this->b2bPaths);
+            //$paths = array_merge($paths, $this->b2bPaths);
+            $settingsData = array_merge($settingsData,$this->getSettingsData($this->b2bPaths,'default','default'));
         } else {
             if (!$args['suppressB2BSettings']) {
-                $paths = array_merge($paths, $this->b2bPaths);
+                //$paths = array_merge($paths, $this->b2bPaths);
+                $settingsData = array_merge($settingsData,$this->getSettingsData($this->b2bPaths,'default','default'));
             }
         }
 
         //this->scopeConfig->getValue($path, $scopeType, $scopeCode);
 
-        $settingsData = $this->getSettingsData($paths, $context->getExtensionAttributes()->getStore()->getCode());
+        $settingsData = array_merge($settingsData,$this->getSettingsData($paths, $context->getExtensionAttributes()->getStore()->getCode(),'stores'));
 
         return [
             'items' => $settingsData,
@@ -122,14 +128,15 @@ class Configurations implements ResolverInterface
      *
      * @param array $paths
      * @param string $storeCode
+     * @param string $scope
      * @return array
      * @throws GraphQlNoSuchEntityException
      */
-    private function getSettingsData(array $paths, $storeCode): array
+    private function getSettingsData(array $paths, $storeCode, $scope): array
     {
         $settingsData = [];
         foreach ($paths as $path) {
-            $settingsData[] = $this->configurationDataProvider->getSettingsData($path, $storeCode);
+            $settingsData[] = $this->configurationDataProvider->getSettingsData($path, $storeCode,$scope);
         }
         return array_filter($settingsData);
     }
