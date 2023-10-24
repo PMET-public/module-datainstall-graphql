@@ -106,17 +106,24 @@ class Configurations implements ResolverInterface
 
         if (empty($args['suppressB2BSettings'])) {
             //$paths = array_merge($paths, $this->b2bPaths);
-            $settingsData = array_merge($settingsData,$this->getSettingsData($this->b2bPaths,'default','default'));
+            $settingsData = array_merge($settingsData, $this->getSettingsData($this->b2bPaths, 'default', 'default'));
         } else {
             if (!$args['suppressB2BSettings']) {
                 //$paths = array_merge($paths, $this->b2bPaths);
-                $settingsData = array_merge($settingsData,$this->getSettingsData($this->b2bPaths,'default','default'));
+                $settingsData = array_merge(
+                    $settingsData,
+                    $this->getSettingsData($this->b2bPaths, 'default', 'default')
+                );
             }
         }
 
         //this->scopeConfig->getValue($path, $scopeType, $scopeCode);
 
-        $settingsData = array_merge($settingsData,$this->getSettingsData($paths, $context->getExtensionAttributes()->getStore()->getCode(),'stores'));
+        $settingsData = array_merge($settingsData, $this->getSettingsData(
+            $paths,
+            $context->getExtensionAttributes()->getStore()->getCode(),
+            'stores'
+        ));
 
         return [
             'items' => $settingsData,
@@ -136,7 +143,7 @@ class Configurations implements ResolverInterface
     {
         $settingsData = [];
         foreach ($paths as $path) {
-            $settingsData[] = $this->configurationDataProvider->getSettingsData($path, $storeCode,$scope);
+            $settingsData[] = $this->configurationDataProvider->getSettingsData($path, $storeCode, $scope);
         }
         return array_filter($settingsData);
     }

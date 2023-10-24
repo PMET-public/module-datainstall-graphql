@@ -390,12 +390,11 @@ class ImageZipFile implements ResolverInterface
             $productImages[] = $product->getThumbnail();
             $productImages[] = $product->getSwatchImage();
             $additionalImages = $product->getMediaGalleryEntries();
-            if($additionalImages){
+            if ($additionalImages) {
                 foreach ($additionalImages as $additionalImage) {
                     $productImages[] = $additionalImage->getFile();
                 }
             }
-            
         }
         return array_unique($productImages);
     }
@@ -666,19 +665,20 @@ class ImageZipFile implements ResolverInterface
     ) : array {
         $returnFiles = [];
         foreach ($files as $file) {
-            if($file!==null){
-               $fileInfo = $this->fileIo->getPathInfo($file);
+            if ($file!==null) {
+                $fileInfo = $this->fileIo->getPathInfo($file);
                 $path = $fileInfo["dirname"];
                 $fileName = $fileInfo["basename"];
                 $this->makeDirectory($this->baseDir.$destinationPath.$path);
                 $source = $this->directoryList->getPath('media').$sourcePath.$path.'/'.$fileName;
-                $destination = $this->directoryList->getPath('tmp').$this->baseDir.$destinationPath . $path.'/'.$fileName;
+                $destination = $this->directoryList->
+                    getPath('tmp').$this->baseDir.$destinationPath . $path.'/'.$fileName;
                 $this->fileIo->cp($source, $destination);
                 $returnFiles[] = [
                     'source' => $source,
                     'in_datapack' => $destinationPath.$file,
                     'image_url' => $this->getImageUrl($storeCode).ltrim($sourcePath, '/').$file
-                ]; 
+                ];
             }
         }
         return $returnFiles;

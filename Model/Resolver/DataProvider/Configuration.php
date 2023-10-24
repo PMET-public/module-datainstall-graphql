@@ -35,7 +35,7 @@ class Configuration
      * @return array
      * @throws NoSuchEntityException
      */
-    public function getSettingsData(string $path, string $storeCode,string $scope): array
+    public function getSettingsData(string $path, string $storeCode, string $scope): array
     {
         //check to see if value is set. If it's not, ignore it
         // left in for reference. Returning the "resolved" value is more useful, but may revisit in the future
