@@ -261,11 +261,20 @@ class ImageZipFile implements ResolverInterface
             $pageIds = explode(',', $args['negotiableQuoteIds']);
         }
         //copy template thumbnail images
+        $templateThumbnailImages = $this->getTemplateThumbnailImagesList($templateIds);
+        $allImages= array_merge($allImages, $this->copyFiles(
+            $templateThumbnailImages,
+            self::TEMPLATE_PATH_ON_SERVER,
+            self::TEMPLATE_PATH_DATAPACK,
+            $storeCode
+        ));
+
+        //copy template content images
         $templateImages = $this->getTemplateImagesList($templateIds);
         $allImages= array_merge($allImages, $this->copyFiles(
             $templateImages,
-            self::TEMPLATE_PATH_ON_SERVER,
-            self::TEMPLATE_PATH_DATAPACK,
+            self::CMS_PATH_ON_SERVER,
+            self::CMS_PATH_DATAPACK,
             $storeCode
         ));
         
@@ -434,7 +443,7 @@ class ImageZipFile implements ResolverInterface
      * @return array
      * @throws NoSuchEntityException
      */
-    private function getTemplateImagesList(array $templateIds) : array
+    private function getTemplateThumbnailImagesList(array $templateIds) : array
     {
         $templateImages = [];
         $templates = $this->templateCollection->create()
@@ -448,8 +457,30 @@ class ImageZipFile implements ResolverInterface
         return $templateImages;
     }
 
+     /**
+      * Get list of templateIds images
+      *
+      * @param array $templateIds
+      * @return array
+      * @throws LocalizedException
+      */
+    private function getTemplateImagesList(array $templateIds) : array
+    {
+        $templateImages = [];
+        $templates = $this->templateCollection->create()
+        ->addFieldToFilter(TemplateInterface::KEY_ID, ['in' => $templateIds])->getAllIds();
+
+        foreach ($templates as $template) {
+            $templateContent = $this->templateRepository->get($template)->getTemplate();
+            // phpcs:ignore Magento2.Performance.ForeachArrayMerge.ForeachArrayMerge
+            $templateImages = array_merge($templateImages, $this->parseContent($templateContent));
+        }
+
+        return $templateImages;
+    }
+
     /**
-     * Get lis of block images
+     * Get list of block images
      *
      * @param array $blockIds
      * @return array
