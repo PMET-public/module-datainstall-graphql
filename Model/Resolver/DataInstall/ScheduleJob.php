@@ -79,7 +79,7 @@ class ScheduleJob implements ResolverInterface
         }
 
         if (!empty($jobArgs['files'])) {
-            $dataPack->setFiles($jobArgs['files']);
+            $dataPack->setFiles(explode(",",$jobArgs['files']));
         }
 
         if (!empty($jobArgs['host'])) {
@@ -98,6 +98,32 @@ class ScheduleJob implements ResolverInterface
             $dataPack->setAuthToken($jobArgs['auth_token']);
         } else {
             $dataPack->setAuthToken('');
+        }
+        if(!empty($jobArgs['override_settings'])) {
+            if($jobArgs['override_settings']){
+                $dataPack->setIsOverride(true);
+                if(!empty($jobArgs['site_code'])) {
+                    $dataPack->setSiteCode($jobArgs['site_code']);
+                }
+                if(!empty($jobArgs['site_name'])) {
+                    $dataPack->setSiteName($jobArgs['site_name']);
+                }
+                if(!empty($jobArgs['store_code'])) {
+                    $dataPack->setStoreCode($jobArgs['store_code']);
+                }
+                if(!empty($jobArgs['store_name'])) {
+                    $dataPack->setStoreName($jobArgs['store_name']);
+                }
+                if(!empty($jobArgs['store_view_code'])) {
+                    $dataPack->setStoreViewCode($jobArgs['store_view_code']);
+                }
+                if(!empty($jobArgs['store_view_name'])) {
+                    $dataPack->setStoreViewName($jobArgs['store_view_name']);
+                } 
+            } else{
+                $dataPack->setIsOverride(false);
+            }
+
         }
 
         if ($dataPack->getIsRemote()) {
