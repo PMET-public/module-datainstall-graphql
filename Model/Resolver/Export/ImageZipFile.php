@@ -221,7 +221,7 @@ class ImageZipFile implements ResolverInterface
         $storeCode = $context->getExtensionAttributes()->getStore()->getCode();
         $allImages = [];
         //create a unique directory to store the images
-        $this->baseDir = '/'. uniqid("data-install-");
+        $this->baseDir = '/'. uniqid("data-install-images");
 
         if (empty($args['categoryIds'])) {
             $categoryIds = [];
