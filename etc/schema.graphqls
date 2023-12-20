@@ -395,6 +395,7 @@ input DataInstallerJobInput @doc(description: "datapack only required value") {
   auth_token: String @doc(description: "Optional: Token to include with request for remote Data Pack if required e.g. GitHub access token") 
   is_remote: Boolean @doc(description: "Optional: Set to true if using remote Data Pack")
   override_settings: Boolean @doc(description: "Optional: Set to true if overriding Data Pack store and website settings")
+  restrict_products_from_views: Boolean @doc(description: "Optional: Set to true if incoming products should be restriced from other store views")
   site_code: String @doc(description: "Optional: Site code to override Data pack site code")
   store_code: String @doc(description: "Optional: Store code to override Data pack store code")
   store_view_code: String @doc(description: "Optional: Store view code to override Data pack store view code")

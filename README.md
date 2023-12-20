@@ -5,13 +5,13 @@ This module provides GraphQL support for the Data Install Module. There are two 
 1. Data Installer functions like launching a data pack import and retrieving log information about an import
 2. Exporting of data via a GraphQl query to be used in a data pack
 
-For most queries and mutations, a valid admin user is required.  In the reqeust headers, add a header of `Authorization` with a value of `username|password`. Or the value can be added in the Commerce UI under Stores->Configuration->Advanced->System->Data Installer Authorization. This will overide the value passed in the header
+For most queries and mutations, a valid admin user is required.  In the request headers, add a header of `Authorization` with a value of `username|password`. Or the value can be added in the Commerce UI under Stores->Configuration->Advanced->System->Data Installer Authorization. This will override the value passed in the header
 
 Details on query arguments and types are available in the online GraphQL docs.
 
 ## Data Installer Support
 
-**createDataInstallerJob**: Similiar to installing a data pack via CLI. This will schedule a data pack import, and return the `job_id` of the process. This also supports the retrieval of remote data packs from GitHub. If you are accessing a private repository, you will need to create a [Personal Access Token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token). This token can be used as an option in the mutation. Or it can be added to the Commerce instance under *Stores->Configuration->Advanced->System->Data Installer Authorization*.
+**createDataInstallerJob**: Similar to installing a data pack via CLI. This will schedule a data pack import, and return the `job_id` of the process. This also supports the retrieval of remote data packs from GitHub. If you are accessing a private repository, you will need to create a [Personal Access Token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token). This token can be used as an option in the mutation. Or it can be added to the Commerce instance under *Stores->Configuration->Advanced->System->Data Installer Authorization*.
 - When setting up the token, create a "classic" token, and check the box to give access to the `repo` scope
 
 *example: data pack on instance*
@@ -58,7 +58,7 @@ Details on query arguments and types are available in the online GraphQL docs.
 		}
 	}
 
-**dataInstallerLogs**: Retrives information about a data pack install which is displayed in the terminal with a CLI install. Can be selected by `job_id` in the case of a scheduled install, or by the name of a data pack.  Name can be partial string.
+**dataInstallerLogs**: Retrieves information about a data pack install which is displayed in the terminal with a CLI install. Can be selected by `job_id` in the case of a scheduled install, or by the name of a data pack.  Name can be partial string.
 
 *example:*
 
@@ -139,7 +139,7 @@ Example:
     	}
     }
 
-**storeConfigurations**: Use to create the `store_configurations.json` file.  `suppressB2BSettings` is optional (defaults to false). This will supress the Default B2B settings from being exported, and can be used when exporting from a B2B environment, but the Data Pack has no B2b componants.  `additionalSettings` is optional. This would include the `path` from `core_config_data` of settings not included in the default list.
+**storeConfigurations**: Use to create the `store_configurations.json` file.  `suppressB2BSettings` is optional (defaults to false). This will suppress the Default B2B settings from being exported, and can be used when exporting from a B2B environment, but the Data Pack has no B2b componants.  `additionalSettings` is optional. This would include the `path` from `core_config_data` of settings not included in the default list.
 Configurations are retrieved from the store view scope and uses the same inheritance as the configuration. For example, if you do not have `Welcome Text` set at your Store View scope, it will return the value set for Website or Default. If a setting has no value set that path will not be included in the query results.
 It is important to note that at this time only the Store View scope is used. There are many options that are set at the Website scope. Those would be retrieved, but then interpreted as Store View scope, so therefore would be imported but not used.  If you need to use other scopes, or a mixture of scopes, you should supplement this file with the manual .csv configuration files available
 
@@ -814,7 +814,7 @@ It is important to note that at this time only the Store View scope is used. The
 		zip_file_server_path
 		}
 	}
-An optional `all_iamges` node can be included if you want details on all of the contained images. This could be used for retrieving the images remotely rather than downloading the .zip file. `source` is the absolute path of the image on the server. `in_datapack` is the path to save the image in a Data pack. `image_url` is the url to the image. This does not include any images that were extracted under the `cmsDir` argument.
+An optional `all_images` node can be included if you want details on all of the contained images. This could be used for retrieving the images remotely rather than downloading the .zip file. `source` is the absolute path of the image on the server. `in_datapack` is the path to save the image in a Data pack. `image_url` is the url to the image. This does not include any images that were extracted under the `cmsDir` argument.
 
 	all_images{
 		source

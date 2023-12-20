@@ -71,6 +71,7 @@ class ScheduleJob implements ResolverInterface
         if (empty($jobArgs['datapack'])) {
             throw new GraphQlInputException(__('"datapack" is required'));
         }
+         /** @var DataPackInterface $dataPack */
         $dataPack = $this->dataPackInterface->create();
         $dataPack->setDataPackLocation($jobArgs['datapack']);
         
@@ -79,7 +80,7 @@ class ScheduleJob implements ResolverInterface
         }
 
         if (!empty($jobArgs['files'])) {
-            $dataPack->setFiles(explode(",",$jobArgs['files']));
+            $dataPack->setFiles(explode(",", $jobArgs['files']));
         }
 
         if (!empty($jobArgs['host'])) {
@@ -91,6 +92,9 @@ class ScheduleJob implements ResolverInterface
         if (!empty($jobArgs['reload'])) {
             $dataPack->setReload($jobArgs['reload']);
         }
+        if (!empty($jobArgs['restrict_products_from_views'])) {
+            $dataPack->setRestrictProductsFromViews($jobArgs['restrict_products_from_views']);
+        }
         if (!empty($jobArgs['is_remote'])) {
             $dataPack->setIsRemote($jobArgs['is_remote']);
         }
@@ -99,31 +103,30 @@ class ScheduleJob implements ResolverInterface
         } else {
             $dataPack->setAuthToken('');
         }
-        if(!empty($jobArgs['override_settings'])) {
-            if($jobArgs['override_settings']){
+        if (!empty($jobArgs['override_settings'])) {
+            if ($jobArgs['override_settings']) {
                 $dataPack->setIsOverride(true);
-                if(!empty($jobArgs['site_code'])) {
+                if (!empty($jobArgs['site_code'])) {
                     $dataPack->setSiteCode($jobArgs['site_code']);
                 }
-                if(!empty($jobArgs['site_name'])) {
+                if (!empty($jobArgs['site_name'])) {
                     $dataPack->setSiteName($jobArgs['site_name']);
                 }
-                if(!empty($jobArgs['store_code'])) {
+                if (!empty($jobArgs['store_code'])) {
                     $dataPack->setStoreCode($jobArgs['store_code']);
                 }
-                if(!empty($jobArgs['store_name'])) {
+                if (!empty($jobArgs['store_name'])) {
                     $dataPack->setStoreName($jobArgs['store_name']);
                 }
-                if(!empty($jobArgs['store_view_code'])) {
+                if (!empty($jobArgs['store_view_code'])) {
                     $dataPack->setStoreViewCode($jobArgs['store_view_code']);
                 }
-                if(!empty($jobArgs['store_view_name'])) {
+                if (!empty($jobArgs['store_view_name'])) {
                     $dataPack->setStoreViewName($jobArgs['store_view_name']);
-                } 
-            } else{
+                }
+            } else {
                 $dataPack->setIsOverride(false);
             }
-
         }
 
         if ($dataPack->getIsRemote()) {
