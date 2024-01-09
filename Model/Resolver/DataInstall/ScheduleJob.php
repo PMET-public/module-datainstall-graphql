@@ -103,6 +103,11 @@ class ScheduleJob implements ResolverInterface
         } else {
             $dataPack->setAuthToken('');
         }
+        if (!empty($jobArgs['additional_parameters'])) {
+            $dataPack->setAdditionalParameters($jobArgs['additional_parameters']);
+        } else {
+            $dataPack->setAdditionalParameters('');
+        }
         if (!empty($jobArgs['override_settings'])) {
             if ($jobArgs['override_settings']) {
                 $dataPack->setIsOverride(true);
@@ -128,7 +133,6 @@ class ScheduleJob implements ResolverInterface
                 $dataPack->setIsOverride(false);
             }
         }
-
         if ($dataPack->getIsRemote()) {
             $dataPack->setDataPackLocation($dataPack->getRemoteDataPack(
                 $dataPack->getDataPackLocation(),

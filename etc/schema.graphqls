@@ -395,13 +395,14 @@ input DataInstallerJobInput @doc(description: "datapack only required value") {
   auth_token: String @doc(description: "Optional: Token to include with request for remote Data Pack if required e.g. GitHub access token") 
   is_remote: Boolean @doc(description: "Optional: Set to true if using remote Data Pack")
   override_settings: Boolean @doc(description: "Optional: Set to true if overriding Data Pack store and website settings")
-  restrict_products_from_views: Boolean @doc(description: "Optional: Set to true if incoming products should be restriced from other store views")
+  restrict_products_from_views: Boolean @doc(description: "Optional: Set to true if incoming products should be restricted from other store views")
   site_code: String @doc(description: "Optional: Site code to override Data pack site code")
   store_code: String @doc(description: "Optional: Store code to override Data pack store code")
   store_view_code: String @doc(description: "Optional: Store view code to override Data pack store view code")
   site_name: String @doc(description: "Optional: Site Name to override Data pack site name")
   store_name: String @doc(description: "Optional: Store Name to override Data pack store name")
   store_view_name: String @doc(description: "Optional: Store View Name to override Data pack store view name")
+  additional_parameters: String @doc(description: "Optional: Json encoded object of additional parameters to pass to Data Installer")
 }
 
 type Attribute {
@@ -520,7 +521,7 @@ type DataInstallerStoreSettings {
     store_code: String
     store_view_code: String
     restrict_products_from_views: String @doc(description:"Optional. Will return Y if not defined")
-    product_image_import_directory: String @doc(description:"Optional. Do not include unless overiding")
+    product_image_import_directory: String @doc(description:"Optional. Do not include unless overriding")
     product_validation_strategy: String @doc(description:"Optional - default validation-skip-errors. Defined values are validation-stop-on-errors,validation-skip-errors")
 }
 

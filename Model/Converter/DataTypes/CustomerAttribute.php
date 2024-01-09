@@ -39,7 +39,9 @@ class CustomerAttribute
         ['regex'=> '/Customer\\\\Attributes","attribute":"([a-zA-Z0-9_]+)","operator":"!{}","value":\["([0-9,"]+)"\]/',
         'substringstart'=> 'Customer\\Attributes","attribute":"',
         'substringend'=>'","operator":"!{}","value":["'],
-
+        ['regex'=> '/Customer\\\\Attributes","attribute":"([a-zA-Z0-9_]+)","operator":"\[\]","value":\["([0-9,"]+)"\]/',
+        'substringstart'=> 'Customer\\Attributes","attribute":"',
+        'substringend'=>'","operator":"[]","value":["'],
         ['regex'=> '/Customer\\\\\\\\Attributes","attribute":"([a-zA-Z0-9_]+)","operator":"==","value":"([0-9]+)"/',
         'substringstart'=> 'Customer\\\\Attributes","attribute":"',
         'substringend'=>'","operator":"==","value":"']
