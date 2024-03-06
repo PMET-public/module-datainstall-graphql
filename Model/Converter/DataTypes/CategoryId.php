@@ -56,7 +56,11 @@ class CategoryId
         ['regex'=>'/\?cat=([0-9,\s]+)"/',
         'substring'=>'?cat='],
         ['regex'=>'/Condition\|\|Product`,`attribute`:`category_ids`,`value`:`([0-9,\s`]+)`/',
-        'substring'=>'`category_ids`,`value`:`']
+        'substring'=>'`category_ids`,`value`:`'],
+        ['regex'=>'/Condition\|\|Product`,`attribute`:`category_ids`,`operator`:`==`,`value`:`([0-9,\s`]+)`/',
+        'substring'=>'`category_ids`,`operator`:`==`,`value`:`'],
+        ['regex'=>'/Condition\|\|Product`,`attribute`:`category_ids`,`operator`:`!=`,`value`:`([0-9,\s`]+)`/',
+        'substring'=>'`category_ids`,`operator`:`==`,`value`:`']
     ];
     /** @var CategoryRepositoryInterface */
     protected $categoryRepository;
