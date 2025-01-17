@@ -127,6 +127,7 @@ class Pages implements ResolverInterface
         $pageList = $this->pageRepository->getList($search)->getItems();
         
         foreach ($pageList as $page) {
+            $l = $page->getId();
             $pagesData[$page->getId()] = $this->pageDataProvider
             ->getDataByPageId((int)$page->getId());
         }

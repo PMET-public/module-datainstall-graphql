@@ -51,6 +51,12 @@ class DataInstallLog
         return $this->formatLogData($logData, $datapack, LoggerInterface::DATAPACK);
     }
 
+    public function getInstalledDataPacks(): array
+    {
+        $logData = $this->loggerRepository->getInstalledDataPacks();
+        return $this->formatLogData($logData, 'installed', LoggerInterface::DATAPACK);
+    }
+
     /**
      * Formats log data for return
      *

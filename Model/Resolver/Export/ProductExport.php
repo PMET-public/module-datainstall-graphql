@@ -100,11 +100,39 @@ class ProductExport implements ResolverInterface
         if (count($exportData) < 2) {
             throw new GraphQlNoSuchEntityException(__('No Products Found'));
         }
+        //return attribute set codes
+        $attributeSetCodes = $this->extractAttributeSetCodes($exportData);
         $json = json_encode($exportData);
         return [
             'data' => $json,
         ];
     }
+
+    /**
+     * Extract attribute_set_code values from export data
+     *
+     * @param array $exportData
+     * @return array
+     */
+    private function extractAttributeSetCodes(array $exportData): array
+    {
+        // Find the index of "attribute_set_code" in the header row
+        $header = $exportData[0];
+        $attributeSetCodeIndex = array_search('attribute_set_code', $header);
+        if ($attributeSetCodeIndex === false) {
+            throw new GraphQlNoSuchEntityException(__('Attribute Set Code not found in export data'));
+        }
+
+        // Extract the "attribute_set_code" values from all other rows
+        $attributeSetCodes = [];
+        for ($i = 1; $i < count($exportData); $i++) {
+            $attributeSetCodes[] = $exportData[$i][$attributeSetCodeIndex];
+        }
+
+        // Return distinct values
+        return array_unique($attributeSetCodes);
+    }
+
     /**
      * Convert cvs to array when there are line breaks in content
      *

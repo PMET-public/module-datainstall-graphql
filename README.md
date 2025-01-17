@@ -95,6 +95,38 @@ Details on query arguments and types are available in the online GraphQL docs.
 			},
 			.....
 
+**dataInstallerDataPacks**: Will retrieve a list of all data packs installed. It can return all of the information that the other logging queries will return, but it's likely that `datapack` and `add_date` will be the most important data.
+The value of `datapack` will depend on how the data pack was installed. If it was added by module name, then that value will show the name (`MagentoEse_VerticalDataHealthBeauty`). If it was added by specifing a data path, then that value will show (`datapacks/deployed/vertical-data-frescopa`).
+
+*example:*
+
+	query{
+  		dataInstallerDataPacks{
+    	datapacks {
+      	add_date
+      	datapack
+      	job_id
+      	level
+      	message
+    	}
+  	}
+	}
+*returns:*
+
+	{
+	  "data": {
+		"dataInstallerLogs": {
+		  "datapacks": [
+			{
+			 "add_date": "2025-01-13 15:51:53",
+			 "datapack": "datapacks/deployed/vertical-data-frescopa"
+			},
+			{
+			  "add_date": "2025-01-13 16:27:15",
+			  "datapack": "MagentoEse_VerticalDataHealthBeauty"
+			},
+			.....
+
 ## Exporting Data
 
 These queries are written to return data in a format that can be saved as a file to be used by the Data Installer. There is a combination of extensions to native queries along with some that are custom.

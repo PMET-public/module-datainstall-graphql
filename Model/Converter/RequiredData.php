@@ -162,6 +162,20 @@ class RequiredData implements RequiredDataInterface
             $requiredData,
             $this->customerAttribute->getRequiredAttributeOptions($content, self::CUSTOMER_ATTRIBUTES)
         );
+        $requiredData = $this->eliminateDuplicateArrays($requiredData);
         return $requiredData;
+    }
+
+     /**
+     * Eliminate duplicate arrays within an array
+     *
+     * @param array $array
+     * @return array
+     */
+    private function eliminateDuplicateArrays(array $array): array
+    {
+        $serializedArray = array_map('serialize', $array);
+        $uniqueSerializedArray = array_unique($serializedArray);
+        return array_map('unserialize', $uniqueSerializedArray);
     }
 }

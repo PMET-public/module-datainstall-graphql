@@ -8,14 +8,13 @@ declare(strict_types=1);
 
 namespace MagentoEse\DataInstallGraphQl\Model\Resolver\DataInstall;
 
-use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use MagentoEse\DataInstallGraphQl\Model\Resolver\DataProvider\DataInstallLog as LogDataProvider;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use MagentoEse\DataInstallGraphQl\Model\Authentication;
 
-class DataInstallLog implements ResolverInterface
+class DataInstallDataPacks implements ResolverInterface
 {
     /**
      * @var LogDataProvider
@@ -51,15 +50,10 @@ class DataInstallLog implements ResolverInterface
     ) {
         $this->authentication->authorize();
 
-        if (!empty($args['jobId'])) {
-            $logData = $this->logDataProvider->getLogByJobId($args['jobId']);
-        } elseif (!empty($args['datapack'])) {
-            $logData = $this->logDataProvider->getLogByDatpack($args['datapack']);
-        } else {
-            throw new GraphQlInputException(__('jobId or datapack is required'));
-        }
+        $logData = $this->logDataProvider->getInstalledDataPacks();
+        
         return [
-             'log_records' => $logData,
+             'datapacks' => $logData,
         ];
     }
 }
